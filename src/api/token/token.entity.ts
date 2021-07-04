@@ -1,10 +1,21 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import { JoinTable } from 'typeorm/browser';
+import { User } from 'src/api/user/user.entity';
 @Entity()
 export class Token {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false, unique: true })
+  value: string;
+
+  @Column({ nullable: false, default: true })
   active: boolean;
+
+  @Column({ type: 'date', nullable: false })
+  date: Date;
+
+  @ManyToMany(() => User, (user) => user.id)
+  @JoinTable()
+  user: User[];
 }
