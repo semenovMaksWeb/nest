@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import {Todo} from  "./todo.entity"
-import {TodoService} from "./todo.server"
+import { Todo } from './todo.entity';
+import { TodoService } from './todo.server';
 @Module({
   imports: [],
   controllers: [],
