@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
-import { JoinTable } from 'typeorm/browser';
+import {JoinTable} from 'typeorm';
 import { User } from 'src/api/user/user.entity';
 @Entity()
 export class Token {
@@ -16,6 +16,5 @@ export class Token {
   date: Date;
 
   @ManyToMany(() => User, (user) => user.id)
-  @JoinTable()
   user: User[];
 }

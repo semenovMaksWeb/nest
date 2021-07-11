@@ -5,8 +5,10 @@ import {
   CreateDateColumn,
   ManyToMany,
 } from 'typeorm';
-import { JoinTable } from 'typeorm/browser';
 import { Todo } from '../todo/todo.entity';
+import {JoinTable} from 'typeorm';
+
+
 
 @Entity()
 export class Categories {
@@ -20,6 +22,5 @@ export class Categories {
   create: Date;
 
   @ManyToMany(() => Todo, (todo) => todo.id)
-  @JoinTable()
   todo: Todo[];
 }
