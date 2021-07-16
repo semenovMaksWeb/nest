@@ -32,7 +32,7 @@ export class User {
 
   @ManyToMany(() => Token, (token) => token.id)
   @JoinTable()
-  user: Token[];
+  token: Token[];
 
   @OneToMany(() => Todo, (todo) => todo.id)
   todo: Todo[];

@@ -11,7 +11,7 @@ export class Token {
   @Column({ nullable: false, default: true })
   active: boolean;
 
-  @Column({ type: 'date', nullable: false })
+  @Column({ type: 'timestamp', nullable: false })
   date: Date;
 
   @ManyToMany(() => User, (user) => user.id)

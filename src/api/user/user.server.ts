@@ -3,15 +3,27 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserPostDto } from './user.dto/user-post.dto';
+import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
+import { TokenService } from '../token/token.server';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly tokenService: TokenService,
   ) {}
-  async getUserAll() {
+  async getUserAll(): Promise<User[]> {
     return await this.userRepository.find();
+  }
+  async postUserToken(userAuthorizationDto: UserAuthorizationDto) {
+    const user = await this.findUserLoginAndPassword(userAuthorizationDto);
+    if (user) {
+      const token = await this.tokenService.postToken(user.id);
+      return token;
+    } else {
+      UserService.errorsEmailOrPassword();
+    }
   }
   // async getUserId(id: number) {}
   // async getUserToken(token: string) {}
@@ -20,7 +32,18 @@ export class UserService {
     await this.userRepository.save(userPostDto);
   }
 
-  private async validateBdUser(nik?: string, email?: string) {
+  // find login and password
+  private async findUserLoginAndPassword(
+    userAuthorizationDto: UserAuthorizationDto,
+  ): Promise<User> {
+    return await this.userRepository.findOne({
+      where: {
+        email: userAuthorizationDto.email,
+        password: userAuthorizationDto.password,
+      },
+    });
+  }
+  private async validateBdUser(nik?: string, email?: string): Promise<void> {
     const user = await this.userRepository.findOne({
       where: [{ nik: nik }, { email: email }],
     });
@@ -41,16 +64,26 @@ export class UserService {
       UserService.errorsNik();
     }
   }
-  private static errorsEmail() {
+  // Ошибка email
+  private static errorsEmail(): void {
     throw new HttpException('Указанный емайл занят', HttpStatus.BAD_REQUEST);
   }
-  private static errorsEmailAndNik() {
+  // Ошибка email and nik
+  private static errorsEmailAndNik(): void {
     throw new HttpException(
       'Указанный емайл и ник заняты',
       HttpStatus.BAD_REQUEST,
     );
   }
-  private static errorsNik() {
+  // Ошибка  nik
+  private static errorsNik(): void {
     throw new HttpException('Указанный ник занят', HttpStatus.BAD_REQUEST);
+  }
+  // Ошибка  email or password
+  private static errorsEmailOrPassword(): void {
+    throw new HttpException(
+      'Указанный email или пароль не верны',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 }
