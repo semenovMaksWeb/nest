@@ -16,7 +16,7 @@ import { CategoriesModule } from 'src/api/categories/categories.module';
       database: 'nest',
       synchronize: true,
       autoLoadEntities: true,
-    }), 
+    }),
     UserModule,
     TodoModule,
     CategoriesModule,

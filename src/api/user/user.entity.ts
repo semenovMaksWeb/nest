@@ -6,7 +6,7 @@ import {
   ManyToMany,
   OneToMany,
 } from 'typeorm';
-import {JoinTable} from 'typeorm';
+import { JoinTable } from 'typeorm';
 import { Token } from '../token/token.entity';
 import { Todo } from '../todo/todo.entity';
 

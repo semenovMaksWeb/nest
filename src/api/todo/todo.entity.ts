@@ -7,7 +7,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { User } from '../user/user.entity';
-import {JoinTable} from 'typeorm';
+import { JoinTable } from 'typeorm';
 import { Categories } from '../categories/categories.entity';
 
 @Entity()
@@ -28,7 +28,7 @@ export class Todo {
   create: Date;
 
   @ManyToOne(() => User, (user) => user.id)
-  user: User; 
+  user: User;
 
   @ManyToMany(() => Categories, (categories) => categories.id)
   @JoinTable()

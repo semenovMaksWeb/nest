@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
-import {JoinTable} from 'typeorm';
 import { User } from 'src/api/user/user.entity';
 @Entity()
 export class Token {
