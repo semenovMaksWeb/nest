@@ -29,7 +29,17 @@ export class UserService {
     }
   }
   // async getUserId(id: number) {}
-  // async getUserToken(token: string) {}
+  async getUserToken(token?: string) {
+    token = token.replace('Bearer ', '');
+    if (token) {
+      return await this.userRepository
+        .createQueryBuilder('user')
+        .innerJoin('user.token', 'token')
+        .where('token.value = :token', { token })
+        .getMany();
+    }
+    return 'Token не указан';
+  }
 
   async postUser(userPostDto: UserPostDto) {
     await this.validateBdUser(userPostDto.nik, userPostDto.email);

@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UserService } from './user.server';
 import { UserPostDto } from './user.dto/user-post.dto';
 import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
@@ -10,11 +17,17 @@ export class UserController {
     return this.userService.postUser(userPostDto);
   }
   @Post('authorization')
-  postUserToken(@Body(ValidationPipe) userAuthorizationDto: UserAuthorizationDto) {
+  postUserToken(
+    @Body(ValidationPipe) userAuthorizationDto: UserAuthorizationDto,
+  ) {
     return this.userService.postUserToken(userAuthorizationDto);
   }
   @Get()
   getUserAll() {
     return this.userService.getUserAll();
+  }
+  @Get('/token')
+  async getUserToken(@Headers() headers) {
+    return await this.userService.getUserToken(headers.authorization);
   }
 }
