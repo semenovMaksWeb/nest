@@ -26,8 +26,9 @@ export class UserController {
   getUserAll() {
     return this.userService.getUserAll();
   }
-  @Get('/token')
-  async getUserToken(@Headers() headers) {
-    return await this.userService.getUserToken(headers.authorization);
-  }
+
+  // @Get('token')
+  // async getUserToken(@Headers() headers) {
+  //   return await this.userService.getUserToken(headers.authorization);
+  // }
 }

@@ -45,12 +45,12 @@ export class UserService {
 
   async postUser(userPostDto: UserPostDto) {
     await this.validateBdUser(userPostDto.nik, userPostDto.email);
-    return await this.userRepository.save({
+    await this.userRepository.save({
       nik: userPostDto.nik,
       email: userPostDto.email,
       password: userPostDto.password,
     });
-    // return 'Пользователь успешно создан';
+    return 'Пользователь успешно создан';
   }
 
   // сохранить связь User and token many to many
