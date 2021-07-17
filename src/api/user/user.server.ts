@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserPostDto } from './user.dto/user-post.dto';
 import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
 import { TokenService } from '../token/token.server';
+import { Token } from '../token/token.entity';
 
 @Injectable()
 export class UserService {
@@ -20,19 +21,33 @@ export class UserService {
     const user = await this.findUserLoginAndPassword(userAuthorizationDto);
     if (user) {
       const token = await this.tokenService.postToken(user.id);
-      await this.userRepository.save({
-        id: user.id,
-        token: [{ id: token.id }],
-      });
+      console.log(token);
+      await this.postUserTokenManyToMany(user.id, token.id);
+      return UserService.getUserProfile(user, token);
     } else {
       UserService.errorsEmailOrPassword();
     }
   }
   // async getUserId(id: number) {}
   // async getUserToken(token: string) {}
+
   async postUser(userPostDto: UserPostDto) {
     await this.validateBdUser(userPostDto.nik, userPostDto.email);
     await this.userRepository.save(userPostDto);
+    return 'Пользователь успешно создан';
+  }
+
+  // сохранить связь User and token many to many
+  private async postUserTokenManyToMany(idUser: number, idToken: number) {
+    await this.userRepository
+      .createQueryBuilder()
+      .insert()
+      .into('user_token_token')
+      .values({
+        userId: idUser,
+        tokenId: idToken,
+      })
+      .execute();
   }
 
   // find login and password
@@ -47,6 +62,7 @@ export class UserService {
     });
   }
 
+  // validate set and update user
   private async validateBdUser(nik?: string, email?: string): Promise<void> {
     const user = await this.userRepository.findOne({
       where: [{ nik: nik }, { email: email }],
@@ -68,6 +84,16 @@ export class UserService {
       UserService.errorsNik();
     }
   }
+
+  // get data user profile
+  private static getUserProfile(user: User, token: Token) {
+    return {
+      email: user.email,
+      nik: user.nik,
+      token: token.value,
+    };
+  }
+
   // Ошибка email
   private static errorsEmail(): void {
     throw new HttpException('Указанный емайл занят', HttpStatus.BAD_REQUEST);

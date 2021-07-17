@@ -16,7 +16,7 @@ export class TokenService {
       return new Date().valueOf() < token.date.valueOf() && token.active;
     }
   }
-  async postToken(id: number) {
+  async postToken(id: number): Promise<Token> {
     const date = new Date();
     date.setDate(date.getDate() + 1);
     return await this.tokenRepository.save({
