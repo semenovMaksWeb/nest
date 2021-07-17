@@ -16,10 +16,12 @@ export class UserService {
     private userRepository: Repository<User>,
     private readonly tokenService: TokenService,
   ) {}
+
   // Показать всех пользователей
   async getUserAll(): Promise<User[]> {
     return await this.userRepository.find();
   }
+
   // Авторизация
   async postUserToken(userAuthorizationDto: UserAuthorizationDto) {
     const user = await this.findUserLogin(userAuthorizationDto);
@@ -33,25 +35,13 @@ export class UserService {
       // пользователь существует и пароль истенный
       const token = await this.tokenService.postToken(user.id);
       await this.postUserTokenManyToMany(user.id, token.id);
-      return UserService.getUserProfile(user, token);
+      return this.getUserProfileAuthorization(user, token);
     } else {
-      // не валдидные данные
+      // не валидные данные
       UserService.errorsEmailOrPassword();
     }
   }
-  // async getUserId(id: number) {}
-  // показать пользователя по token
-  async getUserToken(token?: string) {
-    token = token.replace('Bearer ', '');
-    if (token) {
-      return await this.userRepository
-        .createQueryBuilder('user')
-        .innerJoin('user.token', 'token')
-        .where('token.value = :token', { token })
-        .getMany();
-    }
-    return 'Token не указан';
-  }
+
   // Регистрация
   async postUser(userPostDto: UserPostDto) {
     await this.validateBdUser(userPostDto.nik, userPostDto.email);
@@ -87,6 +77,22 @@ export class UserService {
     });
   }
 
+  // найти пользователя по токену
+  async findUserToken(token?: string) {
+    token = token.replace('Bearer ', '');
+    const data = await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.token', 'token')
+      .where('token.value = :token', { token })
+      .getOne();
+    if (data) {
+      await this.tokenService.validateToken(data.token[0]);
+      return data;
+    } else {
+      this.tokenService.tokenNoValidate();
+    }
+  }
+
   // validate set and update user
   private async validateBdUser(nik?: string, email?: string): Promise<void> {
     const user = await this.userRepository.findOne({
@@ -110,11 +116,19 @@ export class UserService {
     }
   }
 
-  // get data user profile
-  private static getUserProfile(user: User, token: Token) {
+  // get data user profile and token
+  getUserProfile(user: User) {
     return {
       email: user.email,
       nik: user.nik,
+    };
+  }
+
+  // get data user profile and token
+  private getUserProfileAuthorization(user: User, token: Token) {
+    const userProfile = this.getUserProfile(user);
+    return {
+      ...userProfile,
       token: token.value,
     };
   }

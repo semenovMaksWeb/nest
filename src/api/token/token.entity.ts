@@ -5,7 +5,7 @@ export class Token {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false, unique: true, type: 'text' })
   value: string;
 
   @Column({ nullable: false, default: true })
