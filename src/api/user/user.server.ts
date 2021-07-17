@@ -1,7 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { User } from './user.entity';
 import { UserPostDto } from './user.dto/user-post.dto';
 import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
 import { TokenService } from '../token/token.server';
@@ -43,7 +45,11 @@ export class UserService {
 
   async postUser(userPostDto: UserPostDto) {
     await this.validateBdUser(userPostDto.nik, userPostDto.email);
-    await this.userRepository.save(userPostDto);
+    await this.userRepository.save({
+      nik: userPostDto.nik,
+      email: userPostDto.email,
+      password: userPostDto.password,
+    });
     return 'Пользователь успешно создан';
   }
 
@@ -125,5 +131,11 @@ export class UserService {
       'Указанный email или пароль не верны',
       HttpStatus.BAD_REQUEST,
     );
+  }
+
+  // password create
+  private createPassword() {
+    // process.env.BCRYPT_PRIVATE_KEY,
+    // bcrypt.hash();
   }
 }
