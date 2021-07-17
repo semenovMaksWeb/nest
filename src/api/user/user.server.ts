@@ -20,7 +20,10 @@ export class UserService {
     const user = await this.findUserLoginAndPassword(userAuthorizationDto);
     if (user) {
       const token = await this.tokenService.postToken(user.id);
-      return token;
+      await this.userRepository.save({
+        id: user.id,
+        token: [{ id: token.id }],
+      });
     } else {
       UserService.errorsEmailOrPassword();
     }
@@ -43,6 +46,7 @@ export class UserService {
       },
     });
   }
+
   private async validateBdUser(nik?: string, email?: string): Promise<void> {
     const user = await this.userRepository.findOne({
       where: [{ nik: nik }, { email: email }],
