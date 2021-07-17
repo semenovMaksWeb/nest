@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './user.entity';
@@ -16,21 +16,31 @@ export class UserService {
     private userRepository: Repository<User>,
     private readonly tokenService: TokenService,
   ) {}
+  // Показать всех пользователей
   async getUserAll(): Promise<User[]> {
     return await this.userRepository.find();
   }
+  // Авторизация
   async postUserToken(userAuthorizationDto: UserAuthorizationDto) {
-    const user = await this.findUserLoginAndPassword(userAuthorizationDto);
-    if (user) {
+    const user = await this.findUserLogin(userAuthorizationDto);
+    if (
+      user &&
+      (await UserService.getPassword(
+        userAuthorizationDto.password,
+        user.password,
+      ))
+    ) {
+      // пользователь существует и пароль истенный
       const token = await this.tokenService.postToken(user.id);
-      console.log(token);
       await this.postUserTokenManyToMany(user.id, token.id);
       return UserService.getUserProfile(user, token);
     } else {
+      // не валдидные данные
       UserService.errorsEmailOrPassword();
     }
   }
   // async getUserId(id: number) {}
+  // показать пользователя по token
   async getUserToken(token?: string) {
     token = token.replace('Bearer ', '');
     if (token) {
@@ -42,13 +52,13 @@ export class UserService {
     }
     return 'Token не указан';
   }
-
+  // Регистрация
   async postUser(userPostDto: UserPostDto) {
     await this.validateBdUser(userPostDto.nik, userPostDto.email);
     await this.userRepository.save({
       nik: userPostDto.nik,
       email: userPostDto.email,
-      password: userPostDto.password,
+      password: await UserService.createPassword(userPostDto.password),
     });
     return 'Пользователь успешно создан';
   }
@@ -67,13 +77,12 @@ export class UserService {
   }
 
   // find login and password
-  private async findUserLoginAndPassword(
+  private async findUserLogin(
     userAuthorizationDto: UserAuthorizationDto,
   ): Promise<User> {
     return await this.userRepository.findOne({
       where: {
         email: userAuthorizationDto.email,
-        password: userAuthorizationDto.password,
       },
     });
   }
@@ -134,8 +143,14 @@ export class UserService {
   }
 
   // password create
-  private createPassword() {
-    // process.env.BCRYPT_PRIVATE_KEY,
-    // bcrypt.hash();
+  private static async createPassword(password: string): Promise<string> {
+    return await bcrypt.hash(password, 10);
+  }
+
+  private static async getPassword(
+    password: string,
+    passwordHash: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(password, passwordHash);
   }
 }

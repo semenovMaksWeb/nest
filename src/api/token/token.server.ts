@@ -9,12 +9,14 @@ export class TokenService {
     @InjectRepository(Token)
     private tokenRepository: Repository<Token>,
   ) {}
+  // Проверить токен на валидность
   async checkToken(id) {
     const token = await this.tokenRepository.findOne(id);
     if (token) {
       return new Date().valueOf() < token.date.valueOf() && token.active;
     }
   }
+  // создать токен
   async postToken(id: number): Promise<Token> {
     const date = new Date();
     date.setDate(date.getDate() + 1);
