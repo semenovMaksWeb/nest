@@ -1,7 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { User } from './user.entity';
 import { UserPostDto } from './user.dto/user-post.dto';
 import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
 import { TokenService } from '../token/token.server';
@@ -125,5 +127,11 @@ export class UserService {
       'Указанный email или пароль не верны',
       HttpStatus.BAD_REQUEST,
     );
+  }
+  private passwordInPlaintext = '12345678';
+  // password create
+  private createPassword() {
+    // process.env.BCRYPT_PRIVATE_KEY,
+    // bcrypt.hash();
   }
 }

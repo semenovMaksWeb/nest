@@ -9,7 +9,6 @@ export class TokenService {
     @InjectRepository(Token)
     private tokenRepository: Repository<Token>,
   ) {}
-  private privateKey = '213sdojg9dsgds';
   async checkToken(id) {
     const token = await this.tokenRepository.findOne(id);
     if (token) {
@@ -22,7 +21,7 @@ export class TokenService {
     return await this.tokenRepository.save({
       value: jwt.sign(
         new Date().toTimeString() + id.toString(),
-        this.privateKey,
+        process.env.JWT_PRIVATE_KEY,
       ),
       date: date,
     });
