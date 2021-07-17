@@ -45,8 +45,12 @@ export class UserService {
 
   async postUser(userPostDto: UserPostDto) {
     await this.validateBdUser(userPostDto.nik, userPostDto.email);
-    await this.userRepository.save(userPostDto);
-    return 'Пользователь успешно создан';
+    return await this.userRepository.save({
+      nik: userPostDto.nik,
+      email: userPostDto.email,
+      password: userPostDto.password,
+    });
+    // return 'Пользователь успешно создан';
   }
 
   // сохранить связь User and token many to many
@@ -128,7 +132,7 @@ export class UserService {
       HttpStatus.BAD_REQUEST,
     );
   }
-  private passwordInPlaintext = '12345678';
+
   // password create
   private createPassword() {
     // process.env.BCRYPT_PRIVATE_KEY,
