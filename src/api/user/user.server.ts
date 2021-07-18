@@ -8,6 +8,7 @@ import { UserPostDto } from './user.dto/user-post.dto';
 import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
 import { TokenService } from '../token/token.server';
 import { Token } from '../token/token.entity';
+import { UserUpdateDto } from './user.dto/user-update.dto';
 
 @Injectable()
 export class UserService {
@@ -53,6 +54,15 @@ export class UserService {
     return 'Пользователь успешно создан';
   }
 
+  // изменения пользователя
+  async updateUserProfile(id: number, userUpdateDto: UserUpdateDto) {
+    await this.validateBdUser(userUpdateDto.nik, null, id);
+    await this.userRepository.update(id, {
+      nik: userUpdateDto.nik,
+    });
+    return 'изменения успешны';
+  }
+
   // сохранить связь User and token many to many
   private async postUserTokenManyToMany(idUser: number, idToken: number) {
     await this.userRepository
@@ -94,7 +104,11 @@ export class UserService {
   }
 
   // validate set and update user
-  private async validateBdUser(nik?: string, email?: string): Promise<void> {
+  private async validateBdUser(
+    nik?: string,
+    email?: string,
+    id?: number,
+  ): Promise<void> {
     const user = await this.userRepository.findOne({
       where: [{ nik: nik }, { email: email }],
     });
@@ -103,15 +117,15 @@ export class UserService {
       return;
     }
     //errorsEmailAndNik
-    if (user.email === email && user.nik === nik) {
+    if (user.email === email && user.nik === nik && user.id !== id) {
       UserService.errorsEmailAndNik();
     }
     // Errors email
-    if (user.email === email) {
+    if (user.email === email && user.id !== id) {
       UserService.errorsEmail();
     }
     // Errors nik
-    if (user.nik === nik) {
+    if (user.nik === nik && user.id !== id) {
       UserService.errorsNik();
     }
   }
