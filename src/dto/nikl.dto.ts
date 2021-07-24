@@ -1,9 +1,9 @@
-// import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class NikDto {
-  // @ApiProperty()
+  @ApiProperty()
   @IsString({ message: 'ник должен является строкой' })
   @IsNotEmpty({ message: 'ник обязательное поле' })
-  readonly nik: string;
+  nik: string;
 }
