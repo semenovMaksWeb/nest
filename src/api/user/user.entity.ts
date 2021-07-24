@@ -6,7 +6,7 @@ import {
   ManyToMany,
   OneToMany,
 } from 'typeorm';
-import {JoinTable} from 'typeorm';
+import { JoinTable } from 'typeorm';
 import { Token } from '../token/token.entity';
 import { Todo } from '../todo/todo.entity';
 
@@ -32,7 +32,7 @@ export class User {
 
   @ManyToMany(() => Token, (token) => token.id)
   @JoinTable()
-  user: Token[];
+  token: Token[];
 
   @OneToMany(() => Todo, (todo) => todo.id)
   todo: Todo[];

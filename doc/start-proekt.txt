@@ -1,0 +1,4 @@
+docker-compose -f postgres.yml up -d
+nvm use 16.4.0
+npm i
+npm run start:dev
