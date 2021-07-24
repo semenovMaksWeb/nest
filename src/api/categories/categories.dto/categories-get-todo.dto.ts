@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CategoriesGetTodoDto {
   @ApiProperty()
@@ -9,6 +9,7 @@ export class CategoriesGetTodoDto {
 
   @ApiProperty()
   @IsNumber({}, { message: 'id категории должен является числом' })
-  @IsNotEmpty({ message: 'id категории обязательное поле' })
+  @IsOptional()
+  // @({ message: 'id категории обязательное поле' })
   id: number;
 }

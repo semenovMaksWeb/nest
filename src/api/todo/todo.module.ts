@@ -4,8 +4,9 @@ import { TodoService } from './todo.server';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '../user/user.module';
 import { TodoController } from './todo.controller';
+import { CategoriesModule } from '../categories/categories.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([Todo]), UserModule],
+  imports: [TypeOrmModule.forFeature([Todo]), UserModule, CategoriesModule],
   controllers: [TodoController],
   providers: [TodoService],
   exports: [TodoService],

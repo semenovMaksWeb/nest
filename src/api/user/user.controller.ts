@@ -13,7 +13,8 @@ import { UserPostDto } from './user.dto/user-post.dto';
 import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
 import { UserGuard } from './user.guard';
 import { UserUpdateDto } from './user.dto/user-update.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+@ApiTags('user')
 @Controller('user')
 @ApiBearerAuth()
 export class UserController {
@@ -28,7 +29,7 @@ export class UserController {
   ) {
     return this.userService.postUserToken(userAuthorizationDto);
   }
-  @Get()
+  @Get('/all')
   getUserAll() {
     return this.userService.getUserAll();
   }

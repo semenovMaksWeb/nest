@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Put,
   Request,
   UseGuards,
   ValidationPipe,
@@ -10,8 +12,11 @@ import {
 import { TodoService } from './todo.server';
 import { TodoCreateDto } from './todo.dto/todo-create.dto';
 import { UserGuard } from '../user/user.guard';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { TodoUpdateActiveDto } from './todo.dto/todo-update-active.dto';
+import { TodoUpdateDto } from './todo.dto/todo-update.dto';
 @Controller('todo')
+@ApiTags('todo')
 @ApiBearerAuth()
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
@@ -22,11 +27,39 @@ export class TodoController {
     @Request() req,
   ) {
     console.log(req.user.id);
-    await this.todoService.postTodoUser(todoCreateDto, req.user.id);
+    return await this.todoService.postTodoUser(todoCreateDto, req.user.id);
   }
+
+  @UseGuards(UserGuard)
+  @Put(':id')
+  async updateTodoUser(
+    @Param('id') id: string,
+    @Body(ValidationPipe) todoUpdateDto: TodoUpdateDto,
+  ) {
+    return await this.todoService.updateTodoUser(+id, todoUpdateDto);
+  }
+
+  @UseGuards(UserGuard)
+  @Put('/active:id')
+  async updateTodoActiveUser(
+    @Request() req,
+    @Param('id') id: string,
+    @Body(ValidationPipe)
+    todoUpdateActiveDto: TodoUpdateActiveDto,
+  ) {
+    return await this.todoService.updateTodoActiveUser(
+      +id,
+      todoUpdateActiveDto,
+    );
+  }
+
   @Get()
   @UseGuards(UserGuard)
   async getTodoUser(@Request() req) {
     return await this.todoService.getTodoUser(req.user.id);
+  }
+  @Get('/all')
+  async getTodoAll() {
+    return await this.todoService.getTodoAll();
   }
 }
