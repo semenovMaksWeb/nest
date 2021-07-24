@@ -7,6 +7,8 @@ import { TodoModule } from 'src/api/todo/todo.module';
 import { TokenModule } from 'src/api/token/token.module';
 import { CategoriesModule } from 'src/api/categories/categories.module';
 
+console.log(process.env.POSTGRES_USER);
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
