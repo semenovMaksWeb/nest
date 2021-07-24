@@ -13,7 +13,9 @@ import { UserPostDto } from './user.dto/user-post.dto';
 import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
 import { UserGuard } from './user.guard';
 import { UserUpdateDto } from './user.dto/user-update.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 @Controller('user')
+@ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post()

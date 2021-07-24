@@ -89,6 +89,7 @@ export class UserService {
 
   // найти пользователя по токену
   async findUserToken(token?: string) {
+    console.log(token);
     token = token.replace('Bearer ', '');
     const data = await this.userRepository
       .createQueryBuilder('user')
