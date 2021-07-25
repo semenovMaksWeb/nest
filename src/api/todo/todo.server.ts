@@ -59,8 +59,6 @@ export class TodoService {
     const { skip, take } = Pagination(query?.limit, query?.page);
     const sqlCreate = this.todoRepository
       .createQueryBuilder('todo')
-      .innerJoinAndSelect('todo.categories', 'categories')
-      .where({ user: { id: userId } })
       .skip(skip)
       .take(take)
       .select([
@@ -74,8 +72,9 @@ export class TodoService {
       ]);
     this.addSqlWhereTitle(sqlCreate, query.title);
     this.addSqlWhereActive(sqlCreate, query.active);
-    // this.addSqlWhereCategories(sqlCreate, +query.categories);
-    return await sqlCreate.getMany();
+    this.addSqlWhereCategories(sqlCreate, +query.categories);
+    const [list, count] = await sqlCreate.getManyAndCount();
+    return { data: list, count };
   }
   async getTodoAll() {
     return await this.todoRepository.find({
@@ -92,11 +91,18 @@ export class TodoService {
       sqlCreate.andWhere('todo.active= :active', { active: active });
     }
   }
-  // addSqlWhereCategories(sqlCreate: SelectQueryBuilder<Todo>, id?: number) {
-  //   if (id) {
-  //     sqlCreate.andWhere('categories.id = :id', { id });
-  //   }
-  // }
+  addSqlWhereCategories(sqlCreate: SelectQueryBuilder<Todo>, id?: number) {
+    if (id) {
+      sqlCreate.leftJoinAndSelect(
+        'todo.categories',
+        'categories',
+        'categories.id = :categoryId',
+        { categoryId: id },
+      );
+    } else {
+      sqlCreate.innerJoin('todo.categories', 'categories');
+    }
+  }
 
   errors404Todo() {
     throw new HttpException(
