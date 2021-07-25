@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
   ValidationPipe,
@@ -15,6 +16,7 @@ import { UserGuard } from '../user/user.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TodoUpdateActiveDto } from './todo.dto/todo-update-active.dto';
 import { TodoUpdateDto } from './todo.dto/todo-update.dto';
+import { TodoGetFilterDto } from './todo.dto/todo-get-filter.dto';
 @Controller('todo')
 @ApiTags('todo')
 @ApiBearerAuth()
@@ -55,8 +57,11 @@ export class TodoController {
 
   @Get()
   @UseGuards(UserGuard)
-  async getTodoUser(@Request() req) {
-    return await this.todoService.getTodoUser(req.user.id);
+  async getTodoUser(
+    @Request() req,
+    @Query(null, ValidationPipe) query: TodoGetFilterDto,
+  ) {
+    return await this.todoService.getTodoUser(req.user.id, query);
   }
   @Get('/all')
   async getTodoAll() {

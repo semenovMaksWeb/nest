@@ -4,6 +4,7 @@ import {
   Get,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
   ValidationPipe,
@@ -14,6 +15,7 @@ import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
 import { UserGuard } from './user.guard';
 import { UserUpdateDto } from './user.dto/user-update.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UserGetFilterDto } from './user.dto/user-get-filter.dto';
 @ApiTags('user')
 @Controller('user')
 @ApiBearerAuth()
@@ -30,8 +32,9 @@ export class UserController {
     return this.userService.postUserToken(userAuthorizationDto);
   }
   @Get('/all')
-  getUserAll() {
-    return this.userService.getUserAll();
+  getUserAll(@Query(null, ValidationPipe) query: UserGetFilterDto) {
+    console.log(query);
+    return this.userService.getUserAll(query);
   }
 
   @Get('profile')

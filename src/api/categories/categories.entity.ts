@@ -6,7 +6,6 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { Todo } from '../todo/todo.entity';
-import { JoinTable } from 'typeorm';
 
 @Entity()
 export class Categories {

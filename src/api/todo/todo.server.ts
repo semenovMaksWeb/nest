@@ -7,6 +7,8 @@ import { CategoriesService } from '../categories/categories.server';
 import { TodoUpdateActiveDto } from './todo.dto/todo-update-active.dto';
 import { PutValidate } from '../../lib/put-validate';
 import { TodoUpdateDto } from './todo.dto/todo-update.dto';
+import { Pagination } from '../../lib/pagination';
+import { TodoGetFilterDto } from './todo.dto/todo-get-filter.dto';
 
 @Injectable()
 export class TodoService {
@@ -53,12 +55,14 @@ export class TodoService {
   async getTodoId(id: number) {
     return await this.todoRepository.findOne(id);
   }
-  async getTodoUser(userId: number) {
+  async getTodoUser(userId: number, query: TodoGetFilterDto) {
+    const { skip, take } = Pagination(query?.limit, query?.page);
     return await this.todoRepository
       .createQueryBuilder('todo')
       .where({ user: { id: userId } })
       .innerJoinAndSelect('todo.categories', 'categories')
-
+      .skip(skip)
+      .take(take)
       .select([
         'todo.id',
         'categories.id',
