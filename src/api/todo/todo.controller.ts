@@ -33,7 +33,7 @@ export class TodoController {
   }
 
   @UseGuards(UserGuard)
-  @Put(':id')
+  @Put('/:id')
   async updateTodoUser(
     @Param('id') id: string,
     @Body(ValidationPipe) todoUpdateDto: TodoUpdateDto,
@@ -42,7 +42,7 @@ export class TodoController {
   }
 
   @UseGuards(UserGuard)
-  @Put('/active:id')
+  @Put('/active/:id')
   async updateTodoActiveUser(
     @Request() req,
     @Param('id') id: string,

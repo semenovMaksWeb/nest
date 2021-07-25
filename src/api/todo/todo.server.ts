@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { Todo } from './todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoCreateDto } from './todo.dto/todo-create.dto';
@@ -57,10 +57,10 @@ export class TodoService {
   }
   async getTodoUser(userId: number, query: TodoGetFilterDto) {
     const { skip, take } = Pagination(query?.limit, query?.page);
-    return await this.todoRepository
+    const sqlCreate = this.todoRepository
       .createQueryBuilder('todo')
-      .where({ user: { id: userId } })
       .innerJoinAndSelect('todo.categories', 'categories')
+      .where({ user: { id: userId } })
       .skip(skip)
       .take(take)
       .select([
@@ -71,14 +71,32 @@ export class TodoService {
         'todo.title',
         'todo.text',
         'todo.create',
-      ])
-      .getMany();
+      ]);
+    this.addSqlWhereTitle(sqlCreate, query.title);
+    this.addSqlWhereActive(sqlCreate, query.active);
+    // this.addSqlWhereCategories(sqlCreate, +query.categories);
+    return await sqlCreate.getMany();
   }
   async getTodoAll() {
     return await this.todoRepository.find({
       relations: ['categories', 'user'],
     });
   }
+  addSqlWhereTitle(sqlCreate: SelectQueryBuilder<Todo>, title?: string) {
+    if (title) {
+      sqlCreate.andWhere('todo.title LIKE :title', { title: `%${title}%` });
+    }
+  }
+  addSqlWhereActive(sqlCreate: SelectQueryBuilder<Todo>, active?: boolean) {
+    if (active) {
+      sqlCreate.andWhere('todo.active= :active', { active: active });
+    }
+  }
+  // addSqlWhereCategories(sqlCreate: SelectQueryBuilder<Todo>, id?: number) {
+  //   if (id) {
+  //     sqlCreate.andWhere('categories.id = :id', { id });
+  //   }
+  // }
 
   errors404Todo() {
     throw new HttpException(
