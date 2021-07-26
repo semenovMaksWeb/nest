@@ -6,6 +6,7 @@ import { UserModule } from 'src/api/user/user.module';
 import { TodoModule } from 'src/api/todo/todo.module';
 import { TokenModule } from 'src/api/token/token.module';
 import { CategoriesModule } from 'src/api/categories/categories.module';
+import { TestModule } from './api/test/test.module';
 
 console.log(process.env.POSTGRES_USER);
 
@@ -27,6 +28,7 @@ console.log(process.env.POSTGRES_USER);
     TodoModule,
     CategoriesModule,
     TokenModule,
+    TestModule,
   ],
   controllers: [],
   providers: [],
