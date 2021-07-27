@@ -44,7 +44,6 @@ export class TodoService {
         await this.categoriesService.saveCategoriesTodo(
           todoUpdateDto.categories,
         );
-      console.log(todoUpdateDto, id);
       await this.todoRepository.save({ ...todoUpdateDto, id: id });
       return 'Задача успешно измененна';
     } else {
@@ -55,10 +54,20 @@ export class TodoService {
   async getTodoId(id: number) {
     return await this.todoRepository.findOne(id);
   }
+  // async getTodoCategoriesUser(userId: number) {
+  //   return await this.todoRepository
+  //     .createQueryBuilder('todo')
+  //     .innerJoinAndSelect('todo.categories', 'categories')
+  //     .where({ user: { id: userId } })
+  //     .select(['todo.id', 'categories'])
+  //     .getMany();
+  // }
+
   async getTodoUser(userId: number, query: TodoGetFilterDto) {
     const { skip, take } = Pagination(query?.limit, query?.page);
     const sqlCreate = this.todoRepository
       .createQueryBuilder('todo')
+      .where({ user: { id: userId } })
       .skip(skip)
       .take(take)
       .select([
@@ -74,7 +83,11 @@ export class TodoService {
     this.addSqlWhereActive(sqlCreate, query.active);
     this.addSqlWhereCategories(sqlCreate, +query.categories);
     const [list, count] = await sqlCreate.getManyAndCount();
-    return { data: list, count };
+    return {
+      data: list,
+      count,
+      // listCategories: await this.getTodoCategoriesUser(userId),
+    };
   }
   async getTodoAll() {
     return await this.todoRepository.find({
