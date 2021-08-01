@@ -20,6 +20,5 @@ export class Categories {
   create: Date;
 
   @ManyToMany(() => Todo, (todo) => todo.id)
-  @JoinTable()
   todo: Todo[];
 }

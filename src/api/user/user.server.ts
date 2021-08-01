@@ -27,6 +27,8 @@ export class UserService {
       take: take,
       skip: skip,
     });
+  async getUserAll(): Promise<User[]> {
+    return await this.userRepository.find();
   }
 
   // Авторизация
@@ -95,7 +97,6 @@ export class UserService {
 
   // найти пользователя по токену
   async findUserToken(token?: string) {
-    console.log(token);
     token = token.replace('Bearer ', '');
     const data = await this.userRepository
       .createQueryBuilder('user')
