@@ -15,9 +15,7 @@ export class CategoriesService {
   ): Promise<Categories[]> {
     return await this.categoriesRepository.save(categories);
   }
-  async getCategoriesUser(idUser: number) {
-    return await this.categoriesRepository
-      .createQueryBuilder('categories')
-      .getMany();
+  async getCategoriesAll() {
+    return await this.categoriesRepository.find();
   }
 }

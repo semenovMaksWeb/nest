@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Todo } from '../todo/todo.entity';
 
@@ -19,5 +20,6 @@ export class Categories {
   create: Date;
 
   @ManyToMany(() => Todo, (todo) => todo.id)
+  @JoinTable()
   todo: Todo[];
 }

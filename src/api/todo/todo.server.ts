@@ -54,14 +54,6 @@ export class TodoService {
   async getTodoId(id: number) {
     return await this.todoRepository.findOne(id);
   }
-  // async getTodoCategoriesUser(userId: number) {
-  //   return await this.todoRepository
-  //     .createQueryBuilder('todo')
-  //     .innerJoinAndSelect('todo.categories', 'categories')
-  //     .where({ user: { id: userId } })
-  //     .select(['todo.id', 'categories'])
-  //     .getMany();
-  // }
 
   async getTodoUser(userId: number, query: TodoGetFilterDto) {
     const { skip, take } = Pagination(query?.limit, query?.page);
@@ -81,7 +73,7 @@ export class TodoService {
       ]);
     this.addSqlWhereTitle(sqlCreate, query.title);
     this.addSqlWhereActive(sqlCreate, query.active);
-    this.addSqlWhereCategories(sqlCreate, +query.categories);
+    this.addSqlWhereCategories(sqlCreate);
     const [list, count] = await sqlCreate.getManyAndCount();
     return {
       data: list,
@@ -104,17 +96,8 @@ export class TodoService {
       sqlCreate.andWhere('todo.active= :active', { active: active });
     }
   }
-  addSqlWhereCategories(sqlCreate: SelectQueryBuilder<Todo>, id?: number) {
-    if (id) {
-      sqlCreate.leftJoinAndSelect(
-        'todo.categories',
-        'categories',
-        'categories.id = :categoryId',
-        { categoryId: id },
-      );
-    } else {
-      sqlCreate.innerJoin('todo.categories', 'categories');
-    }
+  addSqlWhereCategories(sqlCreate: SelectQueryBuilder<Todo>) {
+    sqlCreate.innerJoin('todo.categories', 'categories');
   }
 
   errors404Todo() {
