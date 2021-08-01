@@ -9,6 +9,8 @@ import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
 import { TokenService } from '../token/token.server';
 import { Token } from '../token/token.entity';
 import { UserUpdateDto } from './user.dto/user-update.dto';
+import { Pagination } from '../../lib/pagination';
+import { UserGetFilterDto } from './user.dto/user-get-filter.dto';
 
 @Injectable()
 export class UserService {
@@ -19,6 +21,12 @@ export class UserService {
   ) {}
 
   // Показать всех пользователей
+  async getUserAll(param: UserGetFilterDto): Promise<User[]> {
+    const { skip, take } = Pagination(param?.limit, param?.page);
+    return await this.userRepository.find({
+      take: take,
+      skip: skip,
+    });
   async getUserAll(): Promise<User[]> {
     return await this.userRepository.find();
   }

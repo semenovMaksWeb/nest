@@ -4,9 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Todo } from '../todo/todo.entity';
-import { JoinTable } from 'typeorm';
 
 @Entity()
 export class Categories {
