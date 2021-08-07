@@ -19,6 +19,7 @@ import { UserGetFilterDto } from './user.dto/user-get-filter.dto';
 @ApiTags('user')
 @Controller('user')
 @ApiBearerAuth()
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post()
