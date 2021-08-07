@@ -1,4 +1,3 @@
-
 import {
   Injectable,
   CanActivate,
@@ -6,7 +5,6 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 
 import { UserService } from './user.server';
 
