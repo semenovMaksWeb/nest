@@ -34,15 +34,10 @@ export class TodoService {
   ): Promise<string> {
     const todo = await this.getTodoUserId(id);
     this.validateTodoUser(todo, idUser);
-    const result = await this.todoRepository.update(id, {
+    await this.todoRepository.update(id, {
       active: todoUpdateActiveDto.active,
     });
-
-    return PutValidate({
-      validate: result.affected,
-      callbackTrue: 'Вы успешно поменяли активность задачи',
-      callbackFalse: 'Указанная задача не найдена',
-    });
+    return 'Вы успешно поменяли активность задачи';
   }
 
   async updateTodoUser(
