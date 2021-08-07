@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { Todo } from '../todo/todo.entity';
 

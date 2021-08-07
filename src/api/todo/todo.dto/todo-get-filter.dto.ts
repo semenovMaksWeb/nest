@@ -1,9 +1,6 @@
 import { QueryPagination } from 'src/lib/pagination';
 import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
-import {
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class TodoGetFilterDto extends QueryPagination {
   @ApiModelProperty({ required: false })

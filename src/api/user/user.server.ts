@@ -27,8 +27,6 @@ export class UserService {
       take: take,
       skip: skip,
     });
-  async getUserAll(): Promise<User[]> {
-    return await this.userRepository.find();
   }
 
   // Авторизация

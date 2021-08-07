@@ -5,11 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TodoCreateDto } from './todo.dto/todo-create.dto';
 import { CategoriesService } from '../categories/categories.server';
 import { TodoUpdateActiveDto } from './todo.dto/todo-update-active.dto';
-import { PutValidate } from '../../lib/put-validate';
 import { TodoUpdateDto } from './todo.dto/todo-update.dto';
 import { Pagination } from '../../lib/pagination';
 import { TodoGetFilterDto } from './todo.dto/todo-get-filter.dto';
-import { User } from '../user/user.entity';
 
 @Injectable()
 export class TodoService {
