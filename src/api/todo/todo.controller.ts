@@ -35,10 +35,15 @@ export class TodoController {
   @UseGuards(UserGuard)
   @Put('/:id')
   async updateTodoUser(
+    @Request() req,
     @Param('id') id: string,
     @Body(ValidationPipe) todoUpdateDto: TodoUpdateDto,
   ) {
-    return await this.todoService.updateTodoUser(+id, todoUpdateDto);
+    return await this.todoService.updateTodoUser(
+      +id,
+      todoUpdateDto,
+      req.user.id,
+    );
   }
 
   @UseGuards(UserGuard)
@@ -52,6 +57,7 @@ export class TodoController {
     return await this.todoService.updateTodoActiveUser(
       +id,
       todoUpdateActiveDto,
+      req.user.id,
     );
   }
 

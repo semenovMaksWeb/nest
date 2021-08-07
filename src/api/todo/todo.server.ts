@@ -9,6 +9,7 @@ import { PutValidate } from '../../lib/put-validate';
 import { TodoUpdateDto } from './todo.dto/todo-update.dto';
 import { Pagination } from '../../lib/pagination';
 import { TodoGetFilterDto } from './todo.dto/todo-get-filter.dto';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class TodoService {
@@ -17,6 +18,7 @@ export class TodoService {
     private todoRepository: Repository<Todo>,
     private categoriesService: CategoriesService,
   ) {}
+
   async postTodoUser(todoCreateDto: TodoCreateDto, userId: number) {
     todoCreateDto.categories = await this.categoriesService.saveCategoriesTodo(
       todoCreateDto.categories,
@@ -24,13 +26,18 @@ export class TodoService {
     await this.todoRepository.save({ ...todoCreateDto, user: { id: userId } });
     return 'Задача успешно добавлена';
   }
+
   async updateTodoActiveUser(
     id: number,
     todoUpdateActiveDto: TodoUpdateActiveDto,
+    idUser: number,
   ): Promise<string> {
+    const todo = await this.getTodoUserId(id);
+    this.validateTodoUser(todo, idUser);
     const result = await this.todoRepository.update(id, {
       active: todoUpdateActiveDto.active,
     });
+
     return PutValidate({
       validate: result.affected,
       callbackTrue: 'Вы успешно поменяли активность задачи',
@@ -38,21 +45,22 @@ export class TodoService {
     });
   }
 
-  async updateTodoUser(id: number, todoUpdateDto: TodoUpdateDto) {
-    if (await this.getTodoId(id)) {
-      todoUpdateDto.categories =
-        await this.categoriesService.saveCategoriesTodo(
-          todoUpdateDto.categories,
-        );
-      await this.todoRepository.save({ ...todoUpdateDto, id: id });
-      return 'Задача успешно измененна';
-    } else {
-      this.errors404Todo();
-    }
+  async updateTodoUser(
+    id: number,
+    todoUpdateDto: TodoUpdateDto,
+    idUser: number,
+  ) {
+    const todo = await this.getTodoUserId(id);
+    this.validateTodoUser(todo, idUser);
+    todoUpdateDto.categories = await this.categoriesService.saveCategoriesTodo(
+      todoUpdateDto.categories,
+    );
+    await this.todoRepository.save({ ...todoUpdateDto, id: id });
+    return 'Задача успешно измененна';
   }
 
-  async getTodoId(id: number) {
-    return await this.todoRepository.findOne(id);
+  async getTodoUserId(id: number) {
+    return await this.todoRepository.findOne(id, { relations: ['user'] });
   }
 
   async getTodoUser(userId: number, query: TodoGetFilterDto) {
@@ -86,6 +94,7 @@ export class TodoService {
       relations: ['categories', 'user'],
     });
   }
+
   addSqlWhereTitle(sqlCreate: SelectQueryBuilder<Todo>, title?: string) {
     if (title) {
       sqlCreate.andWhere('todo.title LIKE :title', { title: `%${title}%` });
@@ -98,6 +107,13 @@ export class TodoService {
   }
   addSqlWhereCategories(sqlCreate: SelectQueryBuilder<Todo>) {
     sqlCreate.innerJoin('todo.categories', 'categories');
+  }
+
+  validateTodoUser(todo: Todo, idUser: number) {
+    if (todo && todo.user.id === idUser) {
+      return;
+    }
+    this.errors404Todo();
   }
 
   errors404Todo() {
