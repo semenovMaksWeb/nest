@@ -32,11 +32,11 @@ export class User {
   password: string;
 
   @ManyToMany(() => Token, (token) => token.id)
-  @JoinTable()
+  @JoinTable({ name: 'user_token' })
   token: Token[];
 
   @ManyToMany(() => Roles, (roles) => roles.id)
-  @JoinTable()
+  @JoinTable({ name: 'user_roles' })
   roles: Roles[];
 
   @OneToMany(() => Todo, (todo) => todo.id)

@@ -24,6 +24,6 @@ export class Roles {
   user: User[];
 
   @ManyToMany(() => Rights, (rights) => rights.id)
-  @JoinTable()
+  @JoinTable({ name: 'roles_rights' })
   rights: Rights[];
 }

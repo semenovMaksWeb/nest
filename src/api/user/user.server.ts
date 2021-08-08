@@ -74,7 +74,7 @@ export class UserService {
     await this.userRepository
       .createQueryBuilder()
       .insert()
-      .into('user_token_token')
+      .into('user_token')
       .values({
         userId: idUser,
         tokenId: idToken,
