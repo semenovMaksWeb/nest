@@ -9,6 +9,7 @@ import {
 import { JoinTable } from 'typeorm';
 import { Token } from '../token/token.entity';
 import { Todo } from '../todo/todo.entity';
+import { Roles } from '../roles/roles.entity';
 
 @Entity()
 export class User {
@@ -33,6 +34,10 @@ export class User {
   @ManyToMany(() => Token, (token) => token.id)
   @JoinTable()
   token: Token[];
+
+  @ManyToMany(() => Roles, (roles) => roles.id)
+  @JoinTable()
+  roles: Roles[];
 
   @OneToMany(() => Todo, (todo) => todo.id)
   todo: Todo[];

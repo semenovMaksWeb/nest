@@ -5,10 +5,10 @@ import {
   CreateDateColumn,
   ManyToMany,
 } from 'typeorm';
-import { Todo } from '../todo/todo.entity';
+import { Roles } from '../roles/roles.entity';
 
 @Entity()
-export class Categories {
+export class Rights {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,6 +18,6 @@ export class Categories {
   @CreateDateColumn()
   create: Date;
 
-  @ManyToMany(() => Todo, (todo) => todo.id)
-  todo: Todo[];
+  @ManyToMany(() => Roles, (roles) => roles.id)
+  roles: Roles[];
 }
