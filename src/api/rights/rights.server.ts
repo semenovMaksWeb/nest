@@ -17,10 +17,8 @@ export class RightsService {
     });
   }
   async updateRights(rightsBody: RightsSaveDto, id: number) {
-    const rights = await this.getRightsFindId(id);
-    if (!rights) {
-      RightsService.errorsRightsNull();
-    }
+    const rights = await this.validateBdNull(id);
+
     await this.validateBdRights(rightsBody.name, rights.id);
     await this.rightsRepository.update(id, {
       name: rightsBody.name,
@@ -43,6 +41,13 @@ export class RightsService {
     if (rights && rights.id !== id) {
       RightsService.errorsRightsName();
     }
+  }
+  private async validateBdNull(id: number) {
+    const rights = await this.getRightsFindId(id);
+    if (!rights) {
+      RightsService.errorsRightsNull();
+    }
+    return rights;
   }
   private static errorsRightsName() {
     throw new HttpException(
