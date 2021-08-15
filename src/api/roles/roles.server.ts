@@ -5,12 +5,15 @@ import { Repository } from 'typeorm';
 import { Pagination } from '../../lib/pagination';
 import { RolesGetFilterDto } from './roles.dto/roles-get-filter.dto';
 import { RolesSaveDto } from './roles.dto/roles-save.dto';
+import { RolesSaveRightsDto } from './roles.dto/roles-save-rights.dto';
+import { RightsService } from '../rights/rights.server';
 
 @Injectable()
 export class RolesService {
   constructor(
     @InjectRepository(Roles)
     private rolesRepository: Repository<Roles>,
+    private rightsServer: RightsService,
   ) {}
   async saveRoles(rolesBody: RolesSaveDto) {
     await this.validateBdRoles(rolesBody.name);
@@ -19,6 +22,13 @@ export class RolesService {
     });
     return `Роль удачно создана`;
   }
+  async saveRolesRights(rolesRightsBody: RolesSaveRightsDto) {
+    rolesRightsBody.rights = await this.rightsServer.saveRightsRoles(
+      rolesRightsBody.rights,
+    );
+    await this.rolesRepository.save(rolesRightsBody);
+  }
+
   async updateRoles(rolesBody: RolesSaveDto, id: number) {
     const roles = await this.validateBdNull(id);
     await this.validateBdRoles(rolesBody.name, roles.id);
@@ -37,6 +47,7 @@ export class RolesService {
     return await this.rolesRepository.find({
       take: take,
       skip: skip,
+      relations: ['rights'],
     });
   }
 

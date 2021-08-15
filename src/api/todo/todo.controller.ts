@@ -28,7 +28,6 @@ export class TodoController {
     @Body(ValidationPipe) todoCreateDto: TodoCreateDto,
     @Request() req,
   ) {
-    console.log(req.user.id);
     return await this.todoService.postTodoUser(todoCreateDto, req.user.id);
   }
 

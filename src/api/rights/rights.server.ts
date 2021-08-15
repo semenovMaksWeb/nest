@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Rights } from './rights.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RightsSaveDto } from './rights.dto/rights-save.dto';
+import { RightsGetRoles } from './rights.dto/rights-get-roles';
 
 @Injectable()
 export class RightsService {
@@ -15,6 +16,9 @@ export class RightsService {
     return await this.rightsRepository.save({
       name: rights.name,
     });
+  }
+  async saveRightsRoles(rights: RightsGetRoles[]): Promise<Rights[]> {
+    return await this.rightsRepository.save(rights);
   }
   async updateRights(rightsBody: RightsSaveDto, id: number) {
     const rights = await this.validateBdNull(id);
