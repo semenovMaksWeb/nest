@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  ValidationPipe,
+} from '@nestjs/common';
 import { RightsService } from './rights.server';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RightsSaveDto } from './rights.dto/rights-save.dto';
@@ -14,5 +22,12 @@ export class RightsController {
   @Post('')
   async rightsSave(@Body(ValidationPipe) rightsSaveDto: RightsSaveDto) {
     return await this.rightsService.saveRights(rightsSaveDto);
+  }
+  @Put(':id')
+  async rightsUpdate(
+    @Body(ValidationPipe) rightsSaveDto: RightsSaveDto,
+    @Param('id') id: string,
+  ) {
+    return await this.rightsService.updateRights(rightsSaveDto, +id);
   }
 }
