@@ -13,7 +13,13 @@ export class CategoriesService {
   async saveCategoriesTodo(
     categories: CategoriesGetTodoDto[],
   ): Promise<Categories[]> {
-    return await this.categoriesRepository.save(categories);
+    const categoriesMap: CategoriesGetTodoDto[] = categories.map((e) => {
+      return {
+        name: e.name,
+        id: e.id,
+      };
+    });
+    return await this.categoriesRepository.save(categoriesMap);
   }
   async getCategoriesAll() {
     return await this.categoriesRepository.find();

@@ -31,6 +31,6 @@ export class Todo {
   user: User;
 
   @ManyToMany(() => Categories, (categories) => categories.id)
-  @JoinTable()
+  @JoinTable({ name: 'todo_categories' })
   categories: Categories[];
 }

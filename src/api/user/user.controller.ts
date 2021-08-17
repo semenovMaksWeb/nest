@@ -16,13 +16,13 @@ import { UserGuard } from './user.guard';
 import { UserUpdateDto } from './user.dto/user-update.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserGetFilterDto } from './user.dto/user-get-filter.dto';
-@ApiTags('user')
-@Controller('user')
+import { User, nameController } from 'src/name/nameApi/User';
+@ApiTags(nameController)
 @ApiBearerAuth()
-@Controller('user')
+@Controller(nameController)
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Post()
+  @Post(User.postUser.name)
   postUser(@Body(ValidationPipe) userPostDto: UserPostDto) {
     return this.userService.postUser(userPostDto);
   }
@@ -32,19 +32,19 @@ export class UserController {
   ) {
     return this.userService.postUserToken(userAuthorizationDto);
   }
-  @Get('/all')
+  @Get(User.getUserAll.name)
   getUserAll(@Query(null, ValidationPipe) query: UserGetFilterDto) {
     console.log(query);
     return this.userService.getUserAll(query);
   }
 
-  @Get('profile')
+  @Get(User.getUserToken.name)
   @UseGuards(UserGuard)
   getUserToken(@Request() req) {
     return this.userService.getUserProfile(req.user);
   }
 
-  @Put('profile')
+  @Put(User.updateUserProfile.name)
   @UseGuards(UserGuard)
   updateUserProfile(
     @Request() req,

@@ -11,5 +11,5 @@ export class CategoriesGetTodoDto {
   @IsNumber({}, { message: 'id категории должен является числом' })
   @IsOptional()
   // @({ message: 'id категории обязательное поле' })
-  id: number;
+  id?: number;
 }
