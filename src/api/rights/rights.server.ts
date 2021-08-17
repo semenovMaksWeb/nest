@@ -18,7 +18,13 @@ export class RightsService {
     });
   }
   async saveRightsRoles(rights: RightsGetRoles[]): Promise<Rights[]> {
-    return await this.rightsRepository.save(rights);
+    const rightsMap = rights.map((e) => {
+      return {
+        id: e.id,
+        name: e.name,
+      };
+    });
+    return await this.rightsRepository.save(rightsMap);
   }
   async updateRights(rightsBody: RightsSaveDto, id: number) {
     const rights = await this.validateBdNull(id);
