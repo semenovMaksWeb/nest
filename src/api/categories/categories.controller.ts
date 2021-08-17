@@ -1,13 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
 import { CategoriesService } from './categories.server';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-
-@Controller('categories')
-@ApiTags('categories')
+import { Categories, nameController } from 'src/name/nameApi/Categories';
+@Controller(nameController)
+@ApiTags(nameController)
 @ApiBearerAuth()
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
-  @Get('/all')
+  @Get(Categories.categoriesUser.name)
   async categoriesUser() {
     return await this.categoriesService.getCategoriesAll();
   }

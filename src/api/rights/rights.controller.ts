@@ -10,20 +10,21 @@ import {
 import { RightsService } from './rights.server';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RightsSaveDto } from './rights.dto/rights-save.dto';
-@Controller('rights')
-@ApiTags('rights')
+import { Rights, nameController } from 'src/name/nameApi/Rights';
+@Controller(nameController)
+@ApiTags(nameController)
 @ApiBearerAuth()
 export class RightsController {
   constructor(private readonly rightsService: RightsService) {}
-  @Get('/all')
+  @Get(Rights.rightsAll.name)
   async rightsAll() {
     return await this.rightsService.getRightsAll();
   }
-  @Post('')
+  @Post(Rights.rightsSave.name)
   async rightsSave(@Body(ValidationPipe) rightsSaveDto: RightsSaveDto) {
     return await this.rightsService.saveRights(rightsSaveDto);
   }
-  @Put(':id')
+  @Put(Rights.rightsUpdate.name)
   async rightsUpdate(
     @Body(ValidationPipe) rightsSaveDto: RightsSaveDto,
     @Param('id') id: string,
