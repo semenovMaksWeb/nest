@@ -10,7 +10,7 @@ import {
 import { RightsService } from './rights.server';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RightsSaveDto } from './rights.dto/rights-save.dto';
-import { Rights, nameController } from 'src/name/nameApi/Rights';
+import { Rights, nameController } from 'src/lib/name/nameApi/Rights';
 @Controller(nameController)
 @ApiTags(nameController)
 @ApiBearerAuth()

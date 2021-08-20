@@ -9,7 +9,7 @@ import { UserAuthorizationDto } from './user.dto/user-authorization.dto';
 import { TokenService } from '../token/token.server';
 import { Token } from '../token/token.entity';
 import { UserUpdateDto } from './user.dto/user-update.dto';
-import { Pagination } from '../../lib/pagination';
+import { Pagination } from '../../lib/api/pagination';
 import { UserGetFilterDto } from './user.dto/user-get-filter.dto';
 
 @Injectable()
@@ -177,11 +177,11 @@ export class UserService {
   }
 
   // password create
-  private static async createPassword(password: string): Promise<string> {
+  static async createPassword(password: string): Promise<string> {
     return await bcrypt.hash(password, 10);
   }
 
-  private static async getPassword(
+  static async getPassword(
     password: string,
     passwordHash: string,
   ): Promise<boolean> {

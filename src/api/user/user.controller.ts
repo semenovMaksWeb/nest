@@ -16,7 +16,7 @@ import { UserGuard } from './user.guard';
 import { UserUpdateDto } from './user.dto/user-update.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserGetFilterDto } from './user.dto/user-get-filter.dto';
-import { User, nameController } from 'src/name/nameApi/User';
+import { User, nameController } from 'src/lib/name/nameApi/User';
 @ApiTags(nameController)
 @ApiBearerAuth()
 @Controller(nameController)

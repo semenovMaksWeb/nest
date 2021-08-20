@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { CategoriesService } from './categories.server';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Categories, nameController } from 'src/name/nameApi/Categories';
+import { Categories, nameController } from 'src/lib/name/nameApi/Categories';
 @Controller(nameController)
 @ApiTags(nameController)
 @ApiBearerAuth()

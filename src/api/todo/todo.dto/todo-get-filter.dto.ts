@@ -1,4 +1,4 @@
-import { QueryPagination } from 'src/lib/pagination';
+import { QueryPagination } from 'src/lib/api/pagination';
 import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 import {
   IsOptional,

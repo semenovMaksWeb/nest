@@ -17,7 +17,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TodoUpdateActiveDto } from './todo.dto/todo-update-active.dto';
 import { TodoUpdateDto } from './todo.dto/todo-update.dto';
 import { TodoGetFilterDto } from './todo.dto/todo-get-filter.dto';
-import { Todo, nameController } from 'src/name/nameApi/Todo';
+import { Todo, nameController } from 'src/lib/name/nameApi/Todo';
 @Controller(nameController)
 @ApiTags(nameController)
 @ApiBearerAuth()

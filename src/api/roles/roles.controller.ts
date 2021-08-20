@@ -14,7 +14,7 @@ import { RolesService } from './roles.server';
 import { RolesGetFilterDto } from './roles.dto/roles-get-filter.dto';
 import { RolesSaveDto } from './roles.dto/roles-save.dto';
 import { RolesSaveRightsDto } from './roles.dto/roles-save-rights.dto';
-import { Roles, nameController } from 'src/name/nameApi/Roles';
+import { Roles, nameController } from 'src/lib/name/nameApi/Roles';
 @Controller(nameController)
 @ApiTags(nameController)
 @ApiBearerAuth()

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Roles } from './roles.entity';
 import { Repository } from 'typeorm';
-import { Pagination } from '../../lib/pagination';
+import { Pagination } from '../../lib/api/pagination';
 import { RolesGetFilterDto } from './roles.dto/roles-get-filter.dto';
 import { RolesSaveDto } from './roles.dto/roles-save.dto';
 import { RolesSaveRightsDto } from './roles.dto/roles-save-rights.dto';
