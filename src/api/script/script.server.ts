@@ -16,9 +16,10 @@ export class ScriptService {
     const key = 'isActive';
     const variable = await this.variableServer.getValKey(key);
     if (variable && variable.value === 'true') {
+      // await this.variableServer.setValKey(key, 'false');
       return 'Проект активен';
     }
-    await this.variableServer.createKey(key, 'true');
+    await this.variableServer.setValKey(key, 'true');
     const userRes = await InsetUserSuper(bdUserRolesRights.user);
     const rolesRes = await insetRoles(bdUserRolesRights.roles);
     const rightsRes = await InsetRights(bdUserRolesRights.rights);
