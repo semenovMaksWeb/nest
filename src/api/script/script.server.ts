@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { nameAllApi } from '../../lib/name/nameApi';
 import { bdUserRolesRights } from 'src/lib/default/bd-user-roles-rights';
 
-import { InsetUserSuper } from '../../lib/script/InsetUserSuper';
-import { insetRoles } from '../../lib/script/insetRoles';
-import { InsetRights } from '../../lib/script/insetRights';
-import { InsetRolesRights } from '../../lib/script/insetRolesRights';
+import { InsetUserSuper } from '../../lib/script/bd-start/InsetUserSuper';
+import { insetRoles } from '../../lib/script/bd-start/insetRoles';
+import { InsetRights } from '../../lib/script/bd-start/insetRights';
+import { InsetRolesRights } from '../../lib/script/bd-start/insetRolesRights';
 import { VariableServer } from '../variable/variable.server';
 
 @Injectable()
@@ -32,8 +31,6 @@ export class ScriptService {
     };
   }
   async DataSetApi() {
-    return {
-      api: nameAllApi,
-    };
+    return {};
   }
 }

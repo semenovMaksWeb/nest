@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Rights } from '../rights/rights.entity';
+import { Router } from '../router/router.entity';
 
 @Entity()
 export class Roles {
@@ -28,4 +29,8 @@ export class Roles {
   @ManyToMany(() => Rights, (rights) => rights.id)
   @JoinTable({ name: 'roles_rights' })
   rights: Rights[];
+
+  @ManyToMany(() => Router, (router) => router.id)
+  @JoinTable({ name: 'router_roles' })
+  router: Router[];
 }

@@ -10,6 +10,7 @@ import { RightsModule } from 'src/api/rights/rights.module';
 import { RolesModule } from './api/roles/roles.module';
 import { ScriptModule } from './api/script/script.module';
 import { VariableModule } from './api/variable/variable.module';
+import { RouterModule } from './api/router/router.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { VariableModule } from './api/variable/variable.module';
     RolesModule,
     ScriptModule,
     VariableModule,
+    RouterModule,
   ],
   controllers: [],
   providers: [],

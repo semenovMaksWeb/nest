@@ -1,6 +1,6 @@
 import { getConnection } from 'typeorm';
-import { User } from '../../api/user/user.entity';
-import { UserService } from '../../api/user/user.server';
+import { User } from '../../../api/user/user.entity';
+import { UserService } from '../../../api/user/user.server';
 // функция создания админа супер
 export async function InsetUserSuper(user) {
   // поиск user

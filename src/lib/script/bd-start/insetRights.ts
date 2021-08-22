@@ -1,6 +1,6 @@
-import { Rights } from '../../api/rights/rights.entity';
+import { Rights } from '../../../api/rights/rights.entity';
 import { getConnection } from 'typeorm';
-import { uniqueArray } from './uniqueScript';
+import { uniqueArray } from '../uniqueScript';
 export async function InsetRights(rights) {
   const rightsName = rights.map((e) => e.name);
   const rightsBd = await getConnection()
