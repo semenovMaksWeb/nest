@@ -6,13 +6,19 @@ import { InsetUserSuper } from '../../lib/script/InsetUserSuper';
 import { insetRoles } from '../../lib/script/insetRoles';
 import { InsetRights } from '../../lib/script/insetRights';
 import { InsetRolesRights } from '../../lib/script/insetRolesRights';
-import { DropDatabase } from '../../lib/script/drop-database';
+import { VariableServer } from '../variable/variable.server';
 
 @Injectable()
 export class ScriptService {
+  constructor(private variableServer: VariableServer) {}
   // первая загрузка при создания проекта
   async DataSetBd() {
-    await DropDatabase();
+    const key = 'isActive';
+    const variable = await this.variableServer.getValKey(key);
+    if (variable && variable.value === 'true') {
+      return 'Проект активен';
+    }
+    await this.variableServer.createKey(key, 'true');
     const userRes = await InsetUserSuper(bdUserRolesRights.user);
     const rolesRes = await insetRoles(bdUserRolesRights.roles);
     const rightsRes = await InsetRights(bdUserRolesRights.rights);

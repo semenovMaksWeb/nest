@@ -29,8 +29,8 @@ export class TokenService {
   async updateDateToken(token: Token) {
     if (this.checkUpdateDateToken(token)) {
       const date = this.generationDateToken();
-      console.log('5 часов токен протухнет');
-      // если через после 5 часов токен протухнет обновить его
+      console.log('1 часов токен протухнет');
+      // если через после 1 часов токен протухнет обновить его
       await this.tokenRepository.update(
         { id: token.id },
         {

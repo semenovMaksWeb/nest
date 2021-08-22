@@ -9,8 +9,7 @@ import { CategoriesModule } from 'src/api/categories/categories.module';
 import { RightsModule } from 'src/api/rights/rights.module';
 import { RolesModule } from './api/roles/roles.module';
 import { ScriptModule } from './api/script/script.module';
-
-console.log(process.env.POSTGRES_USER);
+import { VariableModule } from './api/variable/variable.module';
 
 @Module({
   imports: [
@@ -33,6 +32,7 @@ console.log(process.env.POSTGRES_USER);
     RightsModule,
     RolesModule,
     ScriptModule,
+    VariableModule,
   ],
   controllers: [],
   providers: [],

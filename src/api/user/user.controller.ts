@@ -26,7 +26,7 @@ export class UserController {
   postUser(@Body(ValidationPipe) userPostDto: UserPostDto) {
     return this.userService.postUser(userPostDto);
   }
-  @Post('authorization')
+  @Post(User.postUserToken.name)
   postUserToken(
     @Body(ValidationPipe) userAuthorizationDto: UserAuthorizationDto,
   ) {
