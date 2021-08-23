@@ -6,10 +6,16 @@ import { insetRoles } from '../../lib/script/bd-start/insetRoles';
 import { InsetRights } from '../../lib/script/bd-start/insetRights';
 import { InsetRolesRights } from '../../lib/script/bd-start/insetRolesRights';
 import { VariableServer } from '../variable/variable.server';
+import { RouterServer } from '../router/router-server';
+import { nameAllApi } from '../../lib/name/nameApi';
+import { ConvertRouterToBd } from '../../lib/script/bd-start/convertRouterToBd';
 
 @Injectable()
 export class ScriptService {
-  constructor(private variableServer: VariableServer) {}
+  constructor(
+    private variableServer: VariableServer,
+    private routerServer: RouterServer,
+  ) {}
   // первая загрузка при создания проекта
   async DataSetBd() {
     const key = 'isActive';
@@ -23,14 +29,18 @@ export class ScriptService {
     const rolesRes = await insetRoles(bdUserRolesRights.roles);
     const rightsRes = await InsetRights(bdUserRolesRights.rights);
     const rolesRights = await InsetRolesRights(bdUserRolesRights.roles_rights);
+    const routerRes = await this.routerServer.savesRouter(
+      ConvertRouterToBd(nameAllApi),
+    );
     return {
       user: userRes,
       roles: `Созданно roles ${rolesRes}`,
       rights: `Созданно rights ${rightsRes}`,
       rolesRights: rolesRights,
+      router: routerRes,
     };
   }
   async DataSetApi() {
-    return {};
+    return ConvertRouterToBd(nameAllApi);
   }
 }
