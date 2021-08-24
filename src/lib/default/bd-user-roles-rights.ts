@@ -50,4 +50,10 @@ export const bdUserRolesRights = {
       rightsId: 1,
     },
   ],
+  router_rights: [
+    {
+      keyRouter: '',
+      rightsId: '',
+    },
+  ],
 };

@@ -18,13 +18,12 @@ export class ScriptService {
   ) {}
   // первая загрузка при создания проекта
   async DataSetBd() {
-    const key = 'isActive';
-    const variable = await this.variableServer.getValKey(key);
+    const variable = await this.variableServer.getValKey('isActive');
     if (variable && variable.value === 'true') {
-      // await this.variableServer.setValKey(key, 'false');
       return 'Проект активен';
     }
-    await this.variableServer.setValKey(key, 'true');
+    await this.variableServer.createKey('isActive', 'true');
+    await this.variableServer.createKey('rightsAllId', '1');
     const userRes = await InsetUserSuper(bdUserRolesRights.user);
     const rolesRes = await insetRoles(bdUserRolesRights.roles);
     const rightsRes = await InsetRights(bdUserRolesRights.rights);

@@ -5,7 +5,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Roles } from '../roles/roles.entity';
+import { Rights } from '../rights/rights.entity';
 
 @Entity()
 export class Router {
@@ -21,7 +21,7 @@ export class Router {
   @Column({})
   type: string;
 
-  @ManyToMany(() => Roles, (roles) => roles.id)
-  @JoinTable({ name: 'router_roles' })
-  roles: Roles[];
+  @ManyToMany(() => Rights, (rights) => rights.id)
+  @JoinTable({ name: 'router_rights' })
+  roles: Rights[];
 }
