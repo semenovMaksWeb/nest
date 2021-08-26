@@ -9,6 +9,7 @@ import { VariableServer } from '../variable/variable.server';
 import { RouterServer } from '../router/router-server';
 import { nameAllApi } from '../../lib/name/nameApi';
 import { ConvertRouterToBd } from '../../lib/script/bd-start/convertRouterToBd';
+import { InsetUserRoles } from '../../lib/script/bd-start/insetUserRoles';
 
 @Injectable()
 export class ScriptService {
@@ -25,11 +26,12 @@ export class ScriptService {
     await this.variableServer.createKey('isActive', 'true');
     await this.variableServer.createKey('rightsAllId', '1');
     const userRes = await InsetUserSuper(bdUserRolesRights.user);
-    const rolesRes = await insetRoles(bdUserRolesRights.roles);
     const rightsRes = await InsetRights(bdUserRolesRights.rights);
+    const rolesRes = await insetRoles(bdUserRolesRights.roles);
     const rolesRights = await InsetRolesRights(bdUserRolesRights.roles_rights);
+    await InsetUserRoles(bdUserRolesRights.user_roles);
     const routerRes = await this.routerServer.savesRouter(
-      ConvertRouterToBd(nameAllApi),
+      ConvertRouterToBd(nameAllApi, bdUserRolesRights.router_rights),
     );
     return {
       user: userRes,
@@ -40,6 +42,6 @@ export class ScriptService {
     };
   }
   async DataSetApi() {
-    return ConvertRouterToBd(nameAllApi);
+    return ConvertRouterToBd(nameAllApi, bdUserRolesRights.router_rights);
   }
 }

@@ -11,8 +11,11 @@ export class RouterServer {
     private userRepository: Repository<Router>,
   ) {}
 
-  async getAllRouter() {
+  async getAllRouter(): Promise<Router[]> {
     return await this.userRepository.find();
+  }
+  async getKeyRouter(key: string): Promise<Router> {
+    return await this.userRepository.findOne({ where: { key } });
   }
   async savesRouter(router: RouterSave[]) {
     return await this.userRepository.save(router);

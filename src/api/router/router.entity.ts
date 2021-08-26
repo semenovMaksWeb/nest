@@ -21,7 +21,10 @@ export class Router {
   @Column({})
   type: string;
 
+  @Column({ default: true })
+  authorization: boolean;
+
   @ManyToMany(() => Rights, (rights) => rights.id)
   @JoinTable({ name: 'router_rights' })
-  roles: Rights[];
+  rights: Rights[];
 }
