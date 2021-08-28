@@ -20,6 +20,12 @@ export class Roles {
   })
   name: string;
 
+  @Column()
+  description: string;
+
+  @Column({ default: true })
+  visible: boolean;
+
   @CreateDateColumn()
   create: Date;
 

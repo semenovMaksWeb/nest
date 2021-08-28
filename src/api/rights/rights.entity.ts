@@ -17,6 +17,9 @@ export class Rights {
   })
   name: string;
 
+  @Column()
+  description: string;
+
   @CreateDateColumn()
   create: Date;
 
