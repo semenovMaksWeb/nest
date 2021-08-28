@@ -19,19 +19,13 @@ export function ConvertRouterToBd(router) {
         type: `${router[routerName][routerKey].type}`,
         defaultAuthorization:
           router[routerName][routerKey].defaultAuthorization,
+        authorization: router[routerName][routerKey].authorization,
       };
       // доступ ко всем авторизованным user
       if (router[routerName][routerKey].usersRolesAll) {
         resId.usersRolesAll = true;
         resId.authorization = true;
         resId.defaultAuthorization = true;
-      }
-      // есть дефолтное значение для требование авторизации
-      if (router[routerName][routerKey].defaultAuthorization !== undefined) {
-        resId.defaultAuthorization =
-          router[routerName][routerKey].defaultAuthorization;
-        resId.authorization =
-          router[routerName][routerKey].defaultAuthorization;
       }
       // требуется права админов
       if (router[routerName][routerKey].checkAdmin) {

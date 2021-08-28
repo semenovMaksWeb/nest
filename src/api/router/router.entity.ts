@@ -21,10 +21,13 @@ export class Router {
   @Column({})
   type: string;
 
+  @Column({ default: '' })
+  description: string;
+
   @Column()
   authorization: boolean;
 
-  @Column({ default: false })
+  @Column()
   defaultAuthorization: boolean;
 
   @Column({ default: false })

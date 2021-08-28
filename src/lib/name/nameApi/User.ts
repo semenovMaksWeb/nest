@@ -1,9 +1,15 @@
 export const User = {
-  postUser: { type: 'POST', name: '/', defaultAuthorization: false },
+  postUser: {
+    type: 'POST',
+    name: '/',
+    defaultAuthorization: true,
+    authorization: false,
+  },
   postUserToken: {
     type: 'POST',
     name: '/authorization',
     defaultAuthorization: false,
+    authorization: true,
   },
   getUserAll: { type: 'GET', name: '/all', checkAdmin: true },
   getUserToken: {
