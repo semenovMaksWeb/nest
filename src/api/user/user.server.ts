@@ -49,13 +49,18 @@ export class UserService {
     }
   }
 
-  // Регистрация
+  // Регистрация обычного пользователя
   async postUser(userPostDto: UserPostDto) {
     await this.validateBdUser(userPostDto.nik, userPostDto.email);
     await this.userRepository.save({
       nik: userPostDto.nik,
       email: userPostDto.email,
       password: await UserService.createPassword(userPostDto.password),
+      roles: [
+        {
+          id: 1,
+        },
+      ],
     });
     return 'Пользователь успешно создан';
   }

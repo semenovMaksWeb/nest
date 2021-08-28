@@ -67,7 +67,6 @@ export class UserGuard implements CanActivate {
         return await this.checkValidateRights(router, request);
       }
       return true;
-      // await this.checkValidateRightsSyperAdmin(request);
     }
     // валидация отсутсвует
     return true;
