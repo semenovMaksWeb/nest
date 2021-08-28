@@ -26,6 +26,9 @@ export class Roles {
   @Column({ default: true })
   visible: boolean;
 
+  @Column({ default: false })
+  system: boolean;
+
   @CreateDateColumn()
   create: Date;
 

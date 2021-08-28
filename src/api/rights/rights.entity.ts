@@ -17,6 +17,9 @@ export class Rights {
   })
   name: string;
 
+  @Column({ default: false })
+  system: boolean;
+
   @Column()
   description: string;
 
