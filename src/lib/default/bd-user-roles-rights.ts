@@ -64,6 +64,12 @@ export const bdUserRolesRights = {
       keyRouter: 'updateUserProfile',
     },
     {
+      // получить все user
+      authorization: true,
+      keyRouter: 'getUserAll',
+      rights: [{ id: 2 }],
+    },
+    {
       // сохранить роль
       authorization: true,
       keyRouter: 'rolesSave',

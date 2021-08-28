@@ -17,6 +17,12 @@ export class RouterServer {
   async getKeyRouter(key: string): Promise<Router> {
     return await this.userRepository.findOne({ where: { key } });
   }
+  async getKeyRouterRights(key: string): Promise<Router> {
+    return await this.userRepository.findOne({
+      where: { key },
+      relations: ['rights'],
+    });
+  }
   async savesRouter(router: RouterSave[]) {
     return await this.userRepository.save(router);
   }

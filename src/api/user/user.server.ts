@@ -99,6 +99,8 @@ export class UserService {
     const data = await this.userRepository
       .createQueryBuilder('user')
       .innerJoinAndSelect('user.token', 'token')
+      .innerJoinAndSelect('user.roles', 'roles')
+      .innerJoinAndSelect('roles.rights', 'rights')
       .where('token.value = :token', { token })
       .getOne();
     if (data) {

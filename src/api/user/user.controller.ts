@@ -22,34 +22,38 @@ import { RouterName } from '../../decorator/router-name.decorator';
 @ApiTags(nameController)
 @ApiBearerAuth()
 @Controller(nameController)
+@UseGuards(UserGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
   @Post(User.postUser.name)
+  @RouterName('postUser')
   postUser(@Body(ValidationPipe) userPostDto: UserPostDto) {
     return this.userService.postUser(userPostDto);
   }
+
   @Post(User.postUserToken.name)
+  @RouterName('postUserToken')
   postUserToken(
     @Body(ValidationPipe) userAuthorizationDto: UserAuthorizationDto,
   ) {
     return this.userService.postUserToken(userAuthorizationDto);
   }
+
   @Get(User.getUserAll.name)
   @RouterName('getUserAll')
-  @UseGuards(UserGuard)
   getUserAll(@Query(null, ValidationPipe) query: UserGetFilterDto) {
-    console.log(query);
     return this.userService.getUserAll(query);
   }
 
   @Get(User.getUserToken.name)
-  @UseGuards(UserGuard)
+  @RouterName('getUserToken')
   getUserToken(@Request() req) {
     return this.userService.getUserProfile(req.user);
   }
 
   @Put(User.updateUserProfile.name)
-  @UseGuards(UserGuard)
+  @RouterName('updateUserProfile')
   updateUserProfile(
     @Request() req,
     @Body(ValidationPipe) userUpdateDto: UserUpdateDto,
