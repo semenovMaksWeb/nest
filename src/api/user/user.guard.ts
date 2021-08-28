@@ -23,13 +23,7 @@ export class UserGuard implements CanActivate {
   async checkValidateUserToken(authorization: string) {
     if (authorization) {
       // токен  есть
-      const user = await this.userService.findUserToken(authorization);
-      if (!!user === false) {
-        // user не найден
-        throw new HttpException('Токен не валиден', HttpStatus.FORBIDDEN);
-      }
-      // user найден
-      return user;
+      return await this.userService.findUserToken(authorization);
     }
     throw new HttpException('Доступ закрыт', HttpStatus.FORBIDDEN);
   }
@@ -50,7 +44,9 @@ export class UserGuard implements CanActivate {
   async checkValidateRightsSyperAdmin(request) {
     const idRolesAll = await this.variableServer.getValKey('rolesAllId');
     const user = request.user;
-    return user.roles.some((elem) => elem.id === idRolesAll.value[0]);
+    if (!user.roles.some((elem) => elem.id === idRolesAll.value)) {
+      throw new HttpException('Доступ закрыт', HttpStatus.FORBIDDEN);
+    }
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -62,7 +58,7 @@ export class UserGuard implements CanActivate {
       const authorization = request.headers.authorization;
       request.user = await this.checkValidateUserToken(authorization);
       if (router.rights.length > 0) {
-        return await this.checkValidateRights(router, request);
+        await this.checkValidateRights(router, request);
       }
       return true;
     }

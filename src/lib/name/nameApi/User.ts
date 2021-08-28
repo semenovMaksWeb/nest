@@ -8,8 +8,8 @@ export const User = {
   postUserToken: {
     type: 'POST',
     name: '/authorization',
-    defaultAuthorization: false,
-    authorization: true,
+    defaultAuthorization: true,
+    authorization: false,
   },
   getUserAll: { type: 'GET', name: '/all', checkAdmin: true },
   getUserToken: {

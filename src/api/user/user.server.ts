@@ -103,10 +103,10 @@ export class UserService {
     token = token.replace('Bearer ', '');
     const data = await this.userRepository
       .createQueryBuilder('user')
-      .innerJoinAndSelect('user.token', 'token')
-      .innerJoinAndSelect('user.roles', 'roles')
-      .innerJoinAndSelect('roles.rights', 'rights')
+      .leftJoinAndSelect('user.token', 'token')
       .where('token.value = :token', { token })
+      .leftJoinAndSelect('user.roles', 'roles')
+      .leftJoinAndSelect('roles.rights', 'rights')
       .getOne();
     if (data) {
       await this.tokenService.validateToken(data.token[0]);
