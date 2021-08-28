@@ -1,3 +1,10 @@
+/**
+ * defaultAuthorization - обозначает что менять авторизацию нельзя и она по дефолту = value
+ * checkAdmin - обозначает что такие router должны иметь доступ только админы (предупреждение)
+ * usersRolesAll - обозначает что таким router нельзя добавлять права ибо они доступы для всех авторизованных user
+ *
+ */
+
 import {
   Categories,
   nameController as nameControllerCategories,

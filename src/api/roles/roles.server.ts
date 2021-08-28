@@ -27,6 +27,7 @@ export class RolesService {
       rolesRightsBody.rights,
     );
     await this.rolesRepository.save(rolesRightsBody);
+    return `Роль удачно создана`;
   }
 
   async updateRoles(rolesBody: RolesSaveDto, id: number) {

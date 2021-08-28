@@ -1,8 +1,8 @@
 export const Roles = {
-  rolesSave: { type: 'POST', name: '/' },
-  rolesSaveRights: { type: 'POST', name: '/rights' },
-  rolesUpdate: { type: 'PUT', name: ':id' },
-  rolesAll: { type: 'GET', name: '/' },
-  rolesDelete: { type: 'DELETE', name: ':id' },
+  rolesSave: { type: 'POST', name: '/', checkAdmin: true },
+  rolesSaveRights: { type: 'POST', name: '/rights', checkAdmin: true },
+  rolesUpdate: { type: 'PUT', name: ':id', checkAdmin: true },
+  rolesAll: { type: 'GET', name: '/', checkAdmin: true },
+  rolesDelete: { type: 'DELETE', name: ':id', checkAdmin: true },
 };
 export const nameController = 'roles';

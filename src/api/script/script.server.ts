@@ -4,7 +4,7 @@ import { bdUserRolesRights } from 'src/lib/default/bd-user-roles-rights';
 import { InsetUserSuper } from '../../lib/script/bd-start/InsetUserSuper';
 import { insetRoles } from '../../lib/script/bd-start/insetRoles';
 import { InsetRights } from '../../lib/script/bd-start/insetRights';
-import { InsetRolesRights } from '../../lib/script/bd-start/insetRolesRights';
+// import { InsetRolesRights } from '../../lib/script/bd-start/insetRolesRights';
 import { VariableServer } from '../variable/variable.server';
 import { RouterServer } from '../router/router-server';
 import { nameAllApi } from '../../lib/name/nameApi';
@@ -24,24 +24,24 @@ export class ScriptService {
       return 'Проект активен';
     }
     await this.variableServer.createKey('isActive', 'true');
-    await this.variableServer.createKey('rightsAllId', '1');
+    await this.variableServer.createKey('rolesAllId:', '3');
     const userRes = await InsetUserSuper(bdUserRolesRights.user);
     const rightsRes = await InsetRights(bdUserRolesRights.rights);
     const rolesRes = await insetRoles(bdUserRolesRights.roles);
-    const rolesRights = await InsetRolesRights(bdUserRolesRights.roles_rights);
+    // const rolesRights = await InsetRolesRights(bdUserRolesRights.roles_rights);
     await InsetUserRoles(bdUserRolesRights.user_roles);
     const routerRes = await this.routerServer.savesRouter(
-      ConvertRouterToBd(nameAllApi, bdUserRolesRights.router_rights),
+      ConvertRouterToBd(nameAllApi),
     );
     return {
       user: userRes,
       roles: `Созданно roles ${rolesRes}`,
       rights: `Созданно rights ${rightsRes}`,
-      rolesRights: rolesRights,
+      // rolesRights: rolesRights,
       router: routerRes,
     };
   }
   async DataSetApi() {
-    return ConvertRouterToBd(nameAllApi, bdUserRolesRights.router_rights);
+    return ConvertRouterToBd(nameAllApi);
   }
 }

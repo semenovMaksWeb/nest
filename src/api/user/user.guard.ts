@@ -48,11 +48,9 @@ export class UserGuard implements CanActivate {
     return check ? true : await this.checkValidateRightsSyperAdmin(request);
   }
   async checkValidateRightsSyperAdmin(request) {
-    const idRightsAll = await this.variableServer.getValKey('rightsAllId');
+    const idRolesAll = await this.variableServer.getValKey('rolesAllId');
     const user = request.user;
-    return user.roles.some(
-      (elem) => elem.rights.filter((e) => e.id === +idRightsAll.value)[0],
-    );
+    return user.roles.some((elem) => elem.id === idRolesAll.value[0]);
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
