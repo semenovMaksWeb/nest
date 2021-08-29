@@ -46,7 +46,8 @@ export class TokenService {
       this.tokenNoActive();
     }
     if (!this.checkToken(token)) {
-      // токен время жизни
+      // токен время жизни закончилось
+      await this.deleteToken(token);
       this.tokenNoDate();
     }
     // токен валиден проверить требуется ли продливать жизнь токену
@@ -63,6 +64,10 @@ export class TokenService {
       ),
       date: date,
     });
+  }
+  //удалить токен
+  async deleteToken(token: Token) {
+    await this.tokenRepository.delete(token.id);
   }
   generationDateToken() {
     const date = new Date();
