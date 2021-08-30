@@ -25,6 +25,7 @@ export class ScriptService {
     }
     await this.variableServer.createKey('isActive', 'true');
     await this.variableServer.createKey('rolesAllId', '3');
+    await this.variableServer.createKey('rightsAdminId', '1');
     const userRes = await InsetUserSuper(bdUserRolesRights.user);
     const rightsRes = await InsetRights(bdUserRolesRights.rights);
     const rolesRes = await insetRoles(bdUserRolesRights.roles);

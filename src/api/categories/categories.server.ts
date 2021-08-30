@@ -15,7 +15,6 @@ export class CategoriesService {
   ): Promise<Categories[]> {
     const categoriesMap: CategoriesGetTodoDto[] = categories.map((e) => {
       return {
-        name: e.name,
         id: e.id,
       };
     });

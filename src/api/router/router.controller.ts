@@ -1,8 +1,11 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { nameController, Router } from '../../lib/name/nameApi/Router';
 import {
+  Body,
   Controller,
   Get,
+  Param,
+  Post,
   Query,
   UseGuards,
   ValidationPipe,
@@ -10,6 +13,7 @@ import {
 import { UserGuard } from '../user/user.guard';
 import { RouterServer } from './router-server';
 import { RouterFilterDto } from './router.dto/router-filter.dto';
+import { RouterRightsDto } from './router.dto/router-rights.dto';
 
 @ApiTags(nameController)
 @ApiBearerAuth()
@@ -20,5 +24,13 @@ export class RouterController {
   @Get(Router.getRouterAll.name)
   async getRouterAll(@Query(null, ValidationPipe) query: RouterFilterDto) {
     return await this.routerServer.getAllRouter(query);
+  }
+
+  @Post(Router.setRouterRights.name)
+  async setRouterRights(
+    @Body(ValidationPipe) routerRightsDto: RouterRightsDto,
+    @Param('id') id: string,
+  ) {
+    return await this.routerServer.saveRouterRights(+id, routerRightsDto);
   }
 }
