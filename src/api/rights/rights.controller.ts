@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   UseGuards,
@@ -14,6 +15,7 @@ import { RightsSaveDto } from './rights.dto/rights-save.dto';
 import { Rights, nameController } from 'src/lib/name/nameApi/Rights';
 import { UserGuard } from '../user/user.guard';
 import { RouterName } from '../../decorator/router-name.decorator';
+import { ParamsIdDto } from '../../dto/paramsId.dto';
 @Controller(nameController)
 @ApiTags(nameController)
 @ApiBearerAuth()
@@ -36,8 +38,8 @@ export class RightsController {
   @RouterName('rightsUpdate')
   async rightsUpdate(
     @Body(ValidationPipe) rightsSaveDto: RightsSaveDto,
-    @Param('id') id: string,
+    @Param('id') params: ParamsIdDto,
   ) {
-    return await this.rightsService.updateRights(rightsSaveDto, +id);
+    return await this.rightsService.updateRights(rightsSaveDto, +params.id);
   }
 }

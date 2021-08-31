@@ -14,6 +14,7 @@ import { UserGuard } from '../user/user.guard';
 import { RouterServer } from './router-server';
 import { RouterFilterDto } from './router.dto/router-filter.dto';
 import { RouterRightsDto } from './router.dto/router-rights.dto';
+import { RouterName } from '../../decorator/router-name.decorator';
 
 @ApiTags(nameController)
 @ApiBearerAuth()
@@ -22,11 +23,13 @@ import { RouterRightsDto } from './router.dto/router-rights.dto';
 export class RouterController {
   constructor(private readonly routerServer: RouterServer) {}
   @Get(Router.getRouterAll.name)
+  @RouterName('getRouterAll')
   async getRouterAll(@Query(null, ValidationPipe) query: RouterFilterDto) {
     return await this.routerServer.getAllRouter(query);
   }
 
   @Post(Router.setRouterRights.name)
+  @RouterName('setRouterRights')
   async setRouterRights(
     @Body(ValidationPipe) routerRightsDto: RouterRightsDto,
     @Param('id') id: string,

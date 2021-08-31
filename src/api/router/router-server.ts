@@ -41,10 +41,14 @@ export class RouterServer {
     const router = await this.findOneRouter(id);
     if (router) {
       await this.validateRouterRights(router, body);
-      // update доделать rights map!
+      const rights = body.rights.map((e) => {
+        return {
+          id: e.id,
+        };
+      });
       return await this.routerRepository.save({
         ...router,
-        rights: body.rights,
+        rights: rights,
         authorization: body.authorization,
       });
     }
@@ -75,6 +79,9 @@ export class RouterServer {
   // функция для создание через парсинг файлов
   async savesRouter(router: RouterSave[]) {
     return await this.routerRepository.save(router);
+  }
+  async getAllRouters() {
+    return await this.routerRepository.find();
   }
 
   errors404Router() {

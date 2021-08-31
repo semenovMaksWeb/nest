@@ -30,9 +30,10 @@ export class RightsService {
     const rights = await this.validateBdNull(id);
 
     await this.validateBdRights(rightsBody.name, rights.id);
-    await this.rightsRepository.update(id, {
-      name: rightsBody.name,
-    });
+    await this.rightsRepository.update(id, rightsBody);
+    // await this.rightsRepository.update(id, {
+    //   name: rightsBody.name,
+    // });
     return 'Право успешно измененно';
   }
 

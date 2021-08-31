@@ -20,7 +20,7 @@ export class Rights {
   @Column({ default: false })
   system: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @CreateDateColumn()

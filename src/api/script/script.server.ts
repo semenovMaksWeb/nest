@@ -10,6 +10,7 @@ import { RouterServer } from '../router/router-server';
 import { nameAllApi } from '../../lib/name/nameApi';
 import { ConvertRouterToBd } from '../../lib/script/bd-start/convertRouterToBd';
 import { InsetUserRoles } from '../../lib/script/bd-start/insetUserRoles';
+import { uniqueArray } from '../../lib/script/uniqueScript';
 
 @Injectable()
 export class ScriptService {
@@ -43,6 +44,14 @@ export class ScriptService {
     };
   }
   async DataSetApi() {
-    return ConvertRouterToBd(nameAllApi);
+    const allRouter = ConvertRouterToBd(nameAllApi);
+    const routerBd = await this.routerServer.getAllRouters();
+
+    const routerRes = await this.routerServer.savesRouter(
+      uniqueArray(allRouter, routerBd, 'key'),
+    );
+    return {
+      routerRes,
+    };
   }
 }

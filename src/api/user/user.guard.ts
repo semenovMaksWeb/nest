@@ -44,9 +44,10 @@ export class UserGuard implements CanActivate {
   async checkValidateRightsSyperAdmin(request) {
     const idRolesAll = await this.variableServer.getValKey('rolesAllId');
     const user = request.user;
-    if (!user.roles.some((elem) => elem.id === idRolesAll.value)) {
+    if (!user.roles.some((elem) => elem.id === +idRolesAll.value)) {
       throw new HttpException('Доступ закрыт', HttpStatus.FORBIDDEN);
     }
+    return true;
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
