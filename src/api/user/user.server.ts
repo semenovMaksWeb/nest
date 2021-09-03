@@ -159,6 +159,9 @@ export class UserService {
       token: token.value,
     };
   }
+  async findOneUserId(id: number) {
+    return await this.userRepository.findOne(id);
+  }
 
   // Ошибка email
   private static errorsEmail(): void {

@@ -10,6 +10,7 @@ import { JoinTable } from 'typeorm';
 import { Token } from '../token/token.entity';
 import { Todo } from '../todo/todo.entity';
 import { Roles } from '../roles/roles.entity';
+import { Chat } from '../chat/chat.entity';
 
 @Entity()
 export class User {
@@ -41,4 +42,10 @@ export class User {
 
   @OneToMany(() => Todo, (todo) => todo.id)
   todo: Todo[];
+
+  @OneToMany(() => Chat, (chat) => chat.id)
+  chat: Chat;
+
+  @ManyToMany(() => Chat, (chat) => chat.id)
+  chatId: Chat[];
 }

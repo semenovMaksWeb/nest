@@ -1,7 +1,8 @@
 /**
- * defaultAuthorization - обозначает что менять авторизацию нельзя и она по дефолту = value
+ * defaultAuthorization - обозначает что менять авторизацию нельзя
  * checkAdmin - обозначает что такие router должны иметь доступ только админы (предупреждение)
  * usersRolesAll - обозначает что таким router нельзя добавлять права ибо они доступы для всех авторизованных user
+ * authorization
  *
  */
 
@@ -14,6 +15,7 @@ import { Rights, nameController as nameControllerRights } from './Rights';
 import { User, nameController as nameControllerUser } from './User';
 import { Todo, nameController as nameControllerTodo } from './Todo';
 import { Router, nameController as nameControllerRouter } from './Router';
+import { Chat, nameController as nameControllerChat } from './Chat';
 export const nameAllApi = {
   [nameControllerRoles]: Roles,
   [nameControllerRights]: Rights,
@@ -21,4 +23,5 @@ export const nameAllApi = {
   [nameControllerTodo]: Todo,
   [nameControllerCategories]: Categories,
   [nameControllerRouter]: Router,
+  [nameControllerChat]: Chat,
 };

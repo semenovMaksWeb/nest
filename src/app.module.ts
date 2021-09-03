@@ -11,6 +11,7 @@ import { RolesModule } from './api/roles/roles.module';
 import { ScriptModule } from './api/script/script.module';
 import { VariableModule } from './api/variable/variable.module';
 import { RouterModule } from './api/router/router.module';
+import { ChatModule } from './api/chat/chat.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { RouterModule } from './api/router/router.module';
     ScriptModule,
     VariableModule,
     RouterModule,
+    ChatModule,
   ],
   controllers: [],
   providers: [],

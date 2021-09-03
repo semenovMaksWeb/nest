@@ -21,6 +21,7 @@ export class UserGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
   async checkValidateUserToken(authorization: string) {
+    console.log(authorization);
     if (authorization) {
       // токен  есть
       return await this.userService.findUserToken(authorization);
