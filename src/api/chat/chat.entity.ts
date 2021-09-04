@@ -4,9 +4,11 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
+import { Message } from '../message/message.entity';
 
 @Entity()
 export class Chat {
@@ -15,6 +17,9 @@ export class Chat {
 
   @ManyToOne(() => User, (user) => user.id)
   user: User;
+
+  @OneToMany(() => User, (user) => user.id)
+  message: Message[];
 
   @Column({ nullable: false, unique: true })
   name: string;

@@ -16,6 +16,7 @@ import { User, nameController as nameControllerUser } from './User';
 import { Todo, nameController as nameControllerTodo } from './Todo';
 import { Router, nameController as nameControllerRouter } from './Router';
 import { Chat, nameController as nameControllerChat } from './Chat';
+import { Message, nameController as nameControllerMessage } from './Message';
 export const nameAllApi = {
   [nameControllerRoles]: Roles,
   [nameControllerRights]: Rights,
@@ -24,4 +25,5 @@ export const nameAllApi = {
   [nameControllerCategories]: Categories,
   [nameControllerRouter]: Router,
   [nameControllerChat]: Chat,
+  [nameControllerMessage]: Message,
 };

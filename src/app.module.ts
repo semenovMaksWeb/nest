@@ -12,7 +12,7 @@ import { ScriptModule } from './api/script/script.module';
 import { VariableModule } from './api/variable/variable.module';
 import { RouterModule } from './api/router/router.module';
 import { ChatModule } from './api/chat/chat.module';
-
+import { MessageModule } from './api/message/message.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -37,6 +37,7 @@ import { ChatModule } from './api/chat/chat.module';
     VariableModule,
     RouterModule,
     ChatModule,
+    MessageModule,
   ],
   controllers: [],
   providers: [],
