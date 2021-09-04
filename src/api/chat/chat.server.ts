@@ -20,6 +20,7 @@ export class ChatServer {
     const saveChat = await this.chatRepository.save({
       ...body,
       user: { id: user.id },
+      userId: [{ id: user.id }],
     });
     return {
       id: saveChat.id,
@@ -61,15 +62,26 @@ export class ChatServer {
       skip: skip,
     });
   }
+  // чаты где пользователь существует
+  async getChats(user: User) {
+    return await this.chatRepository
+      .createQueryBuilder('chat')
+      .leftJoinAndSelect('chat.user', 'user')
+      .leftJoinAndSelect('chat.userId', 'userId')
+      .andWhere('userId.id = :id', { id: user.id })
+      .getMany();
+  }
   // Показать чат id где я существую
   async getMyChatsId(user: User, id: number) {
     // разобраться с условиями many to many
-    console.log(
-      await this.chatRepository.findOne({
-        relations: ['user', 'userId'],
-        where: { id, userId: user.id },
-      }),
-    );
+    // const check = await getConnection()
+    //   .createQueryBuilder()
+    //   .select()
+    //   .from('chat_user', 'chat_user')
+    //   .innerJoinAndSelect('chat', 'chat', 'chat.id = chat_user.chatId')
+    //   .leftJoinAndSelect('chat.userId', 'userId')
+    //   .where('chat_user.userId =:id', { id: user.id })
+    //   .getMany();
     // разобраться с условиями many to many
     const chat = await this.chatRepository.findOne({
       relations: ['user', 'userId'],
@@ -117,9 +129,6 @@ export class ChatServer {
   // Валидация что пользователь есть в этом чате
   async validateUserInChatId(chat: Chat, id: number) {
     this.validateChatId(chat);
-    if (chat.user.id === id) {
-      return;
-    }
     if (!chat.userId.filter((e) => e.id === id)[0]) {
       this.errors404YouNotChat();
     }
