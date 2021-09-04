@@ -53,6 +53,11 @@ export class ChatController {
   ) {
     return await this.chatServer.getMyChats(req.user, query);
   }
+  @RouterName('getChatsUser')
+  @Get(Chat.getChatsUser.name)
+  async getChatsUser(@Request() req) {
+    return await this.chatServer.getChatsUser(req.user);
+  }
 
   @RouterName('getChatsId')
   @Get(Chat.getChatsId.name)

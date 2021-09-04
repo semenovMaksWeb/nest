@@ -24,5 +24,12 @@ export const Chat = {
     defaultAuthorization: true,
     authorization: true,
   },
+
+  getChatsUser: {
+    type: 'GET',
+    name: '/',
+    defaultAuthorization: true,
+    authorization: true,
+  },
 };
 export const nameController = 'chat';

@@ -62,27 +62,17 @@ export class ChatServer {
       skip: skip,
     });
   }
-  // чаты где пользователь существует
-  async getChats(user: User) {
+  // чаты где пользователь существует (не работает)
+  async getChatsUser(user: User) {
     return await this.chatRepository
       .createQueryBuilder('chat')
+      .innerJoinAndSelect('chat.userId', 'userId')
       .leftJoinAndSelect('chat.user', 'user')
-      .leftJoinAndSelect('chat.userId', 'userId')
-      .andWhere('userId.id = :id', { id: user.id })
+      .where('chat.userId = :id', { id: user.id })
       .getMany();
   }
   // Показать чат id где я существую
   async getMyChatsId(user: User, id: number) {
-    // разобраться с условиями many to many
-    // const check = await getConnection()
-    //   .createQueryBuilder()
-    //   .select()
-    //   .from('chat_user', 'chat_user')
-    //   .innerJoinAndSelect('chat', 'chat', 'chat.id = chat_user.chatId')
-    //   .leftJoinAndSelect('chat.userId', 'userId')
-    //   .where('chat_user.userId =:id', { id: user.id })
-    //   .getMany();
-    // разобраться с условиями many to many
     const chat = await this.chatRepository.findOne({
       relations: ['user', 'userId'],
       where: { id },
