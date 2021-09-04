@@ -36,7 +36,7 @@ export class ChatController {
     @Request() req,
     @Body(ValidationPipe) body: ChatAddUserDto,
   ) {
-    return await this.chatServer.addChatUser(req.user, body);
+    return await this.chatServer.postAddChatUser(req.user, body);
   }
 
   @RouterName('getChatAll')
@@ -52,5 +52,11 @@ export class ChatController {
     @Query(null, ValidationPipe) query: ChatGetFilterDto,
   ) {
     return await this.chatServer.getMyChats(req.user, query);
+  }
+
+  @RouterName('getChatsId')
+  @Get(Chat.getChatsId.name)
+  async getChatsId(@Request() req, @Param('id') id: string) {
+    return await this.chatServer.getMyChatsId(req.user, +id);
   }
 }

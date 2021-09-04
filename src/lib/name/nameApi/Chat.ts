@@ -18,5 +18,11 @@ export const Chat = {
     authorization: true,
   },
   getChatAll: { type: 'GET', name: '/all', checkAdmin: true },
+  getChatsId: {
+    type: 'GET',
+    name: ':id',
+    defaultAuthorization: true,
+    authorization: true,
+  },
 };
 export const nameController = 'chat';

@@ -14,6 +14,7 @@ export class ChatServer {
     @InjectRepository(Chat) private chatRepository: Repository<Chat>,
     private readonly userServer: UserService,
   ) {}
+  // Создание нового чата
   async postChat(user: User, body: ChatPostDto) {
     await this.validatePostChat(body.name);
     const saveChat = await this.chatRepository.save({
@@ -25,10 +26,10 @@ export class ChatServer {
       name: saveChat.name,
     };
   }
-
-  async addChatUser(userMy: User, body: ChatAddUserDto) {
+  // Добавление нового пользователя в чат
+  async postAddChatUser(userMy: User, body: ChatAddUserDto) {
     const chat = await this.findOneIdChat(body.chatId);
-    this.validateAddChatUser(chat, userMy);
+    this.validatePostAddChatUser(chat, userMy);
     await this.validateAddUser(body.userId, chat);
     await getConnection()
       .createQueryBuilder()
@@ -40,7 +41,7 @@ export class ChatServer {
 
     return 'Пользователь удачно добавлен в чат';
   }
-
+  // Показать все чаты
   async getChatAll(param: ChatGetFilterDto) {
     const { skip, take } = Pagination(param?.limit, param?.page);
     return await this.chatRepository.find({
@@ -50,7 +51,7 @@ export class ChatServer {
       skip: skip,
     });
   }
-
+  // Показать все чаты где я админ
   async getMyChats(user: User, param: ChatGetFilterDto) {
     const { skip, take } = Pagination(param?.limit, param?.page);
     return await this.chatRepository.find({
@@ -60,30 +61,40 @@ export class ChatServer {
       skip: skip,
     });
   }
+  // Показать чат id где я существую
   async getMyChatsId(user: User, id: number) {
+    // разобраться с условиями many to many
+    console.log(
+      await this.chatRepository.findOne({
+        relations: ['user', 'userId'],
+        where: { id, userId: user.id },
+      }),
+    );
+    // разобраться с условиями many to many
     const chat = await this.chatRepository.findOne({
-      where: { id: id },
       relations: ['user', 'userId'],
+      where: { id },
     });
     await this.validateUserInChatId(chat, user.id);
     return chat;
   }
-
+  // найти чат по имени
   async findOneNameChat(name: string) {
     return await this.chatRepository.findOne({ where: { name } });
   }
-
+  // найти чат по id
   async findOneIdChat(id: number) {
     return await this.chatRepository.findOne(id, {
       relations: ['user', 'userId'],
     });
   }
-
+  // Валидация при создании чата
   async validatePostChat(name: string) {
     const chat = await this.findOneNameChat(name);
-    this.validateChatId(chat);
+    this.validateChatName(chat);
   }
-  validateAddChatUser(chat: Chat, user: User) {
+  // Валидация при добавление в чата пользователя
+  validatePostAddChatUser(chat: Chat, user: User) {
     if (!chat) {
       this.errors404Chat();
     }
@@ -91,6 +102,7 @@ export class ChatServer {
       this.errors400AddUserChat();
     }
   }
+  // Валидация что добавляемый пользователь существует и его уже нету в чате
   async validateAddUser(id: number, chat: Chat) {
     const user = await this.userServer.findOneUserId(id);
     if (!user) {
@@ -102,15 +114,24 @@ export class ChatServer {
       }
     });
   }
-
+  // Валидация что пользователь есть в этом чате
   async validateUserInChatId(chat: Chat, id: number) {
     this.validateChatId(chat);
+    if (chat.user.id === id) {
+      return;
+    }
     if (!chat.userId.filter((e) => e.id === id)[0]) {
       this.errors404YouNotChat();
     }
   }
-
+  // Валидация что чат существует
   validateChatId(chat: Chat) {
+    if (!chat) {
+      this.errors404Chat();
+    }
+  }
+  // Валидация что чат с таким именем не существует
+  validateChatName(chat: Chat) {
     if (chat) {
       this.errors400UniqueNameChat();
     }
@@ -125,7 +146,7 @@ export class ChatServer {
 
   errors404Chat() {
     throw new HttpException(
-      'Указанный   чат не уже существует',
+      'Указанный чат не уже существует',
       HttpStatus.BAD_REQUEST,
     );
   }
