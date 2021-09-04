@@ -66,9 +66,11 @@ export class ChatServer {
   async getChatsUser(user: User) {
     return await this.chatRepository
       .createQueryBuilder('chat')
-      .innerJoinAndSelect('chat.userId', 'userId')
+      .innerJoin('chat.userId', 'userId', 'chat.userId = :id', {
+        id: user.id,
+      })
       .leftJoinAndSelect('chat.user', 'user')
-      .where('chat.userId = :id', { id: user.id })
+      // .where('chat.userId = :id', { id: user.id })
       .getMany();
   }
   // Показать чат id где я существую
