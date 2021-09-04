@@ -66,8 +66,8 @@ export class ChatServer {
   async getChatsUser(user: User) {
     return await this.chatRepository
       .createQueryBuilder('chat')
-      .innerJoin('chat.userId', 'userId', 'userId.id IN(:...id)', {
-        id: [user.id],
+      .innerJoinAndSelect('chat.userId', 'userId', 'userId.id = :id', {
+        id: user.id,
       })
       .getMany();
   }
