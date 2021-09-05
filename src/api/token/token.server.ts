@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Token } from './token.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as jwt from 'jsonwebtoken';
+import { WsException } from '@nestjs/websockets';
 @Injectable()
 export class TokenService {
   constructor(
@@ -40,15 +41,15 @@ export class TokenService {
     }
   }
   // валидация токена
-  async validateToken(token: Token) {
+  async validateToken(token: Token, checkValidate) {
     if (!token.active) {
       // токен не активен
-      this.tokenNoActive();
+      this.tokenNoActive(checkValidate);
     }
     if (!this.checkToken(token)) {
       // токен время жизни закончилось
       await this.deleteToken(token);
-      this.tokenNoDate();
+      this.tokenNoDate(checkValidate);
     }
     // токен валиден проверить требуется ли продливать жизнь токену
     await this.updateDateToken(token);
@@ -74,16 +75,28 @@ export class TokenService {
     date.setDate(date.getDate() + parseInt(process.env.LIVE_TOKEN_DAY));
     return date;
   }
-  tokenNoValidate(): void {
-    throw new HttpException('Токен не валиден', HttpStatus.FORBIDDEN);
+  tokenNoValidate(checkValidate: string): void {
+    if (checkValidate === 'rest') {
+      throw new HttpException('Токен не валиден', HttpStatus.FORBIDDEN);
+    } else {
+      throw new WsException('Токен не валиден');
+    }
   }
-  tokenNoActive(): void {
-    throw new HttpException('Токен не активный', HttpStatus.FORBIDDEN);
+  tokenNoActive(checkValidate): void {
+    if (checkValidate === 'rest') {
+      throw new HttpException('Токен не активный', HttpStatus.FORBIDDEN);
+    } else {
+      throw new WsException('Токен не активный');
+    }
   }
-  tokenNoDate(): void {
-    throw new HttpException(
-      'Время жизни токена закончилось',
-      HttpStatus.FORBIDDEN,
-    );
+  tokenNoDate(checkValidate): void {
+    if (checkValidate === 'rest') {
+      throw new HttpException(
+        'Время жизни токена закончилось',
+        HttpStatus.FORBIDDEN,
+      );
+    } else {
+      throw new WsException('Время жизни токена закончилось');
+    }
   }
 }

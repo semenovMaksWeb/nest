@@ -11,6 +11,7 @@ import { Reflector } from '@nestjs/core';
 import { RouterServer } from '../router/router-server';
 import { VariableServer } from '../variable/variable.server';
 import { Router } from '../router/router.entity';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class UserGuard implements CanActivate {
@@ -20,15 +21,14 @@ export class UserGuard implements CanActivate {
     private variableServer: VariableServer,
     private reflector: Reflector,
   ) {}
-  async checkValidateUserToken(authorization: string) {
-    console.log(authorization);
+  async checkValidateUserToken(authorization: string, checkValidate: string) {
     if (authorization) {
       // токен  есть
-      return await this.userService.findUserToken(authorization);
+      return await this.userService.findUserToken(authorization, checkValidate);
     }
-    throw new HttpException('Доступ закрыт', HttpStatus.FORBIDDEN);
+    this.errors403CloseAccess(checkValidate);
   }
-  async checkValidateRights(router: Router, request) {
+  async checkValidateRights(router: Router, request, checkValidate: string) {
     const user = request.user;
     let check = false;
     router.rights.map((routerR) => {
@@ -40,27 +40,55 @@ export class UserGuard implements CanActivate {
         });
       });
     });
-    return check ? true : await this.checkValidateRightsSyperAdmin(request);
+    return check
+      ? true
+      : await this.checkValidateRightsSyperAdmin(request, checkValidate);
   }
-  async checkValidateRightsSyperAdmin(request) {
+  async checkValidateRightsSyperAdmin(request, checkValidate) {
     const idRolesAll = await this.variableServer.getValKey('rolesAllId');
     const user = request.user;
     if (!user.roles.some((elem) => elem.id === +idRolesAll.value)) {
-      throw new HttpException('Доступ закрыт', HttpStatus.FORBIDDEN);
+      this.errors403CloseAccess(checkValidate);
     }
     return true;
   }
-
+  errors403CloseAccess(checkValidate: string) {
+    if (checkValidate === 'rest') {
+      throw new HttpException('Доступ закрыт', HttpStatus.FORBIDDEN);
+    } else if (checkValidate === 'webSocket') {
+      console.log('Доступ закрыт');
+      throw new WsException('Доступ закрыт');
+    }
+  }
+  // узнать валидация сокета или rest
+  checkValidateRestOrSocket(request) {
+    let checkValidate = 'rest';
+    let authorization = '';
+    if (request?.headers?.authorization) {
+      authorization = request.headers.authorization;
+      checkValidate = 'rest';
+    } else if (request.handshake.headers.authorization) {
+      checkValidate = 'webSocket';
+      authorization = request.handshake.headers.authorization;
+    }
+    return { checkValidate, authorization };
+  }
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const routerName = this.reflector.get<string>('name', context.getHandler());
     const router = await this.routerServer.getKeyRouterRights(routerName);
+
     // валидация требуется
     if (router && router.authorization) {
-      const authorization = request.headers.authorization;
-      request.user = await this.checkValidateUserToken(authorization);
+      const { authorization, checkValidate } =
+        this.checkValidateRestOrSocket(request);
+
+      request.user = await this.checkValidateUserToken(
+        authorization,
+        checkValidate,
+      );
       if (router.rights.length > 0) {
-        await this.checkValidateRights(router, request);
+        await this.checkValidateRights(router, request, checkValidate);
       }
       return true;
     }

@@ -99,7 +99,7 @@ export class UserService {
   }
 
   // найти пользователя по токену
-  async findUserToken(token?: string) {
+  async findUserToken(token?: string, checkValidate = 'rest') {
     token = token.replace('Bearer ', '');
     const data = await this.userRepository
       .createQueryBuilder('user')
@@ -109,10 +109,10 @@ export class UserService {
       .leftJoinAndSelect('roles.rights', 'rights')
       .getOne();
     if (data) {
-      await this.tokenService.validateToken(data.token[0]);
+      await this.tokenService.validateToken(data.token[0], checkValidate);
       return data;
     } else {
-      this.tokenService.tokenNoValidate();
+      this.tokenService.tokenNoValidate(checkValidate);
     }
   }
 
