@@ -12,12 +12,13 @@ import {
 
 import { Socket } from 'socket.io';
 import { Server } from 'ws';
-import { Observable } from 'rxjs';
-import { UseGuards, ValidationPipe } from '@nestjs/common';
+
+import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserGuard } from '../user/user.guard';
 import { RouterName } from '../../decorator/router-name.decorator';
 import { MessageServer } from './message.server';
-import { MessageGetFilterDto } from './message.dto/message-get-filter.dto';
+
+import { MessageGetSocket } from './message.dto/message-get-socket';
 
 @WebSocketGateway({ namespace: 'websocket/message' })
 export class MessageGateway
@@ -28,15 +29,15 @@ export class MessageGateway
 
   wsClients = [];
 
-  @RouterName('getMessage')
+  // @UsePipes(new ValidationPipe())
   @UseGuards(UserGuard)
+  @RouterName('getMessage')
   @SubscribeMessage('get_message')
   findAll(
-    @MessageBody(ValidationPipe) body: MessageGetFilterDto,
+    @MessageBody() data: MessageGetSocket,
     @ConnectedSocket() client: Socket,
   ) {
-    // console.log(this.messageServer.getMessage(client['user']), body);
-    console.log(body);
+    this.broadcast('get_message', data);
   }
   // новое сообщение для всех
   //    this.broadcast('get_message', body);
