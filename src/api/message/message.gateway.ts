@@ -7,19 +7,23 @@ import {
   OnGatewayDisconnect,
   WsResponse,
   MessageBody,
+  ConnectedSocket,
 } from '@nestjs/websockets';
 
 import { Socket } from 'socket.io';
 import { Server } from 'ws';
 import { Observable } from 'rxjs';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, ValidationPipe } from '@nestjs/common';
 import { UserGuard } from '../user/user.guard';
 import { RouterName } from '../../decorator/router-name.decorator';
+import { MessageServer } from './message.server';
+import { MessageGetFilterDto } from './message.dto/message-get-filter.dto';
 
 @WebSocketGateway({ namespace: 'websocket/message' })
 export class MessageGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private readonly messageServer: MessageServer) {}
   @WebSocketServer() server: Server;
 
   wsClients = [];
@@ -27,10 +31,15 @@ export class MessageGateway
   @RouterName('getMessage')
   @UseGuards(UserGuard)
   @SubscribeMessage('get_message')
-  findAll(@MessageBody() data: any) {
-    console.log('message');
-    this.broadcast('get_message', data);
+  findAll(
+    @MessageBody(ValidationPipe) body: MessageGetFilterDto,
+    @ConnectedSocket() client: Socket,
+  ) {
+    // console.log(this.messageServer.getMessage(client['user']), body);
+    console.log(body);
   }
+  // новое сообщение для всех
+  //    this.broadcast('get_message', body);
 
   afterInit(server: Server) {
     console.log('afterInit');
