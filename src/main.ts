@@ -2,9 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+// import { RedisIoAdapter } from './adapter/redis.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // app.useWebSocketAdapter(new RedisIoAdapter(app));
+
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Cats example')
