@@ -5,7 +5,6 @@ import {
   WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
-  WsResponse,
   MessageBody,
   ConnectedSocket,
 } from '@nestjs/websockets';
@@ -17,8 +16,8 @@ import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserGuard } from '../user/user.guard';
 import { RouterName } from '../../decorator/router-name.decorator';
 import { MessageServer } from './message.server';
-
-import { MessageGetSocket } from './message.dto/message-get-socket';
+import { MessageGetFilterDto } from './message.dto/message-get-filter.dto';
+import { MessagePost } from './message.dto/message-post';
 
 @WebSocketGateway({ namespace: 'websocket/message' })
 export class MessageGateway
@@ -29,18 +28,39 @@ export class MessageGateway
 
   wsClients = [];
 
-  // @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe())
   @UseGuards(UserGuard)
   @RouterName('getMessage')
   @SubscribeMessage('get_message')
-  findAll(
-    @MessageBody() data: MessageGetSocket,
+  async findAll(
+    @MessageBody() data: MessageGetFilterDto,
     @ConnectedSocket() client: Socket,
   ) {
-    this.broadcast('get_message', data);
+    return await this.messageServer.getMessage(
+      client['user'],
+      data,
+      +client.handshake.query.id,
+    );
   }
+
+  @UsePipes(new ValidationPipe())
+  @UseGuards(UserGuard)
+  @RouterName('postMessage')
+  @SubscribeMessage('post_message')
+  async setBody(
+    @MessageBody() data: MessagePost,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const message = await this.messageServer.postMessage(
+      client['user'],
+      +client.handshake.query.id,
+      data,
+    );
+    this.broadcast('get_message', message);
+  }
+
   // новое сообщение для всех
-  //    this.broadcast('get_message', body);
+  //
 
   afterInit(server: Server) {
     console.log('afterInit');
@@ -68,4 +88,17 @@ export class MessageGateway
       client.emit(event, data);
     }
   }
+  // validateFindAll(body: any) {
+  //   if (
+  //     body.id === undefined ||
+  //     body.id === null ||
+  //     body.id.toString() === ''
+  //   ) {
+  //     throw new WsException('id чата обязательное поле');
+  //   }
+  //   if (typeof body.id !== 'number') {
+  //     throw new WsException('id чата является числом');
+  //   }
+  //   // this.messageServer.getMessage();
+  // }
 }

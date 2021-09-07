@@ -26,10 +26,10 @@ export class MessageServer {
   }
   async postMessage(user: User, idChat: number, body: MessagePost) {
     await this.chatServer.getMyChatsId(user, idChat);
-    await this.messageRepository.save({
+    return await this.messageRepository.save({
       ...body,
       chat: { id: idChat },
-      user: { id: user.id },
+      user: { id: user.id, nik: user.nik },
     });
   }
 }

@@ -13,4 +13,5 @@ export const Message = {
     authorization: true,
   },
 };
+
 export const nameController = 'message';
