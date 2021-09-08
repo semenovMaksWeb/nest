@@ -9,4 +9,7 @@ export class StyleTypeServer {
     @InjectRepository(StyleType)
     private styleTypeRepository: Repository<StyleType>,
   ) {}
+  async findStyleTypeAll() {
+    return await this.styleTypeRepository.find();
+  }
 }

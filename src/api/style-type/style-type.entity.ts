@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Style } from '../style/style.entity';
 
 @Entity()
 export class StyleType {
@@ -11,6 +12,9 @@ export class StyleType {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   enum: string;
+
+  @OneToMany(() => Style, (style) => style.id)
+  style_id: Style;
 }

@@ -13,6 +13,7 @@ import { VariableModule } from './api/variable/variable.module';
 import { RouterModule } from './api/router/router.module';
 import { ChatModule } from './api/chat/chat.module';
 import { MessageModule } from './api/message/message.module';
+import { StyleModule } from './api/style/style.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -38,6 +39,7 @@ import { MessageModule } from './api/message/message.module';
     RouterModule,
     ChatModule,
     MessageModule,
+    StyleModule,
   ],
   controllers: [],
   providers: [],

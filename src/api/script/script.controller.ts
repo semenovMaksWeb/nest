@@ -16,4 +16,9 @@ export class ScriptController {
   async bdApiSet() {
     return await this.scriptService.DataSetApi();
   }
+
+  @Get('/bd_style')
+  async bdStyleSet() {
+    return await this.scriptService.DataSetStyle();
+  }
 }

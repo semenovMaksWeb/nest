@@ -1,4 +1,4 @@
-export function uniqueArray(arr, arrBd, key) {
+export function uniqueArray(arr: any[], arrBd: any[], key: any) {
   const unique = [];
   arr.map((e) => {
     if (!arrBd.filter((eBd) => eBd[key] === e[key])[0]) {
