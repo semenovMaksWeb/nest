@@ -16,6 +16,7 @@ export class Roles {
   id: number;
 
   @Column({
+    nullable: false,
     unique: true,
   })
   name: string;
