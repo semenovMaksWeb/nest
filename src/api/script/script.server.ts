@@ -12,7 +12,7 @@ import { InsetUserRoles } from '../../lib/script/bd-start/insetUserRoles';
 import { uniqueArray } from '../../lib/script/uniqueScript';
 import { insetStyle } from '../../lib/script/bd-start/insetStyle';
 import { StyleServer } from '../style/style.server';
-import { StyleTypeServer } from '../style-type/style-type.server';
+import { StyleTypeServer } from '../style/style-type/style-type.server';
 
 @Injectable()
 export class ScriptService {

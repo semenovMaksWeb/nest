@@ -14,6 +14,7 @@ import { RouterModule } from './api/router/router.module';
 import { ChatModule } from './api/chat/chat.module';
 import { MessageModule } from './api/message/message.module';
 import { StyleModule } from './api/style/style.module';
+import { ComponentsModule } from './api/components/components.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -40,6 +41,7 @@ import { StyleModule } from './api/style/style.module';
     ChatModule,
     MessageModule,
     StyleModule,
+    ComponentsModule,
   ],
   controllers: [],
   providers: [],

@@ -1,5 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { StyleType } from '../style-type/style-type.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
+import { StyleType } from './style-type/style-type.entity';
+import { ComponentsVar } from '../components/components-var/components-var.entity';
 
 @Entity()
 export class Style {
@@ -14,4 +21,7 @@ export class Style {
 
   @ManyToOne(() => StyleType, (styleType) => styleType.id)
   type: StyleType;
+
+  @OneToMany(() => ComponentsVar, (componentsVar) => componentsVar.id)
+  components_var: ComponentsVar;
 }

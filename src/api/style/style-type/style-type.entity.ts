@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Style } from '../style/style.entity';
+import { Style } from '../style.entity';
 
 @Entity()
 export class StyleType {
