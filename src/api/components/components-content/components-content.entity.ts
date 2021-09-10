@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Components } from '../components.entity';
 import { Style } from '../../style/style.entity';
+import { TypeVarEnum } from '../../../interface/type-var.enum';
 
 @Entity()
 export class ComponentsContent {
@@ -16,4 +17,11 @@ export class ComponentsContent {
 
   @ManyToOne(() => Components, (components) => components.id)
   components: Components;
+
+  @Column({
+    type: 'enum',
+    default: TypeVarEnum.string,
+    enum: TypeVarEnum,
+  })
+  type_var: TypeVarEnum;
 }

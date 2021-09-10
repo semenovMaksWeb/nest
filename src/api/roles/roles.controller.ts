@@ -17,7 +17,7 @@ import { RolesSaveDto } from './roles.dto/roles-save.dto';
 import { RolesSaveRightsDto } from './roles.dto/roles-save-rights.dto';
 import { Roles, nameController } from 'src/lib/name/nameApi/Roles';
 import { UserGuard } from '../user/user.guard';
-import { RouterName } from '../../decorator/router-name.decorator';
+import { RouterName } from '../../lib/decorator/router-name.decorator';
 @Controller(nameController)
 @ApiTags(nameController)
 @ApiBearerAuth()

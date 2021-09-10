@@ -14,8 +14,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RightsSaveDto } from './rights.dto/rights-save.dto';
 import { Rights, nameController } from 'src/lib/name/nameApi/Rights';
 import { UserGuard } from '../user/user.guard';
-import { RouterName } from '../../decorator/router-name.decorator';
-import { ParamsIdDto } from '../../dto/paramsId.dto';
+import { RouterName } from '../../lib/decorator/router-name.decorator';
+import { ParamsIdDto } from '../../lib/dto/paramsId.dto';
 @Controller(nameController)
 @ApiTags(nameController)
 @ApiBearerAuth()

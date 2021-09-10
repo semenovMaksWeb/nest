@@ -14,7 +14,7 @@ import { Server } from 'ws';
 
 import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserGuard } from '../user/user.guard';
-import { RouterName } from '../../decorator/router-name.decorator';
+import { RouterName } from '../../lib/decorator/router-name.decorator';
 import { MessageServer } from './message.server';
 import { MessageGetFilterDto } from './message.dto/message-get-filter.dto';
 import { MessagePost } from './message.dto/message-post';

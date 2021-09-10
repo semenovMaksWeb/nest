@@ -17,7 +17,7 @@ import { UserUpdateDto } from './user.dto/user-update.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserGetFilterDto } from './user.dto/user-get-filter.dto';
 import { User, nameController } from 'src/lib/name/nameApi/User';
-import { RouterName } from '../../decorator/router-name.decorator';
+import { RouterName } from '../../lib/decorator/router-name.decorator';
 
 @ApiTags(nameController)
 @ApiBearerAuth()

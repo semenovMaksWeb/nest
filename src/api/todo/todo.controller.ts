@@ -18,7 +18,7 @@ import { TodoUpdateActiveDto } from './todo.dto/todo-update-active.dto';
 import { TodoUpdateDto } from './todo.dto/todo-update.dto';
 import { TodoGetFilterDto } from './todo.dto/todo-get-filter.dto';
 import { Todo, nameController } from 'src/lib/name/nameApi/Todo';
-import { RouterName } from '../../decorator/router-name.decorator';
+import { RouterName } from '../../lib/decorator/router-name.decorator';
 @Controller(nameController)
 @ApiTags(nameController)
 @ApiBearerAuth()

@@ -14,7 +14,7 @@ import { UserGuard } from '../user/user.guard';
 import { RouterServer } from './router-server';
 import { RouterFilterDto } from './router.dto/router-filter.dto';
 import { RouterRightsDto } from './router.dto/router-rights.dto';
-import { RouterName } from '../../decorator/router-name.decorator';
+import { RouterName } from '../../lib/decorator/router-name.decorator';
 
 @ApiTags(nameController)
 @ApiBearerAuth()

@@ -1,4 +1,4 @@
-import { RouterName } from '../../decorator/router-name.decorator';
+import { RouterName } from '../../lib/decorator/router-name.decorator';
 import { Chat, nameController } from 'src/lib/name/nameApi/Chat';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {

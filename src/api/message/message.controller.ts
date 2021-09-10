@@ -1,4 +1,4 @@
-import { RouterName } from '../../decorator/router-name.decorator';
+import { RouterName } from '../../lib/decorator/router-name.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
   Body,
