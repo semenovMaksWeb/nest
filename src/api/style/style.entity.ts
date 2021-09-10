@@ -20,7 +20,7 @@ export class Style {
   name: string;
 
   @ManyToOne(() => StyleType, (styleType) => styleType.id)
-  type: StyleType;
+  typeId: StyleType;
 
   @OneToMany(() => ComponentsVar, (componentsVar) => componentsVar.id)
   components_var: ComponentsVar;
