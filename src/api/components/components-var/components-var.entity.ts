@@ -9,7 +9,7 @@ export class ComponentsVar {
   id: number;
 
   @Column({ nullable: true })
-    description: string;
+  description: string;
 
   @Column({ nullable: false, unique: true })
   var_name: string;

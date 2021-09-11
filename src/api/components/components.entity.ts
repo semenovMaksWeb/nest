@@ -1,5 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ComponentsVar } from './components-var/components-var.entity';
+import { ComponentsContentExample } from './components-content-example/components-content-example.entity';
+import { ComponentsContent } from './components-content/components-content.entity';
 
 @Entity()
 export class Components {
@@ -14,4 +16,13 @@ export class Components {
 
   @OneToMany(() => ComponentsVar, (componentsVar) => componentsVar.id)
   components_var: ComponentsVar;
+
+  @OneToMany(
+    () => ComponentsContent,
+    (componentsContent) => componentsContent.id,
+  )
+  components_content: ComponentsContent;
+
+  @OneToMany(() => ComponentsVar, (componentsVar) => componentsVar.id)
+  components_example: ComponentsContentExample;
 }
