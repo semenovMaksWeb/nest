@@ -22,6 +22,11 @@ import {
   nameController as nameControllerComponentsExample,
 } from './ComponentsExample';
 
+import {
+  ComponentsContent,
+  nameController as nameControllerComponentsContent,
+} from './ComponentsContent';
+
 export const nameAllApi = {
   [nameControllerRoles]: Roles,
   [nameControllerRights]: Rights,
@@ -32,4 +37,5 @@ export const nameAllApi = {
   [nameControllerChat]: Chat,
   [nameControllerMessage]: Message,
   [nameControllerComponentsExample]: ComponentsExample,
+  [nameControllerComponentsContent]: ComponentsContent,
 };

@@ -4,12 +4,20 @@ import {
   ComponentsExample,
   nameController,
 } from 'src/lib/name/nameApi/ComponentsExample';
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ComponentsExamplePostDto } from './components-example.dto/components-example-post.dto';
 import { RouterName } from '../../../lib/decorator/router-name.decorator';
+import { UserGuard } from '../../user/user.guard';
 @ApiTags(nameController)
 @ApiBearerAuth()
 @Controller(nameController)
+@UseGuards(UserGuard)
 export class ComponentsExampleController {
   constructor(
     private readonly componentsExampleServer: ComponentsExampleServer,

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class ComponentsExamplePostDto {
   @ApiProperty()
@@ -15,5 +15,9 @@ export class ComponentsExamplePostDto {
   name: string;
 
   @ApiProperty()
-  description?: string;
+  @IsString({
+    message: 'описание экземпляра компонента должен является строкой',
+  })
+  @IsOptional()
+  description: string;
 }

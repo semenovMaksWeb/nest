@@ -20,13 +20,17 @@ export class ComponentsExampleServer {
   }
 
   async postComponentsExample(body: ComponentsExamplePostDto) {
-    if (await this.componentsServer.findOneId(body.id)) {
+    if (!(await this.componentsServer.findOneId(body.id))) {
       ComponentsExampleServer.errors404Components();
     }
     if (await this.findOneName(body.name)) {
       ComponentsExampleServer.errors400ComponentsName();
     } else {
-      await this.componentsExampleRepository.save(body);
+      return await this.componentsExampleRepository.save({
+        name: body.name,
+        description: body.description,
+        components: { id: body.id },
+      });
     }
   }
 

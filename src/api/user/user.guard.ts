@@ -67,17 +67,25 @@ export class UserGuard implements CanActivate {
     if (request?.headers?.authorization) {
       authorization = request.headers.authorization;
       checkValidate = 'rest';
-    } else if (request.handshake.headers.authorization) {
+    } else if (request?.handshake?.headers?.authorization) {
       checkValidate = 'webSocket';
       authorization = request.handshake.headers.authorization;
     }
+    // токен не передан!
+    else {
+      if (request?.headers) {
+        this.errors403CloseAccess('rest');
+      } else {
+        this.errors403CloseAccess('webSocket');
+      }
+    }
     return { checkValidate, authorization };
   }
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const routerName = this.reflector.get<string>('name', context.getHandler());
     const router = await this.routerServer.getKeyRouterRights(routerName);
-
     // валидация требуется
     if (router && router.authorization) {
       const { authorization, checkValidate } =
