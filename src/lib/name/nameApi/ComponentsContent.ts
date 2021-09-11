@@ -1,5 +1,5 @@
 export const ComponentsContent = {
-  findIdComponents: {
+  findContentIdComponents: {
     type: 'GET',
     name: ':id',
     checkAdmin: true,

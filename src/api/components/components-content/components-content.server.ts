@@ -9,7 +9,7 @@ export class ComponentsContentServer {
     @InjectRepository(ComponentsContent)
     private componentsContentRepository: Repository<ComponentsContent>,
   ) {}
-  async findIdComponents(id: number) {
+  async findContentIdComponents(id: number) {
     console.log(id);
     return await this.componentsContentRepository.find({
       where: { components: { id } },

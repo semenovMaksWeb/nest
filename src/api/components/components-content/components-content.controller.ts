@@ -17,9 +17,9 @@ export class ComponentsContentController {
   constructor(
     private readonly componentsContentServer: ComponentsContentServer,
   ) {}
-  @Get(ComponentsContent.findIdComponents.name)
-  @RouterName('findIdComponents')
-  async findIdComponents(@Param('id') id: string) {
-    return await this.componentsContentServer.findIdComponents(+id);
+  @Get(ComponentsContent.findContentIdComponents.name)
+  @RouterName('findContentIdComponents')
+  async findContentIdComponents(@Param('id') id: string) {
+    return await this.componentsContentServer.findContentIdComponents(+id);
   }
 }
