@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Components } from '../components.entity';
-import { ComponentsContentExample } from '../components-content-example/components-content-example.entity';
+import { Components } from '../components/components.entity';
+import { ComponentsExample } from '../components-example/components-example.entity';
 import { User } from '../../user/user.entity';
 import { TypeVarEnum } from '../../../interface/type-var.enum';
 import { ComponentsExampleTypeEnum } from '../../../interface/components-example-type.enum';
@@ -21,7 +21,7 @@ export class ComponentsContentExampleParams {
   value: string;
 
   @ManyToOne(() => Components, (components) => components.id)
-  componentsExample: ComponentsContentExample;
+  componentsExample: ComponentsExample;
 
   @ManyToOne(() => Components, (components) => components.id)
   user: User;

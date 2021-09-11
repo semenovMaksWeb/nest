@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Components } from '../components.entity';
+import { Components } from '../components/components.entity';
 import { Style } from '../../style/style.entity';
 
 @Entity()
@@ -20,6 +20,6 @@ export class ComponentsVar {
   @ManyToOne(() => Components, (components) => components.id)
   components: Components;
 
-  @ManyToOne(() => Components, (components) => components.id)
+  @ManyToOne(() => Style, (style) => style.id)
   style: Style;
 }

@@ -17,6 +17,11 @@ import { Todo, nameController as nameControllerTodo } from './Todo';
 import { Router, nameController as nameControllerRouter } from './Router';
 import { Chat, nameController as nameControllerChat } from './Chat';
 import { Message, nameController as nameControllerMessage } from './Message';
+import {
+  ComponentsExample,
+  nameController as nameControllerComponentsExample,
+} from './ComponentsExample';
+
 export const nameAllApi = {
   [nameControllerRoles]: Roles,
   [nameControllerRights]: Rights,
@@ -26,4 +31,5 @@ export const nameAllApi = {
   [nameControllerRouter]: Router,
   [nameControllerChat]: Chat,
   [nameControllerMessage]: Message,
+  [nameControllerComponentsExample]: ComponentsExample,
 };

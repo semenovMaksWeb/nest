@@ -1,0 +1,3 @@
+TRUNCATE categories, chat, chat_user, components, components_content, components_content_example, components_content_example_params, components_var, message, rights, roles, roles_rights, router, router_rights, style, style_type, todo, todo_categories, token, "user", user_roles, user_token, variable  CASCADE;
+
+TRUNCATE categories, chat, chat_user, components, components_content, components_content_example, components_content_example_params, components_var, message, rights, roles, roles_rights, router, router_rights, style, style_type, todo, todo_categories, token, "user", user_roles, user_token, variable RESTART IDENTITY;

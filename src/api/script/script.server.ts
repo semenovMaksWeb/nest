@@ -13,6 +13,12 @@ import { uniqueArray } from '../../lib/script/uniqueScript';
 import { insetStyle } from '../../lib/script/bd-start/insetStyle';
 import { StyleServer } from '../style/style.server';
 import { StyleTypeServer } from '../style/style-type/style-type.server';
+import { InsetComponents } from '../../lib/script/bd-start/insetComponents';
+import {
+  components,
+  componentsContent,
+  componentsStyle,
+} from '../../lib/default/components';
 
 @Injectable()
 export class ScriptService {
@@ -34,19 +40,23 @@ export class ScriptService {
     const userRes = await InsetUserSuper(bdUserRolesRights.user);
     const rightsRes = await InsetRights(bdUserRolesRights.rights);
     const rolesRes = await insetRoles(bdUserRolesRights.roles);
-    // const rolesRights = await InsetRolesRights(bdUserRolesRights.roles_rights);
     await InsetUserRoles(bdUserRolesRights.user_roles);
     const routerRes = await this.routerServer.savesRouter(
       ConvertRouterToBd(nameAllApi),
     );
-    const style = insetStyle(styleType, styleValue);
+    const style = await insetStyle(styleType, styleValue);
+    const componentsRes = await InsetComponents(
+      components,
+      componentsContent,
+      componentsStyle,
+    );
     return {
       user: userRes,
       roles: `Созданно roles ${rolesRes}`,
       rights: `Созданно rights ${rightsRes}`,
-      // rolesRights: rolesRights,
       router: routerRes,
       style: style,
+      components: componentsRes,
     };
   }
   async DataSetApi() {

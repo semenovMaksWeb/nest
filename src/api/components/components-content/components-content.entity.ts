@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Components } from '../components.entity';
+import { Components } from '../components/components.entity';
 import { Style } from '../../style/style.entity';
 import { TypeVarEnum } from '../../../interface/type-var.enum';
 
