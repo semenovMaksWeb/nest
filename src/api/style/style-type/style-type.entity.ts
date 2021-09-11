@@ -16,5 +16,5 @@ export class StyleType {
   enum: string;
 
   @OneToMany(() => Style, (style) => style.id)
-  style_id: Style;
+  style: Style;
 }
