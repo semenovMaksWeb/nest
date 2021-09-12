@@ -3,16 +3,12 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Components } from '../components/components.entity';
 import { ComponentsExample } from '../components-example/components-example.entity';
 import { User } from '../../user/user.entity';
-import { TypeVarEnum } from '../../../interface/type-var.enum';
 import { ComponentsExampleTypeEnum } from '../../../interface/components-example-type.enum';
 
 @Entity()
 export class ComponentsContentExampleParams {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({ nullable: true })
-  description: string;
 
   @Column({ nullable: false })
   name_params: string;

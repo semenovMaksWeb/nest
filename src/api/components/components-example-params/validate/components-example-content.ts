@@ -28,7 +28,7 @@ export class ComponentsExampleContent {
       this.validateBodyElementType(element);
     });
     this.checkBodyPosition();
-    this.checkBodyValidate();
+    return this.checkBodyValidate();
   }
   validateBodyElementType(element) {
     for (const v of this.validate) {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ComponentsContent } from './components-content.entity';
@@ -10,9 +10,18 @@ export class ComponentsContentServer {
     private componentsContentRepository: Repository<ComponentsContent>,
   ) {}
   async findContentIdComponents(id: number) {
-    console.log(id);
-    return await this.componentsContentRepository.find({
+    const contentData = await this.componentsContentRepository.find({
       where: { components: { id } },
     });
+    if (contentData.length === 0) {
+      this.errors404ComponentsContent();
+    }
+  }
+
+  errors404ComponentsContent() {
+    throw new HttpException(
+      'по указанному id не существует контент даты',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 }
