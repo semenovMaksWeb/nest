@@ -14,6 +14,7 @@ export class ComponentsVarServer {
     console.log(id);
     return await this.componentsVarRepository.find({
       where: { components: { id } },
+      relations: ['style'],
     });
   }
 }

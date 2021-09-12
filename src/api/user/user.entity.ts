@@ -12,7 +12,7 @@ import { Todo } from '../todo/todo.entity';
 import { Roles } from '../roles/roles.entity';
 import { Chat } from '../chat/chat.entity';
 import { Message } from '../message/message.entity';
-import { ComponentsContentExampleParams } from '../components/components-content-example-params/components-content-example-params.entity';
+import { ComponentsContentExampleParams } from '../components/components-example-params/components-example-params.entity';
 
 @Entity()
 export class User {
