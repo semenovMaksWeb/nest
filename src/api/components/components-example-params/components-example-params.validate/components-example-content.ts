@@ -58,7 +58,6 @@ export class ComponentsExampleContent {
 
     if (Object.keys(element).length !== validateTrue) {
       this.errors400ValidateBody();
-      return;
     }
   }
   validateBodyElementPositionType(v_name) {

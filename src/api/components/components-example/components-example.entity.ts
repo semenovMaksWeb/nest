@@ -16,7 +16,7 @@ export class ComponentsExample {
   id: number;
 
   @Column({ nullable: true })
-  description: string;
+  description?: string;
 
   @Column({ nullable: false })
   name: string;

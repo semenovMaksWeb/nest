@@ -16,6 +16,7 @@ import {
 
 import { ComponentsExampleParamsServer } from './components-example-params.server';
 import { RouterName } from '../../../lib/decorator/router-name.decorator';
+import { PostComponentsExampleParamsDto } from './components-example-params.dto/post-components-example-params.dto';
 
 @ApiTags(nameController)
 @ApiBearerAuth()
@@ -29,7 +30,7 @@ export class ComponentsExampleParamsController {
   @RouterName('postComponentsExampleParamsContent')
   async postComponentsExampleParamsContent(
     @Param('id') id: string,
-    @Body(ValidationPipe) body: any,
+    @Body(ValidationPipe) body: PostComponentsExampleParamsDto[],
   ) {
     return await this.componentsExampleParamsServer.postComponentsExampleParamsContent(
       +id,
@@ -41,7 +42,7 @@ export class ComponentsExampleParamsController {
   @RouterName('postComponentsExampleParamsVar')
   async postComponentsExampleParamsVar(
     @Param('id') id: string,
-    @Body(ValidationPipe) body: any,
+    @Body(ValidationPipe) body: PostComponentsExampleParamsDto,
   ) {
     return await this.componentsExampleParamsServer.postComponentsExampleParamsVar(
       +id,

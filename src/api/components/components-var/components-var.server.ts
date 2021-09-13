@@ -18,6 +18,7 @@ export class ComponentsVarServer {
     if (contentData.length === 0) {
       this.errors404ComponentsVar();
     }
+    return contentData;
   }
 
   errors404ComponentsVar() {

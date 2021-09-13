@@ -1,12 +1,12 @@
 export const ComponentsExampleParams = {
   postComponentsExampleParamsContent: {
     type: 'POST',
-    name: '/',
+    name: 'content/:id',
     checkAdmin: true,
   },
   postComponentsExampleParamsVar: {
     type: 'POST',
-    name: '/',
+    name: 'var/:id',
     checkAdmin: true,
   },
 };

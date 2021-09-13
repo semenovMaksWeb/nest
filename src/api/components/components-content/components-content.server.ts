@@ -16,6 +16,7 @@ export class ComponentsContentServer {
     if (contentData.length === 0) {
       this.errors404ComponentsContent();
     }
+    return contentData;
   }
 
   errors404ComponentsContent() {
