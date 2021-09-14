@@ -27,7 +27,6 @@ export class ComponentsExampleParamsServer {
     );
     new ComponentsExampleContent(validate, body).validateBody();
     body = this.BodyAddParams(body, id, ComponentsExampleTypeEnum.params);
-    console.log(body);
     await this.componentsContentExampleParamsRepository.save(body);
     return 'Успешно добавлено!';
   }
@@ -39,7 +38,7 @@ export class ComponentsExampleParamsServer {
     const validate = await this.componentsVarServer.findVarIdComponents(id);
     new ComponentsExampleVar(validate, body).validateBody();
     body = this.BodyAddParams(body, id, ComponentsExampleTypeEnum.style);
-    console.log(body);
+
     await this.componentsContentExampleParamsRepository.save(body);
     return 'Успешно добавлено!';
   }

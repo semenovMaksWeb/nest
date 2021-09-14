@@ -24,6 +24,7 @@ export class ComponentsExampleVar {
     str: string,
     key: string,
   ) {
+    console.log(validateName.style.name);
     if (!this.isStyle(str, validateName.style.name)) {
       this.errors.push(`переменная ${key} не валидная`);
     }
@@ -45,6 +46,9 @@ export class ComponentsExampleVar {
   }
 
   validateBody() {
+    if (Object.keys(this.data).length === 0) {
+      throw new HttpException('не валидные json', HttpStatus.BAD_REQUEST);
+    }
     for (const key in this.data) {
       const str = this.data[key];
       const validateName = this.validate.filter((v) => v.var_name === key)[0];
@@ -61,7 +65,11 @@ export class ComponentsExampleVar {
   }
   isStyle = (str, name) => {
     const s = new Option().style;
-    s[name] = str;
-    return s[name] !== '';
+    // console.log(s);
+    return false;
+
+    // const s = new Option().style;
+    // s[name] = str;
+    // return s[name] !== '';
   };
 }

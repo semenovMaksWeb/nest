@@ -42,7 +42,7 @@ export class ComponentsExampleParamsController {
   @RouterName('postComponentsExampleParamsVar')
   async postComponentsExampleParamsVar(
     @Param('id') id: string,
-    @Body(ValidationPipe) body: PostComponentsExampleParamsDto,
+    @Body(ValidationPipe) body: PostComponentsExampleParamsDto[],
   ) {
     return await this.componentsExampleParamsServer.postComponentsExampleParamsVar(
       +id,
