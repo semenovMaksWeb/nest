@@ -7,6 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // app.useWebSocketAdapter(new RedisIoAdapter(app));
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .addBearerAuth()
