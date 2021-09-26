@@ -2,6 +2,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
+  Get,
   Param,
   Post,
   UseGuards,
@@ -35,6 +36,18 @@ export class ComponentsExampleParamsController {
     return await this.componentsExampleParamsServer.postComponentsExampleParamsContent(
       +id,
       body,
+    );
+  }
+  @Get(ComponentsExampleParams.getComponentsExampleParamsIdVar.name)
+  async getComponentsExampleParamsIdVar(@Param('id') id: string) {
+    return await this.componentsExampleParamsServer.getComponentsExampleParamsIdVar(
+      +id,
+    );
+  }
+  @Get(ComponentsExampleParams.getComponentsExampleParamsIdContent.name)
+  async getComponentsExampleParamsIdContent(@Param('id') id: string) {
+    return await this.componentsExampleParamsServer.getComponentsExampleParamsIdContent(
+      +id,
     );
   }
 

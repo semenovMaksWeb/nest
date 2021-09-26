@@ -9,5 +9,17 @@ export const ComponentsExampleParams = {
     name: 'var/:id',
     checkAdmin: true,
   },
+  getComponentsExampleParamsIdVar: {
+    type: 'GET',
+    name: 'var/:id',
+    defaultAuthorization: true,
+    authorization: false,
+  },
+  getComponentsExampleParamsIdContent: {
+    type: 'GET',
+    name: 'content/:id',
+    defaultAuthorization: true,
+    authorization: false,
+  },
 };
 export const nameController = 'components_example_params';

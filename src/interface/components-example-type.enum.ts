@@ -1,4 +1,5 @@
 export enum ComponentsExampleTypeEnum {
   style = 'style',
-  params = 'param',
+  content = 'content',
+  param = 'param',
 }

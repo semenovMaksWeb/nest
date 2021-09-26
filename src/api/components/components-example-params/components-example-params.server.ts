@@ -8,6 +8,7 @@ import { ComponentsExampleContent } from './components-example-params.validate/c
 import { ComponentsExampleVar } from './components-example-params.validate/components-example-var';
 import { ComponentsExampleTypeEnum } from '../../../interface/components-example-type.enum';
 import { PostComponentsExampleParamsDto } from './components-example-params.dto/post-components-example-params.dto';
+import { TypeConvertInterface } from './components-example-params.interface/type-convert.interface';
 
 @Injectable()
 export class ComponentsExampleParamsServer {
@@ -22,8 +23,58 @@ export class ComponentsExampleParamsServer {
     return await this.componentsContentExampleParamsRepository
       .createQueryBuilder('data')
       .select('MAX(data.elemId)', 'max')
-      .where({ id })
+      .where('data.componentsExampleId = :id', { id })
       .getRawOne();
+  }
+  // получить переменные по id компонента
+  async getComponentsExampleParamsIdVar(id: number) {
+    const data = await this.componentsContentExampleParamsRepository.find({
+      where: {
+        componentsExample: id,
+        type_var: ComponentsExampleTypeEnum.style,
+      },
+    });
+    return this.convertDataBdToReturn(data, TypeConvertInterface.object);
+  }
+  // из данных контента бд в удобный формат объекта!
+  convertDataBdToReturn(data, type = TypeConvertInterface.array) {
+    if (type === TypeConvertInterface.object) {
+      return this.convertDataBdObject(data);
+    }
+    if (type === TypeConvertInterface.array) {
+      return this.convertDataBdArray(data);
+    }
+  }
+  convertDataBdArray(data) {
+    const res = [];
+    let idElem = null;
+    let index = -1;
+    data.forEach((e) => {
+      if (idElem === null || idElem !== e.elemId) {
+        idElem = e.elemId;
+        index++;
+        res[index] = {};
+      }
+      res[index][e.name_params] = e.value;
+    });
+    return res;
+  }
+  convertDataBdObject(data) {
+    const res = {};
+    data.forEach((e) => {
+      res[e.name_params] = e.value;
+    });
+    return res;
+  }
+  // получить контент по id компонента
+  async getComponentsExampleParamsIdContent(id: number) {
+    const data = await this.componentsContentExampleParamsRepository.find({
+      where: {
+        componentsExample: id,
+        type_var: ComponentsExampleTypeEnum.content,
+      },
+    });
+    return this.convertDataBdToReturn(data);
   }
 
   // создать данные компонента контент
@@ -32,12 +83,13 @@ export class ComponentsExampleParamsServer {
     body: PostComponentsExampleParamsDto[],
   ) {
     const query = await this.getComponentsExampleParamsContentMaxElemId(id);
-    const max = query.max | 1;
+    console.log(query);
+    const max = query.max | 0;
     const validate = await this.componentsContentServer.findContentIdComponents(
       id,
     );
     new ComponentsExampleContent(validate, body).validateBody();
-    body = this.BodyAddParams(body, id, ComponentsExampleTypeEnum.params, max);
+    body = this.BodyAddParams(body, id, ComponentsExampleTypeEnum.content, max);
     await this.componentsContentExampleParamsRepository.save(body);
     return 'Успешно добавлено!';
   }
@@ -58,7 +110,7 @@ export class ComponentsExampleParamsServer {
     e: PostComponentsExampleParamsDto,
     id: number,
     type: ComponentsExampleTypeEnum,
-    max = null,
+    max = 0,
   ) {
     const bodyValue: any[] = [];
     for (const eKey in e) {
@@ -80,7 +132,7 @@ export class ComponentsExampleParamsServer {
     body: PostComponentsExampleParamsDto[] | PostComponentsExampleParamsDto,
     id: number,
     type: ComponentsExampleTypeEnum,
-    max = null,
+    max = 0,
   ) {
     if (!body.length) {
       return this.BodyAddParamsAll(body, id, type, max);
