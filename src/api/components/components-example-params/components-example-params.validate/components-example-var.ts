@@ -1,5 +1,9 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Window = require('window');
+const window = new Window();
+
 export interface validateParamsInterface {
   id: number;
   description: string;
@@ -64,12 +68,8 @@ export class ComponentsExampleVar {
     throw new HttpException(this.errors, HttpStatus.BAD_REQUEST);
   }
   isStyle = (str, name) => {
-    const s = new Option().style;
-    // console.log(s);
-    return false;
-
-    // const s = new Option().style;
-    // s[name] = str;
-    // return s[name] !== '';
+    const elem = window.document.createElement('div');
+    elem.style[name] = str;
+    return elem.style[name];
   };
 }
