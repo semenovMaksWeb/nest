@@ -27,4 +27,8 @@ export class ComponentsContentExampleParams {
     enum: ComponentsExampleTypeEnum,
   })
   type_var: ComponentsExampleTypeEnum;
+  @Column({
+    nullable: true,
+  })
+  elemId: number;
 }

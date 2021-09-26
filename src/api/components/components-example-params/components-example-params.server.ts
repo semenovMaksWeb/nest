@@ -17,20 +17,31 @@ export class ComponentsExampleParamsServer {
     private readonly componentsContentServer: ComponentsContentServer,
     private readonly componentsVarServer: ComponentsVarServer,
   ) {}
+  // получить max значение elem id
+  async getComponentsExampleParamsContentMaxElemId(id: number) {
+    return await this.componentsContentExampleParamsRepository
+      .createQueryBuilder('data')
+      .select('MAX(data.elemId)', 'max')
+      .where({ id })
+      .getRawOne();
+  }
 
+  // создать данные компонента контент
   async postComponentsExampleParamsContent(
     id: number,
     body: PostComponentsExampleParamsDto[],
   ) {
+    const query = await this.getComponentsExampleParamsContentMaxElemId(id);
+    const max = query.max | 1;
     const validate = await this.componentsContentServer.findContentIdComponents(
       id,
     );
     new ComponentsExampleContent(validate, body).validateBody();
-    body = this.BodyAddParams(body, id, ComponentsExampleTypeEnum.params);
+    body = this.BodyAddParams(body, id, ComponentsExampleTypeEnum.params, max);
     await this.componentsContentExampleParamsRepository.save(body);
     return 'Успешно добавлено!';
   }
-
+  // создать данные компонента переменные style
   async postComponentsExampleParamsVar(
     id: number,
     body: PostComponentsExampleParamsDto,
@@ -42,10 +53,12 @@ export class ComponentsExampleParamsServer {
     await this.componentsContentExampleParamsRepository.save(body);
     return 'Успешно добавлено!';
   }
+  // Валидация параметров для создание данных для компонента
   private BodyAddParamsAll(
     e: PostComponentsExampleParamsDto,
     id: number,
     type: ComponentsExampleTypeEnum,
+    max = null,
   ) {
     const bodyValue: any[] = [];
     for (const eKey in e) {
@@ -55,25 +68,26 @@ export class ComponentsExampleParamsServer {
         componentsExample: {
           id: id,
         },
-
+        elemId: max + 1,
         name_params: eKey,
         value: elem,
       });
     }
     return bodyValue;
   }
-
+  // Валидация параметров для создание данных для компонента
   private BodyAddParams(
     body: PostComponentsExampleParamsDto[] | PostComponentsExampleParamsDto,
     id: number,
     type: ComponentsExampleTypeEnum,
+    max = null,
   ) {
     if (!body.length) {
-      return this.BodyAddParamsAll(body, id, type);
+      return this.BodyAddParamsAll(body, id, type, max);
     } else {
       const res = [];
       body.map((e: PostComponentsExampleParamsDto) => {
-        res.push(...this.BodyAddParamsAll(e, id, type));
+        res.push(...this.BodyAddParamsAll(e, id, type, max));
       });
       return res;
     }
