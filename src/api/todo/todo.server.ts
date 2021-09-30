@@ -56,10 +56,19 @@ export class TodoService {
   }
 
   async getTodoUser(userId: number, query: TodoGetFilterDto) {
+    const { sqlCreate } = this.getTodoFunc(query);
+    sqlCreate.where({ user: { id: userId } });
+    return await this.getTodoFuncEnd(sqlCreate);
+  }
+  async getTodoAll(query: TodoGetFilterDto) {
+    const { sqlCreate } = this.getTodoFunc(query);
+    return await this.getTodoFuncEnd(sqlCreate);
+  }
+
+  getTodoFunc(query: TodoGetFilterDto) {
     const { skip, take } = Pagination(query?.limit, query?.page);
     const sqlCreate = this.todoRepository
       .createQueryBuilder('todo')
-      .where({ user: { id: userId } })
       .skip(skip)
       .take(take)
       .select([
@@ -74,18 +83,16 @@ export class TodoService {
     this.addSqlWhereTitle(sqlCreate, query.title);
     this.addSqlWhereActive(sqlCreate, query.active);
     this.addSqlWhereCategories(sqlCreate);
+    return { sqlCreate };
+  }
+  async getTodoFuncEnd(sqlCreate: SelectQueryBuilder<Todo>) {
     const [list, count] = await sqlCreate.getManyAndCount();
     return {
       data: list,
       count,
-      // listCategories: await this.getTodoCategoriesUser(userId),
     };
   }
-  async getTodoAll() {
-    return await this.todoRepository.find({
-      relations: ['categories', 'user'],
-    });
-  }
+
   addSqlWhereTitle(sqlCreate: SelectQueryBuilder<Todo>, title?: string) {
     if (title) {
       sqlCreate.andWhere('todo.title LIKE :title', { title: `%${title}%` });

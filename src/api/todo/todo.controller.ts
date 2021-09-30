@@ -68,7 +68,7 @@ export class TodoController {
 
   @Get(Todo.getTodoAll.name)
   @RouterName('getTodoAll')
-  async getTodoAll() {
-    return await this.todoService.getTodoAll();
+  async getTodoAll(@Query(null, ValidationPipe) query: TodoGetFilterDto) {
+    return await this.todoService.getTodoAll(query);
   }
 }
