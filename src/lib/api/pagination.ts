@@ -9,7 +9,7 @@ export class QueryPagination {
   @ApiModelProperty({ required: false, default: 1 })
   @IsNumberString({}, { message: 'страница задач является числом' })
   @IsOptional()
-    page: string;
+  page: string;
 }
 
 export function Pagination(limit, page, maxLimit = 25) {

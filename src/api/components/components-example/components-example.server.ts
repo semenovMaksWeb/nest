@@ -4,6 +4,8 @@ import { ComponentsExample } from './components-example.entity';
 import { Repository } from 'typeorm';
 import { ComponentsExamplePostDto } from './components-example.dto/components-example-post.dto';
 import { ComponentsServer } from '../components/components.server';
+import { ComponentsExampleFilter } from './components-example.dto/components-example-filter';
+import { Pagination } from '../../../lib/api/pagination';
 
 @Injectable()
 export class ComponentsExampleServer {
@@ -18,7 +20,23 @@ export class ComponentsExampleServer {
       where: [{ name }],
     });
   }
+  async getAllComponentsExample(query: ComponentsExampleFilter) {
+    const { skip, take } = Pagination(query?.limit, query?.page);
+    return await this.componentsExampleRepository.find({
+      take: take,
+      skip: skip,
+    });
+  }
 
+  async getIdComponentsExample(id: number) {
+    const data = await this.componentsExampleRepository.find({
+      where: [{ components: { id } }],
+    });
+    if (data.length === 0) {
+      ComponentsExampleServer.errors404Components();
+    }
+    return data;
+  }
   async postComponentsExample(body: ComponentsExamplePostDto) {
     if (!(await this.componentsServer.findOneId(body.id))) {
       ComponentsExampleServer.errors404Components();
