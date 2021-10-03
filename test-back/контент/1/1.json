@@ -1,0 +1,40 @@
+[
+    {
+        "type": "div",
+        "innerText": "Привет",
+        "attr": {
+            "class": "container"
+        }
+    },
+    {
+        "type": "div",
+        "attr": {
+            "class": "container"
+        },
+        "children": [
+            {
+                "type": "div",
+                "attr": {
+                    "class": "col"
+                }
+            }
+        ]
+    },
+    {
+        "type": "div",
+        "innerText": "Привет",
+        "attr": {
+            "class": "container"
+        },
+        "children": [
+            {
+                "type": "img",
+                "attr": {
+                    "class": "default-image",
+                    "src": "url1",
+                    "alt": "изображение"
+                }
+            }
+        ]
+    }
+]
