@@ -1,0 +1,60 @@
+[
+    {
+        "type": "div",
+        "attr":{
+            "class": "container"
+        },
+        "children":[
+            {
+                "type": "nav",
+                "attr":{
+                    "class":"nav"
+                },
+                "children":[
+                    {
+                        "type": "a",
+                        "innerText": "Новость 1",
+                        "attr":{
+                            "class": "link",
+                            "href": "news/1"
+        
+                        }
+                    },
+                    {
+                        "type": "a",
+                        "innerText": "Новость 2",
+                        "attr":{
+                            "class": "link",
+                            "href": "news/2"
+                        }
+                    },
+                    {
+                        "type": "a",
+                        "innerText": "Новость 3",
+                        "attr":{
+                            "class": "link",
+                            "href": "news/3"
+                        }
+                    },
+                    {
+                        "type": "a",
+                        "innerText": "Новость 4",
+                        "attr":{
+                            "class": "link",
+                            "href": "news/4"
+                        }
+                    },
+                    {
+                        "type": "a",
+                        "innerText": "Новость 5",
+                        "attr":{
+                            "class": "link",
+                            "href": "news/5"
+                        }
+                    }
+                ]   
+            }
+ 
+        ]
+    }
+]

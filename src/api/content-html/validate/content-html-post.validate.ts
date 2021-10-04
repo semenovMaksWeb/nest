@@ -2,9 +2,9 @@ import {
   ContentHtmlPostType,
   ContentHtmlPostTypeInterface,
 } from '../interface/content-html-post.interface';
-import { htmlDiv } from './element/div';
+import { htmlElement } from './element/element';
 import { htmlImg } from './element/img';
-import { log } from 'util';
+import { htmlLink } from './element/link';
 
 // const keyAttr = ['class'];
 
@@ -25,15 +25,28 @@ export function ContentHtmlPostValidate(data: ContentHtmlPostType) {
 
   function childrenPost(data: ContentHtmlPostType) {
     data.forEach((d) => {
-      if (d.type === ContentHtmlPostTypeInterface.div) {
-        errors = htmlDiv(d, errors);
-      } else if (d.type === ContentHtmlPostTypeInterface.img) {
-        errors = htmlImg(d, errors);
-      } else {
-        errors.push({
-          content: d,
-          text: 'Не валидный json',
-        });
+      switch (d.type) {
+        case ContentHtmlPostTypeInterface.h1:
+        case ContentHtmlPostTypeInterface.h2:
+        case ContentHtmlPostTypeInterface.h3:
+        case ContentHtmlPostTypeInterface.h4:
+        case ContentHtmlPostTypeInterface.h5:
+        case ContentHtmlPostTypeInterface.h6:
+        case ContentHtmlPostTypeInterface.div:
+        case ContentHtmlPostTypeInterface.nav:
+          errors = htmlElement(d, errors);
+          break;
+        case ContentHtmlPostTypeInterface.img:
+          errors = htmlImg(d, errors);
+          break;
+        case ContentHtmlPostTypeInterface.a:
+          errors = htmlLink(d, errors);
+          break;
+        default:
+          errors.push({
+            content: d,
+            text: 'Не валидный json',
+          });
       }
       if (d.children && d.children.length !== 0) {
         childrenPost(d.children);
