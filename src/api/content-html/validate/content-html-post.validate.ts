@@ -34,6 +34,7 @@ export function ContentHtmlPostValidate(data: ContentHtmlPostType) {
         case ContentHtmlPostTypeInterface.h6:
         case ContentHtmlPostTypeInterface.div:
         case ContentHtmlPostTypeInterface.nav:
+        case ContentHtmlPostTypeInterface.p:
           errors = htmlElement(d, errors);
           break;
         case ContentHtmlPostTypeInterface.img:
