@@ -62,7 +62,7 @@ export class MessageGateway
   // новое сообщение для всех
   //
 
-  afterInit(server: Server) {
+  afterInit() {
     console.log('afterInit');
   }
 

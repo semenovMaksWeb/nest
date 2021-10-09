@@ -1,15 +1,15 @@
 import {
   Body,
-  Controller, Delete,
+  Controller,
+  Delete,
   Get,
   Param,
   Post,
   Put,
   Request,
-  Res,
   UseGuards,
-  ValidationPipe
-} from "@nestjs/common";
+  ValidationPipe,
+} from '@nestjs/common';
 import { CategoriesService } from './categories.server';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Categories, nameController } from 'src/lib/name/nameApi/Categories';

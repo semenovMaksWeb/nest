@@ -9,7 +9,7 @@ export enum ContentHtmlPostTypeInterface {
   h6 = 'h6',
   a = 'a',
   nav = 'nav',
-  p = "p",
+  p = 'p',
 }
 
 export interface ContentHtmlPostInterface {

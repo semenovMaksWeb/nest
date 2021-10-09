@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Rights } from '../rights/rights.entity';
-import { Router } from '../router/router.entity';
 
 @Entity()
 export class Roles {

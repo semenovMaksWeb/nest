@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 
 import { Components } from '../components/components.entity';
-import { ComponentsVar } from '../components-var/components-var.entity';
 import { ComponentsContentExampleParams } from '../components-example-params/components-example-params.entity';
 
 @Entity()

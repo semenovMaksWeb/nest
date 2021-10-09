@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { In, Repository, SelectQueryBuilder } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { Todo } from './todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoCreateDto } from './todo.dto/todo-create.dto';
@@ -16,7 +16,7 @@ export class TodoService {
     @InjectRepository(Todo)
     private todoRepository: Repository<Todo>,
     private categoriesService: CategoriesService,
-  ) { }
+  ) {}
   // Создать todo
   async postTodoUser(todoCreateDto: TodoCreateDto, userId: number) {
     todoCreateDto.categories = await this.categoriesService.saveCategoriesTodo(
@@ -52,9 +52,12 @@ export class TodoService {
       this.errors404Todo();
     }
   }
-  // получить todo users по todo-id 
+  // получить todo users по todo-id
   async getTodoId(id: number) {
-    return await this.todoRepository.findOne({ where: { id }, relations: ["categorires"] });
+    return await this.todoRepository.findOne({
+      where: { id },
+      relations: ['categorires'],
+    });
   }
   // получить todo users
   async getTodoUser(userId: number, query: TodoGetFilterDto) {
@@ -108,12 +111,15 @@ export class TodoService {
       sqlCreate.andWhere('todo.active= :active', { active: active });
     }
   }
-  // add запрос  todo поиск 
+  // add запрос  todo поиск
   addSqlWhereCategories(sqlCreate: SelectQueryBuilder<Todo>) {
     sqlCreate.innerJoin('todo.categories', 'categories');
   }
   // add запрос поиск todo по categories-id
-  async addSqlWhereCategoriesId(sqlCreate: SelectQueryBuilder<Todo>, categoriesId?: string) {
+  async addSqlWhereCategoriesId(
+    sqlCreate: SelectQueryBuilder<Todo>,
+    categoriesId?: string,
+  ) {
     if (categoriesId) {
       const categoiresIdArray = categoriesId.split(',').map((e: any) => {
         if (+e !== NaN) {
@@ -128,13 +134,15 @@ export class TodoService {
   }
   //  запрос для получение всех todo-ids по categories-id
   addSqlInCategories(categoriesId: number[]) {
-    return this.todoRepository.query(`SELECT DISTINCT "todo"."id" FROM "user"
+    return this.todoRepository.query(
+      `SELECT DISTINCT "todo"."id" FROM "user"
       JOIN "todo" ON ("todo"."userId" = "user"."id")
       JOIN "todo_categories" ON ("todo_categories"."todoId" = "todo"."id")
       WHERE "todo_categories"."categoriesId" IN (:categories)
-      `, [categoriesId])
+      `,
+      [categoriesId],
+    );
   }
-
 
   errors404Todo() {
     throw new HttpException(
