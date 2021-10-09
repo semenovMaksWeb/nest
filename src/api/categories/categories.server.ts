@@ -32,7 +32,7 @@ export class CategoriesService {
       .query(`SELECT DISTINCT "todo_categories"."categoriesId" FROM "user"
         JOIN "todo" ON ("todo"."userId" = "user"."id")
         JOIN "todo_categories" ON ("todo_categories"."todoId" = "todo"."id")
-        WHERE "user"."id" = ${id} AND  "todo_categories"."categoriesId" = ${idCategories}`);
+        WHERE "user"."id" = :id AND  "todo_categories"."categoriesId" =:idCategories`, [id, idCategories]);
     if (data.length === 0) {
       this.errors403Categories();
     }
