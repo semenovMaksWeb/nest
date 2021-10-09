@@ -1,3 +1,4 @@
+import { SupportModule } from './api/support/support.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
@@ -18,6 +19,7 @@ import { ComponentsAllModule } from './api/components/components-all.module';
 import { ContentHtmlModule } from './api/content-html/content-html.module';
 @Module({
   imports: [
+    SupportModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -48,4 +50,4 @@ import { ContentHtmlModule } from './api/content-html/content-html.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
