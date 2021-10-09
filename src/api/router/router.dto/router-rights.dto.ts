@@ -11,8 +11,8 @@ import { RouterRightsElemDto } from './router-rights-elem.dto';
 export class RouterRightsDto {
   @ApiProperty({ type: [RouterRightsElemDto] })
   @Type(() => RouterRightsElemDto)
-  @IsArray({ message: 'Категории задачи является массивом' })
-  @ValidateNested({ message: 'Не валидный массив категории' })
+  @IsArray({ message: 'Права является массивом' })
+  @ValidateNested({ message: 'Не валидный массив прав' })
   rights: RouterRightsElemDto[];
 
   @ApiProperty()
