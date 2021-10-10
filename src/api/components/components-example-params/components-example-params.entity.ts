@@ -19,7 +19,7 @@ export class ComponentsContentExampleParams {
   @ManyToOne(() => Components, (components) => components.id)
   componentsExample: ComponentsExample;
 
-  @ManyToOne(() => Components, (components) => components.id)
+  @ManyToOne(() => User, (user) => user.id)
   user: User;
 
   @Column({

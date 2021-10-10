@@ -5,9 +5,12 @@ https://docs.nestjs.com/modules
 */
 
 import { Module } from '@nestjs/common';
+import { ContentHtmlModule } from '../content-html/content-html.module';
 
 @Module({
-    imports: [],
+    imports: [
+        ContentHtmlModule
+    ],
     controllers: [
         SupportController,
     ],
