@@ -25,13 +25,14 @@ export class SupportController {
     
   @Post(Support.postSupport.name)
   @RouterName('postUser')
-  postSupport(@Body(ValidationPipe) supportPostDto: SupportPostDto) {
-    // return this.supportService
+  async postSupport(@Body(ValidationPipe) body: any) {
+    console.log(body);    
+    return await this.supportService.postSupport(body);
   }
 
   @Get(Support.getSupportAll.name)
   @RouterName('postUser')
-  getSupportAll(@Param(null, ValidationPipe) supportFilterDto: SupportFilterDto) {
-    // return this.supportService
+  async getSupportAll(@Param(null, ValidationPipe) supportFilterDto: SupportFilterDto) {
+    return await this.supportService.getSupportAll(supportFilterDto);
   }
 }

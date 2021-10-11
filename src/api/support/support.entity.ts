@@ -2,10 +2,8 @@ import {
     Entity,
     Column,
     PrimaryGeneratedColumn,
-    CreateDateColumn,
-    ManyToMany,
-    OneToMany,
     ManyToOne,
+ 
   } from 'typeorm';
 import { ContentHtml } from '../content-html/content-html.entity';
 
@@ -15,6 +13,7 @@ import { ContentHtml } from '../content-html/content-html.entity';
 export class Support{
   @PrimaryGeneratedColumn()
   id: number;
+
 
   @ManyToOne(()=> ContentHtml, (contentHtml)=> contentHtml.id)
   contentHtml: ContentHtml

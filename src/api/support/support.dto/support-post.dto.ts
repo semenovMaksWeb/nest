@@ -1,6 +1,7 @@
-import { ContentHtmlPostType, ContentHtmlPostTypeInterface } from "src/api/content-html/interface/content-html-post.interface";
-import { QueryPagination } from "src/lib/api/pagination";
+import { ApiProperty } from "@nestjs/swagger";
+import { ContentHtmlPostType,   } from "src/api/content-html/interface/content-html-post.interface";
 
 export class SupportPostDto{
+    @ApiProperty()
     content: ContentHtmlPostType
 }
