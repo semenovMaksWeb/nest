@@ -2,7 +2,7 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Body, Controller, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { RouterName } from '../../lib/decorator/router-name.decorator';
 import { SupportService } from './support.service';
 import {
@@ -29,10 +29,9 @@ export class SupportController {
     // return this.supportService
   }
 
-  @Post(Support.getSupportAll.name)
+  @Get(Support.getSupportAll.name)
   @RouterName('postUser')
-  getSupportAll(@Body(ValidationPipe) supportFilterDto: SupportFilterDto) {
+  getSupportAll(@Param(null, ValidationPipe) supportFilterDto: SupportFilterDto) {
     // return this.supportService
   }
-
 }
