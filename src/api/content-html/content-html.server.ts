@@ -13,15 +13,24 @@ export class ContentHtmlServer {
     @InjectRepository(ContentHtml)
     private userRepository: Repository<ContentHtml>,
   ) {}
-
-  async contentHtmlPost(data: ContentHtmlPostType) {
-    const errors = ContentHtmlPostValidate(data);
-    if (errors) {
-      this.errors400(errors);
+  // сохранение и получение ответа
+    async contentHtmlPostResultData(data: ContentHtmlPostType){
+      return await this.contentHtmlSave(data);
     }
-    await this.userRepository.save({ content: JSON.stringify(data) });
+    //  общие правило сохранение
+    async contentHtmlSave(data:ContentHtmlPostType){
+      const errors = ContentHtmlPostValidate(data);
+      if (errors) {
+        this.errors400(errors);
+      }
+      return await this.userRepository.save({ content: JSON.stringify(data) });
+    }
+  //   сохранение и получение текста что все ок!
+  async contentHtmlPost(data: ContentHtmlPostType) {
+    await this.contentHtmlSave(data);
     return 'Успешно сохраненно!';
   }
+  //  получение данных по id 
   async contentHtmlGetFormatHtml(id: number) {
     const data = await this.userRepository.findOne(id);
     if (!data) {
