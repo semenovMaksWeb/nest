@@ -143,4 +143,7 @@ export class ComponentsExampleParamsServer {
       return res;
     }
   }
+  updateComponentsExampleParams(id:number, body:any){
+    
+  }
 }

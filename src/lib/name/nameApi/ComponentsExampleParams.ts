@@ -21,5 +21,10 @@ export const ComponentsExampleParams = {
     defaultAuthorization: true,
     authorization: false,
   },
+  updateComponentsExampleParams:{
+    type: 'PUT',
+    name: ':id',
+    checkAdmin: true,
+  }
 };
 export const nameController = 'components_example_params';
