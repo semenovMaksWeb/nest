@@ -11,6 +11,7 @@ export class CategoriesService {
     @InjectRepository(Categories)
     private categoriesRepository: Repository<Categories>,
   ) {}
+  //  сохранить категории пользователю по todo
   async saveCategoriesTodo(
     categories: CategoriesGetTodoDto[],
   ): Promise<Categories[]> {
@@ -21,12 +22,15 @@ export class CategoriesService {
     });
     return await this.categoriesRepository.save(categoriesMap);
   }
+  //  получить все категории
   async getCategoriesAll() {
     return await this.categoriesRepository.find();
   }
+    //  сохранить категории пользователю
   async postCategories(categories: CategoriesCreateDto) {
     return await this.categoriesRepository.save(categories);
   }
+  // получить (валидация) id категории если категория является вашей по todo
   async getCategoriesTodoUser(id: number, idCategories: number) {
     const data = await this.categoriesRepository.query(
       `SELECT DISTINCT "todo_categories"."categoriesId" FROM "user"
@@ -39,7 +43,7 @@ export class CategoriesService {
       this.errors403Categories();
     }
   }
-
+// изменить категорию по todo
   async updateCategoriesTodoUser(
     idUser: number,
     idCategories: number,
@@ -49,12 +53,13 @@ export class CategoriesService {
     await this.categoriesRepository.update(idCategories, categories);
     return 'Категория для задачи успешно измененна!';
   }
+  //  удалить категории по todo
   async deleteCategoriesTodoUser(idUser: number, idCategories: number) {
     await this.getCategoriesTodoUser(idUser, idCategories);
     await this.categoriesRepository.delete(idCategories);
     return 'Категория для задачи успешно удалена!';
   }
-
+// ошибка это не ваша категория работа с ней запрещена
   errors403Categories() {
     throw new HttpException(
       'Указанная категорию не найдена в вашей коллекции',
