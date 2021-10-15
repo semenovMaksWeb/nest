@@ -83,7 +83,6 @@ export class ComponentsExampleParamsServer {
     body: PostComponentsExampleParamsDto[],
   ) {
     const query = await this.getComponentsExampleParamsContentMaxElemId(id);
-    console.log(query);
     const max = query.max | 0;
     const validate = await this.componentsContentServer.findContentIdComponents(
       id,

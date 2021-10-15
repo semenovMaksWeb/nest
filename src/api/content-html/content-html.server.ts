@@ -30,6 +30,7 @@ export class ContentHtmlServer {
     await this.contentHtmlSave(data);
     return 'Успешно сохраненно!';
   }
+  //  получение данных по id 
   async contentHtmlGetFormatHtml(id: number) {
     const data = await this.userRepository.findOne(id);
     if (!data) {
