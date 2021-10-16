@@ -38,6 +38,15 @@ export class CategoriesController {
     return await this.categoriesService.getCategoriesAll();
   }
   /**
+   * @description получить категории поддержки пользователя
+   */
+  @RouterName('categoriesSupport')
+  @Get(Categories.categoriesSupport.name)
+  async categoriesSupport() {
+    return await this.categoriesService.categoriesSupport();
+  }
+
+  /**
    * @description   создать категорию пользователю (all)
    */
   @RouterName('categoriesPost')

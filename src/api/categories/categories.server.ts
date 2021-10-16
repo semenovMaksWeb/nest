@@ -41,6 +41,14 @@ export class CategoriesService {
       type: categories.type,
     });
   }
+  async categoriesSupport(){
+    return await this.categoriesRepository.find({
+      where:{
+        type: "support"
+      }
+    })
+  }
+
   // получить (валидация) id категории если категория является вашей по todo
   async getCategoriesTodoUser(id: number, idCategories: number) {
     const data = await this.categoriesRepository.query(

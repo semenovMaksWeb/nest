@@ -19,5 +19,11 @@ export const Categories = {
     defaultAuthorization: true,
     authorization: true,
   },
+  categoriesSupport:{
+    type: 'GET',
+    name: '/support',
+    defaultAuthorization: false,
+    authorization: false,
+  }
 };
 export const nameController = 'categories';
