@@ -1,5 +1,6 @@
 export const Categories = {
   categoriesUser: { type: 'GET', name: '/all', checkAdmin: true },
+  categoriesPostAdmin:{ type: 'POST', name: '/admin', checkAdmin: true },
   categoriesPost: {
     type: 'POST',
     name: '/',

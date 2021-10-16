@@ -37,7 +37,7 @@ export class SupportService {
       where: this.addWhereSupportActive(param.active),
       skip,
       take,
-      relations: ['contentHtml'],
+      relations: ['contentHtml', 'categories'],
     });
   }
   async postSupport(body: SupportPostDto) {

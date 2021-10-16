@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Categories } from '../categories/categories.entity';
 import { ContentHtml } from '../content-html/content-html.entity';
 
 @Entity()
@@ -16,4 +17,9 @@ export class Support {
 
   @CreateDateColumn()
   create: Date;
+
+  @ManyToMany(() => Categories, (categories) => categories.id)
+  @JoinTable({ name: 'support_categories' })
+  categories: Categories[];
+
 }

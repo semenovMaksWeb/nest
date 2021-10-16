@@ -4,6 +4,7 @@ import { Categories } from './categories.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoriesGetTodoDto } from './categories.dto/categories-get-todo.dto';
 import { CategoriesCreateDto } from './categories.dto/categories-create.dto';
+import { CategoriesCreateAdminDto } from './categories.dto/categories-create-admin.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -26,9 +27,19 @@ export class CategoriesService {
   async getCategoriesAll() {
     return await this.categoriesRepository.find();
   }
-  //  сохранить категории пользователю
-  async postCategories(categories: CategoriesCreateDto) {
-    return await this.categoriesRepository.save(categories);
+  //  сохранить категории пользователю all
+  async postCategories(categories: CategoriesCreateDto) {  
+    return await this.categoriesRepository.save({
+      name: categories.name
+    });
+  }
+    //  сохранить категории пользователю admin
+  async categoriesPostAdmin(categories:CategoriesCreateAdminDto){
+    console.log(categories);  
+    return await this.categoriesRepository.save({
+      name: categories.name,
+      type: categories.type,
+    });
   }
   // получить (валидация) id категории если категория является вашей по todo
   async getCategoriesTodoUser(id: number, idCategories: number) {

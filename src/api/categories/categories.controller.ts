@@ -16,6 +16,7 @@ import { Categories, nameController } from 'src/lib/name/nameApi/Categories';
 import { RouterName } from '../../lib/decorator/router-name.decorator';
 import { UserGuard } from '../user/user.guard';
 import { CategoriesCreateDto } from './categories.dto/categories-create.dto';
+import { CategoriesCreateAdminDto } from './categories.dto/categories-create-admin.dto';
 /**
  * @description контроллер categories
  */
@@ -44,6 +45,16 @@ export class CategoriesController {
   async categoriesPost(@Body(ValidationPipe) categories: CategoriesCreateDto) {
     return await this.categoriesService.postCategories(categories);
   }
+
+  /**
+   * @description   создать категорию пользователю (admin)
+   */
+   @RouterName('categoriesPostAdmin')
+   @Post(Categories.categoriesPostAdmin.name)
+   async categoriesPostAdmin(@Body(ValidationPipe) categories: CategoriesCreateAdminDto) {
+     return await this.categoriesService.categoriesPostAdmin(categories);
+   }
+
   /**
    * @description изменить категорию пользователя по todo
    */
