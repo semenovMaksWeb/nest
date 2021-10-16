@@ -2,7 +2,6 @@
 const Window = require('window');
 const window = new Window();
 function transformHtml(data: any, res: any) {
-  console.log();
   data.forEach((e) => {
     const elem = window.document.createElement(e.type);
     for (const attrKey in e.attr) {

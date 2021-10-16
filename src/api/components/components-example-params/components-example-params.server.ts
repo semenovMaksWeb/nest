@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { ComponentsContentExampleParams } from './components-example-params.entity';
 import { ComponentsContentServer } from '../components-content/components-content.server';
 import { ComponentsVarServer } from '../components-var/components-var.server';
@@ -9,7 +9,10 @@ import { ComponentsExampleVar } from './components-example-params.validate/compo
 import { ComponentsExampleTypeEnum } from '../../../interface/components-example-type.enum';
 import { PostComponentsExampleParamsDto } from './components-example-params.dto/post-components-example-params.dto';
 import { TypeConvertInterface } from './components-example-params.interface/type-convert.interface';
-
+import { UpdateComponentsExampleParamsDto } from './components-example-params.dto/update-components-example-params.dto';
+import { convertDataBdToReturn, convertParamsContentUpdate } from "./components-example-params.lib/convert-all"
+import {BodyAddParams,BodyAddParamsAll} from "./components-example-params.lib/params-add-body"
+import { ComponentsContent } from '../components-content/components-content.entity';
 @Injectable()
 export class ComponentsExampleParamsServer {
   constructor(
@@ -17,7 +20,7 @@ export class ComponentsExampleParamsServer {
     private componentsContentExampleParamsRepository: Repository<ComponentsContentExampleParams>,
     private readonly componentsContentServer: ComponentsContentServer,
     private readonly componentsVarServer: ComponentsVarServer,
-  ) {}
+  ) { }
   // получить max значение elem id
   async getComponentsExampleParamsContentMaxElemId(id: number) {
     return await this.componentsContentExampleParamsRepository
@@ -34,37 +37,7 @@ export class ComponentsExampleParamsServer {
         type_var: ComponentsExampleTypeEnum.style,
       },
     });
-    return this.convertDataBdToReturn(data, TypeConvertInterface.object);
-  }
-  // из данных контента бд в удобный формат объекта!
-  convertDataBdToReturn(data, type = TypeConvertInterface.array) {
-    if (type === TypeConvertInterface.object) {
-      return this.convertDataBdObject(data);
-    }
-    if (type === TypeConvertInterface.array) {
-      return this.convertDataBdArray(data);
-    }
-  }
-  convertDataBdArray(data) {
-    const res = [];
-    let idElem = null;
-    let index = -1;
-    data.forEach((e) => {
-      if (idElem === null || idElem !== e.elemId) {
-        idElem = e.elemId;
-        index++;
-        res[index] = {};
-      }
-      res[index][e.name_params] = e.value;
-    });
-    return res;
-  }
-  convertDataBdObject(data) {
-    const res = {};
-    data.forEach((e) => {
-      res[e.name_params] = e.value;
-    });
-    return res;
+    return convertDataBdToReturn(data, TypeConvertInterface.object);
   }
   // получить контент по id компонента
   async getComponentsExampleParamsIdContent(id: number) {
@@ -73,10 +46,16 @@ export class ComponentsExampleParamsServer {
         componentsExample: id,
         type_var: ComponentsExampleTypeEnum.content,
       },
+      relations: ["components"]
     });
-    return this.convertDataBdToReturn(data);
+    console.log(data);    
+    return convertDataBdToReturn(data);
   }
-
+  // функция валидации параметров контент
+  async validateParams(body: any, validate:ComponentsContent[]) {
+    new ComponentsExampleContent(validate, body).validateBody();
+    return { validate };
+  }
   // создать данные компонента контент
   async postComponentsExampleParamsContent(
     id: number,
@@ -87,8 +66,8 @@ export class ComponentsExampleParamsServer {
     const validate = await this.componentsContentServer.findContentIdComponents(
       id,
     );
-    new ComponentsExampleContent(validate, body).validateBody();
-    body = this.BodyAddParams(body, id, ComponentsExampleTypeEnum.content, max);
+    await this.validateParams(body, validate);
+    body = BodyAddParams(body, id, ComponentsExampleTypeEnum.content, max);
     await this.componentsContentExampleParamsRepository.save(body);
     return 'Успешно добавлено!';
   }
@@ -99,51 +78,59 @@ export class ComponentsExampleParamsServer {
   ) {
     const validate = await this.componentsVarServer.findVarIdComponents(id);
     new ComponentsExampleVar(validate, body).validateBody();
-    body = this.BodyAddParams(body, id, ComponentsExampleTypeEnum.style);
+    body = BodyAddParams(body, id, ComponentsExampleTypeEnum.style);
 
     await this.componentsContentExampleParamsRepository.save(body);
     return 'Успешно добавлено!';
   }
-  // Валидация параметров для создание данных для компонента
-  private BodyAddParamsAll(
-    e: PostComponentsExampleParamsDto,
-    id: number,
-    type: ComponentsExampleTypeEnum,
-    max = 0,
-  ) {
-    const bodyValue: any[] = [];
-    for (const eKey in e) {
-      const elem = e[eKey];
-      bodyValue.push({
-        type_var: type,
-        componentsExample: {
-          id: id,
-        },
-        elemId: max + 1,
-        name_params: eKey,
-        value: elem,
-      });
-    }
-    return bodyValue;
-  }
-  // Валидация параметров для создание данных для компонента
-  private BodyAddParams(
-    body: PostComponentsExampleParamsDto[] | PostComponentsExampleParamsDto,
-    id: number,
-    type: ComponentsExampleTypeEnum,
-    max = 0,
-  ) {
-    if (!body.length) {
-      return this.BodyAddParamsAll(body, id, type, max);
+  // изменить строчку параметров компонента
+  async updateComponentsExampleParams(id: number, body: UpdateComponentsExampleParamsDto) {
+    const params = await this.getComponentsExampleParamsId(id);
+    if (params.elemId !== 0) {
+      // контент
+      const validate = await this.componentsContentServer.findContentIdComponents(
+        params.componentsExample.id,
+      );
+      const elem = await this.getComponentsExampleParamsContent(params.componentsExample.id);
+      const bodyAll = convertParamsContentUpdate(elem, body, id, validate);
+      await this.validateParams(bodyAll, validate);
+      await this.componentsContentExampleParamsRepository.update(id, {
+        value: body.value
+      })
     } else {
-      const res = [];
-      body.map((e: PostComponentsExampleParamsDto) => {
-        res.push(...this.BodyAddParamsAll(e, id, type, max));
-      });
-      return res;
+      // переменные
+      return params;
     }
+
   }
-  updateComponentsExampleParams(id:number, body:any){
-    
+  //  получить параметр по id
+  async getComponentsExampleParamsId(id: number) {
+    const res = await this.componentsContentExampleParamsRepository.findOne({
+      relations: ['componentsExample'],
+      where: {
+        id
+      },
+
+    })
+    if (!res) {
+      this.errors404ParamsId();
+    }
+    return res;
+  }
+  //  получить параметры контента в сыром виде по componentsExampleId
+  async getComponentsExampleParamsContent(componentsExampleId: number) {
+    const res = await this.componentsContentExampleParamsRepository.find({
+      where: {
+        elemId: Not(0),
+        componentsExample: componentsExampleId
+      }
+    })
+    return res;
+  }
+  errors404ParamsId() {
+    throw new HttpException(
+      'Указанный параметр компонента не уже существует',
+      HttpStatus.NOT_FOUND,
+    );
   }
 }

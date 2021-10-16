@@ -25,8 +25,7 @@ export class SupportController {
     
   @Post(Support.postSupport.name)
   @RouterName('postUser')
-  async postSupport(@Body(ValidationPipe) body: any) {
-    console.log(body);    
+  async postSupport(@Body(ValidationPipe) body: any) {  
     return await this.supportService.postSupport(body);
   }
 
