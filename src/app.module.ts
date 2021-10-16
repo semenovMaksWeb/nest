@@ -50,4 +50,4 @@ import { ContentHtmlModule } from './api/content-html/content-html.module';
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

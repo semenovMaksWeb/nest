@@ -28,25 +28,25 @@ import { CategoriesCreateDto } from './categories.dto/categories-create.dto';
  */
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
- /**
- * @description получить все категории пользователя (админ)
- */
+  /**
+   * @description получить все категории пользователя (админ)
+   */
   @RouterName('categoriesUser')
   @Get(Categories.categoriesUser.name)
   async categoriesUser() {
     return await this.categoriesService.getCategoriesAll();
   }
   /**
- * @description   создать категорию пользователю (all)
- */
+   * @description   создать категорию пользователю (all)
+   */
   @RouterName('categoriesPost')
   @Post(Categories.categoriesPost.name)
   async categoriesPost(@Body(ValidationPipe) categories: CategoriesCreateDto) {
     return await this.categoriesService.postCategories(categories);
   }
   /**
-  * @description изменить категорию пользователя по todo
-  */
+   * @description изменить категорию пользователя по todo
+   */
   @RouterName('updateCategoriesTodoUser')
   @Put(Categories.updateCategoriesTodoUser.name)
   async updateCategoriesTodoUser(
@@ -60,9 +60,9 @@ export class CategoriesController {
       categories,
     );
   }
-    /**
-  * @description удалить категорию пользователя по todo
-  */
+  /**
+   * @description удалить категорию пользователя по todo
+   */
   @RouterName('deleteCategoriesTodoUser')
   @Delete(Categories.deleteCategoriesTodoUser.name)
   async deleteCategoriesTodoUser(@Request() req, @Param('id') id: string) {

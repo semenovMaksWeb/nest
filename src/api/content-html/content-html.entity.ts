@@ -1,4 +1,3 @@
- 
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Support } from '../support/support.entity';
 @Entity()
@@ -10,5 +9,5 @@ export class ContentHtml {
   content: string;
 
   @OneToMany(() => Support, (support) => support.id)
-  support: Support
+  support: Support;
 }

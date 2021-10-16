@@ -10,15 +10,8 @@ import { Support } from './support.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Support]),
-        ContentHtmlModule
-    ],
-    controllers: [
-        SupportController,
-    ],
-    providers: [
-        SupportService,
-    ],
+  imports: [TypeOrmModule.forFeature([Support]), ContentHtmlModule],
+  controllers: [SupportController],
+  providers: [SupportService],
 })
-export class SupportModule { }
+export class SupportModule {}

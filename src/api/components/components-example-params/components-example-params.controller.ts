@@ -43,7 +43,7 @@ export class ComponentsExampleParamsController {
       body,
     );
   }
-   /**
+  /**
    * @description показать параметр переменные css для компонента
    */
   @Get(ComponentsExampleParams.getComponentsExampleParamsIdVar.name)
@@ -52,7 +52,7 @@ export class ComponentsExampleParamsController {
       +id,
     );
   }
-     /**
+  /**
    * @description показать параметр contents для компонента
    */
   @Get(ComponentsExampleParams.getComponentsExampleParamsIdContent.name)
@@ -61,7 +61,7 @@ export class ComponentsExampleParamsController {
       +id,
     );
   }
-     /**
+  /**
    * @description добавить параметр переменные css для компонента
    */
   @Post(ComponentsExampleParams.postComponentsExampleParamsVar.name)
@@ -75,13 +75,18 @@ export class ComponentsExampleParamsController {
       body,
     );
   }
-      /**
+  /**
    * @description изменить 1запись параметра для компонента
    */
   @Put(ComponentsExampleParams.updateComponentsExampleParams.name)
   @RouterName('updateComponentsExampleParams')
-  async updateComponentsExampleParams( @Param('id') id: string,
-  @Body(ValidationPipe) body: UpdateComponentsExampleParamsDto){
-    return await this.componentsExampleParamsServer.updateComponentsExampleParams(+id, body);
+  async updateComponentsExampleParams(
+    @Param('id') id: string,
+    @Body(ValidationPipe) body: UpdateComponentsExampleParamsDto,
+  ) {
+    return await this.componentsExampleParamsServer.updateComponentsExampleParams(
+      +id,
+      body,
+    );
   }
 }

@@ -26,7 +26,7 @@ export class CategoriesService {
   async getCategoriesAll() {
     return await this.categoriesRepository.find();
   }
-    //  сохранить категории пользователю
+  //  сохранить категории пользователю
   async postCategories(categories: CategoriesCreateDto) {
     return await this.categoriesRepository.save(categories);
   }
@@ -43,7 +43,7 @@ export class CategoriesService {
       this.errors403Categories();
     }
   }
-// изменить категорию по todo
+  // изменить категорию по todo
   async updateCategoriesTodoUser(
     idUser: number,
     idCategories: number,
@@ -59,7 +59,7 @@ export class CategoriesService {
     await this.categoriesRepository.delete(idCategories);
     return 'Категория для задачи успешно удалена!';
   }
-// ошибка это не ваша категория работа с ней запрещена
+  // ошибка это не ваша категория работа с ней запрещена
   errors403Categories() {
     throw new HttpException(
       'Указанная категорию не найдена в вашей коллекции',

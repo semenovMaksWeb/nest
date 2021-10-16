@@ -36,10 +36,7 @@ import {
   nameController as nameControllerComponentsExampleParams,
 } from './ComponentsExampleParams';
 
-import {
-  Support,
-  nameController as nameControllerSupport,
-} from './Support';
+import { Support, nameController as nameControllerSupport } from './Support';
 
 export const nameAllApi = {
   [nameControllerRoles]: Roles,
@@ -54,5 +51,5 @@ export const nameAllApi = {
   [nameControllerComponentsContent]: ComponentsContent,
   [nameControllerComponentsVar]: ComponentsVar,
   [nameControllerComponentsExampleParams]: ComponentsExampleParams,
-  [nameControllerSupport]: Support
+  [nameControllerSupport]: Support,
 };

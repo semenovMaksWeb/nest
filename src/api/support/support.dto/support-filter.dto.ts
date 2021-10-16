@@ -1,5 +1,3 @@
-import { QueryPagination } from "src/lib/api/pagination";
+import { QueryPagination } from 'src/lib/api/pagination';
 
-export class SupportFilterDto  extends QueryPagination{
-    
-}
+export class SupportFilterDto extends QueryPagination {}

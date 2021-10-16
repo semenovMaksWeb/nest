@@ -10,8 +10,11 @@ import { ComponentsExampleTypeEnum } from '../../../interface/components-example
 import { PostComponentsExampleParamsDto } from './components-example-params.dto/post-components-example-params.dto';
 import { TypeConvertInterface } from './components-example-params.interface/type-convert.interface';
 import { UpdateComponentsExampleParamsDto } from './components-example-params.dto/update-components-example-params.dto';
-import { convertDataBdToReturn, convertParamsContentUpdate } from "./components-example-params.lib/convert-all"
-import {BodyAddParams,BodyAddParamsAll} from "./components-example-params.lib/params-add-body"
+import {
+  convertDataBdToReturn,
+  convertParamsContentUpdate,
+} from './components-example-params.lib/convert-all';
+import { BodyAddParams } from './components-example-params.lib/params-add-body';
 import { ComponentsContent } from '../components-content/components-content.entity';
 @Injectable()
 export class ComponentsExampleParamsServer {
@@ -20,7 +23,7 @@ export class ComponentsExampleParamsServer {
     private componentsContentExampleParamsRepository: Repository<ComponentsContentExampleParams>,
     private readonly componentsContentServer: ComponentsContentServer,
     private readonly componentsVarServer: ComponentsVarServer,
-  ) { }
+  ) {}
   // получить max значение elem id
   async getComponentsExampleParamsContentMaxElemId(id: number) {
     return await this.componentsContentExampleParamsRepository
@@ -46,13 +49,13 @@ export class ComponentsExampleParamsServer {
         componentsExample: id,
         type_var: ComponentsExampleTypeEnum.content,
       },
-      relations: ["components"]
+      relations: ['components'],
     });
-    console.log(data);    
+    console.log(data);
     return convertDataBdToReturn(data);
   }
   // функция валидации параметров контент
-  async validateParams(body: any, validate:ComponentsContent[]) {
+  async validateParams(body: any, validate: ComponentsContent[]) {
     new ComponentsExampleContent(validate, body).validateBody();
     return { validate };
   }
@@ -84,34 +87,38 @@ export class ComponentsExampleParamsServer {
     return 'Успешно добавлено!';
   }
   // изменить строчку параметров компонента
-  async updateComponentsExampleParams(id: number, body: UpdateComponentsExampleParamsDto) {
+  async updateComponentsExampleParams(
+    id: number,
+    body: UpdateComponentsExampleParamsDto,
+  ) {
     const params = await this.getComponentsExampleParamsId(id);
     if (params.elemId !== 0) {
       // контент
-      const validate = await this.componentsContentServer.findContentIdComponents(
+      const validate =
+        await this.componentsContentServer.findContentIdComponents(
+          params.componentsExample.id,
+        );
+      const elem = await this.getComponentsExampleParamsContent(
         params.componentsExample.id,
       );
-      const elem = await this.getComponentsExampleParamsContent(params.componentsExample.id);
       const bodyAll = convertParamsContentUpdate(elem, body, id, validate);
       await this.validateParams(bodyAll, validate);
       await this.componentsContentExampleParamsRepository.update(id, {
-        value: body.value
-      })
+        value: body.value,
+      });
     } else {
       // переменные
       return params;
     }
-
   }
   //  получить параметр по id
   async getComponentsExampleParamsId(id: number) {
     const res = await this.componentsContentExampleParamsRepository.findOne({
       relations: ['componentsExample'],
       where: {
-        id
+        id,
       },
-
-    })
+    });
     if (!res) {
       this.errors404ParamsId();
     }
@@ -122,9 +129,9 @@ export class ComponentsExampleParamsServer {
     const res = await this.componentsContentExampleParamsRepository.find({
       where: {
         elemId: Not(0),
-        componentsExample: componentsExampleId
-      }
-    })
+        componentsExample: componentsExampleId,
+      },
+    });
     return res;
   }
   errors404ParamsId() {
