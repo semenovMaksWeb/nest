@@ -6,5 +6,8 @@ export const Support = {
     authorization: false,
     defaultAuthorization: false,
   },
+  updateActiveSupport:{
+    type: 'PUT', name: ':id', checkAdmin: true
+  }
 };
 export const nameController = 'support';
