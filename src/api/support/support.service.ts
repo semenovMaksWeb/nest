@@ -6,6 +6,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pagination } from 'src/lib/api/pagination';
 import { Repository } from 'typeorm';
+import { CategoriesService } from '../categories/categories.server';
 import { ContentHtmlServer } from '../content-html/content-html.server';
 import { SupportActiveDto } from './support.dto/support-active.dto';
 import { SupportFilterDto } from './support.dto/support-filter.dto';
@@ -18,6 +19,7 @@ export class SupportService {
     @InjectRepository(Support)
     private supportRepository: Repository<Support>,
     private contentHtml: ContentHtmlServer,
+    private categoriesService: CategoriesService,
   ) {}
     async getSupportId(id:number){
        const res =  await this.supportRepository.findOne(id);
@@ -40,12 +42,25 @@ export class SupportService {
       relations: ['contentHtml', 'categories'],
     });
   }
+  convertCategories(data:number[]){
+    const res = []
+    data.map((e)=>{
+      res.push({
+        id: e
+      })
+    })
+    return res;
+  }
+
   async postSupport(body: SupportPostDto) {
+    await this.categoriesService.categoriesValidateTypeSupport(body.categories);
     const htmlContent = await this.contentHtml.contentHtmlPostResultData(
       body.content,
     );
+
     await this.supportRepository.save({
       contentHtml: htmlContent,
+      categories: this.convertCategories(body.categories)
     });
   }
   async updateActiveSupport(id:number, body:SupportActiveDto){

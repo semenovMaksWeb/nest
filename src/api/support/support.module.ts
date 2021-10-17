@@ -8,9 +8,10 @@ import { Module } from '@nestjs/common';
 import { ContentHtmlModule } from '../content-html/content-html.module';
 import { Support } from './support.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoriesModule } from '../categories/categories.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Support]), ContentHtmlModule],
+  imports: [TypeOrmModule.forFeature([Support]), ContentHtmlModule, CategoriesModule],
   controllers: [SupportController],
   providers: [SupportService],
 })

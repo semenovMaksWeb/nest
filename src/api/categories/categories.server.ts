@@ -1,10 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Categories } from './categories.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoriesGetTodoDto } from './categories.dto/categories-get-todo.dto';
 import { CategoriesCreateDto } from './categories.dto/categories-create.dto';
 import { CategoriesCreateAdminDto } from './categories.dto/categories-create-admin.dto';
+import { TypeCategories } from 'src/interface/type-categories.type';
+import { Type } from 'class-transformer';
 
 @Injectable()
 export class CategoriesService {
@@ -41,10 +43,11 @@ export class CategoriesService {
       type: categories.type,
     });
   }
+  //  получить категории типа support
   async categoriesSupport(){
     return await this.categoriesRepository.find({
       where:{
-        type: "support"
+        type: TypeCategories.support
       }
     })
   }
@@ -78,11 +81,36 @@ export class CategoriesService {
     await this.categoriesRepository.delete(idCategories);
     return 'Категория для задачи успешно удалена!';
   }
+  async categoriesValidateTypeSupport(ids:number[]){
+    const categoiresAll  = await this.categoriesRepository.find({
+      where: {
+        id: In(ids)
+      }
+    })
+    if (ids.length !== categoiresAll.length) {
+      this.errors404CategoriesInIds();
+    }
+    if (categoiresAll.filter((e)=> e.type !== TypeCategories.support)[0]) {
+      this.errors400CategoriesInIds();      
+    }
+  }
   // ошибка это не ваша категория работа с ней запрещена
   errors403Categories() {
     throw new HttpException(
       'Указанная категорию не найдена в вашей коллекции',
       HttpStatus.NOT_FOUND,
+    );
+  }
+  errors404CategoriesInIds(){
+    throw new HttpException(
+      'Не все указанные категории были найдены',
+      HttpStatus.NOT_FOUND,
+    );
+  }
+  errors400CategoriesInIds() {
+    throw new HttpException(
+      'Указанные категории не являются категории поддержки',
+      HttpStatus.BAD_REQUEST,
     );
   }
 }

@@ -20,17 +20,23 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserGuard } from '../user/user.guard';
 import { SupportFilterDto } from './support.dto/support-filter.dto';
 import { SupportActiveDto } from './support.dto/support-active.dto';
+import { SupportPostDto } from './support.dto/support-post.dto';
+import { CategoriesService } from '../categories/categories.server';
 
 @ApiTags(nameController)
 @ApiBearerAuth()
 @Controller(nameController)
 @UseGuards(UserGuard)
 export class SupportController {
-  constructor(private readonly supportService: SupportService) {}
+  constructor(
+    private readonly supportService: SupportService,
+    private readonly categoriesService: CategoriesService,
+    ) {}
 
   @Post(Support.postSupport.name)
   @RouterName('postSupport')
-  async postSupport(@Body(ValidationPipe) body: any) {
+  async postSupport(@Body(ValidationPipe) body: SupportPostDto) {
+    console.log(body);    
     return await this.supportService.postSupport(body);
   }
 
