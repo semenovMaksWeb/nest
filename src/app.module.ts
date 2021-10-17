@@ -17,20 +17,12 @@ import { MessageModule } from './api/message/message.module';
 import { StyleModule } from './api/style/style.module';
 import { ComponentsAllModule } from './api/components/components-all.module';
 import { ContentHtmlModule } from './api/content-html/content-html.module';
+import { bdMain } from './config/bd-main';
 @Module({
   imports: [
     SupportModule,
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: parseInt(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      synchronize: true,
-      autoLoadEntities: true,
-    }),
+    TypeOrmModule.forRoot(bdMain),
     UserModule,
     configModule,
     TodoModule,
