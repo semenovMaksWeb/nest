@@ -11,6 +11,11 @@ export class Support {
   contentHtml: ContentHtml;
 
   @Column({
+    default: "вопрос к поддержке"
+  })
+  title: string;
+
+  @Column({
     default: true
   })
   active: boolean;

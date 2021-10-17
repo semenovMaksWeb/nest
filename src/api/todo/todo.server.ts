@@ -132,7 +132,7 @@ export class TodoService {
       sqlCreate.andWhere(`todo.id IN ${ids}`);
     }
   }
-  //  запрос для получение всех todo-ids по categories-id
+  //  запрос для получение всех todo-ids по categories-id + user-id
   addSqlInCategories(categoriesId: number[]) {
     return this.todoRepository.query(
       `SELECT DISTINCT "todo"."id" FROM "user"

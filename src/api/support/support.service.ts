@@ -80,6 +80,17 @@ export class SupportService {
     })
     return "состояние письма успешно измененно"
   }
+    //  запрос для получение всех support-ids по categories-id
+    addSqlInCategories(categoriesId: number[]) {
+      return this.supportRepository.query(
+        `SELECT DISTINCT "support"."id" FROM "support"
+        JOIN "support_categories" ON ("support_categories"."supportId" = "support"."id")
+        WHERE "support_categories"."categoriesId" IN (:categories)
+        `,
+        [categoriesId],
+      );
+    }
+
 
   errors404Id(){
     throw new HttpException(
