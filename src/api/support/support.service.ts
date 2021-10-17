@@ -5,7 +5,7 @@ https://docs.nestjs.com/providers#services
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pagination } from 'src/lib/api/pagination';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CategoriesService } from '../categories/categories.server';
 import { ContentHtmlServer } from '../content-html/content-html.server';
 import { SupportActiveDto } from './support.dto/support-active.dto';
@@ -27,16 +27,26 @@ export class SupportService {
          this.errors404Id();
        }
     }
-    addWhereSupportActive(active){
-      if (active !== undefined) {
-        return {active:active}
+ 
+  addWhereSupport(active:boolean, categories: number[]){
+    const where:any = {};
+    if (active !== undefined) {
+      where.active = active;
     }
+    if (categories && categories.length !==0) {
+      // const res = []
+      // categories.map((e)=> res.push(+e))
+      // where.categories ={
+      //     id: In(res)
+      //   }
+      }      
+    return where; 
   }
   async getSupportAll(param: SupportFilterDto) {
     console.log(param);    
     const { skip, take } = Pagination(param?.limit, param?.page);
     return await this.supportRepository.find({
-      where: this.addWhereSupportActive(param.active),
+      where: this.addWhereSupport(param.active, param.categories),
       skip,
       take,
       relations: ['contentHtml', 'categories'],

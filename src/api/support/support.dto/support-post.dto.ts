@@ -8,7 +8,7 @@ export class SupportPostDto {
   @ApiProperty()
   @IsNotEmpty({ message: 'id категории обязательное поле' })
   @ApiProperty({ type: Number })
-  @IsArray({ message: 'Категории задачи является массивом' })
+  @IsArray({ message: 'Категории поддержки является массивом' })
   categories: number[];
  
   @ApiProperty()
