@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
-import { IsArray, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 import { QueryPagination } from 'src/lib/api/pagination';
 
 export class SupportFilterDto extends QueryPagination {
@@ -8,8 +9,10 @@ export class SupportFilterDto extends QueryPagination {
     @IsOptional()
     active: boolean;
 
+    @ApiProperty({required: false})
     @IsOptional()
-    @ApiProperty({ required: false })
-    @IsArray({ message: 'Категории поддержки является массивом' })
-    categories: number[];
+    categories: string;
+
+
+ 
 }

@@ -20,30 +20,35 @@ export class SupportService {
     private supportRepository: Repository<Support>,
     private contentHtml: ContentHtmlServer,
     private categoriesService: CategoriesService,
-  ) {}
-    async getSupportId(id:number){
-       const res =  await this.supportRepository.findOne(id);
-       if (!res) {
-         this.errors404Id();
-       }
+  ) { }
+  async getSupportId(id: number) {
+    const res = await this.supportRepository.findOne(id);
+    if (!res) {
+      this.errors404Id();
     }
+  }
+
+  addWhereSupport(active: boolean, categories: string) {
  
-  addWhereSupport(active:boolean, categories: number[]){
-    const where:any = {};
+    const where: any = {};
     if (active !== undefined) {
       where.active = active;
     }
-    if (categories && categories.length !==0) {
-      // const res = []
-      // categories.map((e)=> res.push(+e))
-      // where.categories ={
-      //     id: In(res)
-      //   }
-      }      
-    return where; 
+    if (categories) {
+      const categoriesArrayString = categories.split(",");
+      const categoriesArrayNumber:number[] =  [];
+      categoriesArrayString.map((e)=>{  
+        if (+e === NaN) {
+          this.errors400IdsCategoriesNumber();
+        }
+       categoriesArrayNumber.push(+e);
+     });
+      where.categories = this.addSqlInCategories(categoriesArrayNumber);
+    }
+    return where;
   }
   async getSupportAll(param: SupportFilterDto) {
-    console.log(param);    
+    console.log(param);
     const { skip, take } = Pagination(param?.limit, param?.page);
     return await this.supportRepository.find({
       where: this.addWhereSupport(param.active, param.categories),
@@ -52,9 +57,9 @@ export class SupportService {
       relations: ['contentHtml', 'categories'],
     });
   }
-  convertCategories(data:number[]){
+  convertCategories(data: number[]) {
     const res = []
-    data.map((e)=>{
+    data.map((e) => {
       res.push({
         id: e
       })
@@ -73,30 +78,35 @@ export class SupportService {
       categories: this.convertCategories(body.categories)
     });
   }
-  async updateActiveSupport(id:number, body:SupportActiveDto){
+  async updateActiveSupport(id: number, body: SupportActiveDto) {
     await this.getSupportId(id);
     await this.supportRepository.update(id, {
       active: body.active
     })
     return "состояние письма успешно измененно"
   }
-    //  запрос для получение всех support-ids по categories-id
-    addSqlInCategories(categoriesId: number[]) {
-      return this.supportRepository.query(
-        `SELECT DISTINCT "support"."id" FROM "support"
+  //  запрос для получение всех support-ids по categories-id
+  addSqlInCategories(categoriesId: number[]) {
+    return this.supportRepository.query(
+      `SELECT DISTINCT "support"."id" FROM "support"
         JOIN "support_categories" ON ("support_categories"."supportId" = "support"."id")
         WHERE "support_categories"."categoriesId" IN (:categories)
         `,
-        [categoriesId],
-      );
-    }
+      [categoriesId],
+    );
+  }
 
 
-  errors404Id(){
+  errors404Id() {
     throw new HttpException(
-        "Указанное письмо в поддержку не найдено",
-        HttpStatus.NOT_FOUND
+      "Указанное письмо в поддержку не найдено",
+      HttpStatus.NOT_FOUND
     )
-    
+  }
+  errors400IdsCategoriesNumber() {
+    throw new HttpException(
+      "Указанные категории не являются числами",
+      HttpStatus.NOT_FOUND
+    )
   }
 }
