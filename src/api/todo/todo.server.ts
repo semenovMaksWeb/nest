@@ -88,7 +88,8 @@ export class TodoService {
       ]);
     this.addSqlWhereTitle(sqlCreate, query.title);
     this.addSqlWhereActive(sqlCreate, query.active);
-    this.addSqlWhereCategories(sqlCreate);
+    this.addSqlWhereCategoriesId(sqlCreate, query.categories);
+    this.addSqlInnerJoinCategories(sqlCreate);
     return { sqlCreate };
   }
   // дефолтные параметры получение todos конец запроса
@@ -112,7 +113,7 @@ export class TodoService {
     }
   }
   // add запрос  todo поиск
-  addSqlWhereCategories(sqlCreate: SelectQueryBuilder<Todo>) {
+  addSqlInnerJoinCategories(sqlCreate: SelectQueryBuilder<Todo>) {
     sqlCreate.innerJoin('todo.categories', 'categories');
   }
   // add запрос поиск todo по categories-id
@@ -121,19 +122,14 @@ export class TodoService {
     categoriesId?: string,
   ) {
     if (categoriesId) {
-      const categoiresIdArray = categoriesId.split(',').map((e: any) => {
-        if (+e !== NaN) {
-          return +e;
-        } else {
-          this.errors400CategoiresId();
-        }
-      });
+      const categoiresIdArray = this.categoriesService.convertStringToArrayIds(categoriesId);
       const ids = await this.addSqlInCategories(categoiresIdArray);
       sqlCreate.andWhere(`todo.id IN ${ids}`);
     }
   }
   //  запрос для получение всех todo-ids по categories-id + user-id
   addSqlInCategories(categoriesId: number[]) {
+    console.log(categoriesId);    
     return this.todoRepository.query(
       `SELECT DISTINCT "todo"."id" FROM "user"
       JOIN "todo" ON ("todo"."userId" = "user"."id")
@@ -150,10 +146,5 @@ export class TodoService {
       HttpStatus.NOT_FOUND,
     );
   }
-  errors400CategoiresId() {
-    throw new HttpException(
-      'Указанная категория не является числом',
-      HttpStatus.BAD_REQUEST,
-    );
-  }
+
 }
