@@ -49,7 +49,7 @@ export class SupportService {
       .take(take)
       .skip(skip)
       .leftJoinAndSelect('support.categories', 'categories')
-      .leftJoinAndSelect('support.contentHtml', 'contentHtml')
+      // .leftJoinAndSelect('support.contentHtml', 'contentHtml')
 
     await this.addWhereSupport(param, sqlCreate);
 
