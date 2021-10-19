@@ -5,7 +5,7 @@ https://docs.nestjs.com/providers#services
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pagination } from 'src/lib/api/pagination';
-import { In, Repository } from 'typeorm';
+import { In, Repository, SelectQueryBuilder } from 'typeorm';
 import { CategoriesService } from '../categories/categories.server';
 import { ContentHtmlServer } from '../content-html/content-html.server';
 import { SupportActiveDto } from './support.dto/support-active.dto';
@@ -28,34 +28,31 @@ export class SupportService {
     }
   }
 
-  addWhereSupport(active: boolean, categories: string) {
- 
-    const where: any = {};
-    if (active !== undefined) {
-      where.active = active;
+  async addWhereSupport(
+    params: SupportFilterDto,
+    sqlCreate: SelectQueryBuilder<Support>
+  ) {
+    if (params.active !== undefined) {
+      sqlCreate.where('active =:active', { active: params.active })
     }
-    if (categories) {
-      const categoriesArrayString = categories.split(",");
-      const categoriesArrayNumber:number[] =  [];
-      categoriesArrayString.map((e)=>{  
-        if (+e === NaN) {
-          this.errors400IdsCategoriesNumber();
-        }
-       categoriesArrayNumber.push(+e);
-     });
-      where.categories = this.addSqlInCategories(categoriesArrayNumber);
+    if (params.categories) {
+      const categoriesArrayNumber = this.categoriesService.convertStringToArrayIds(params.categories); 
+      const ids = await this.addSqlInCategories(categoriesArrayNumber);      
+      // sqlCreate.andWhere(`categories.id IN ${ids}`)
     }
-    return where;
   }
   async getSupportAll(param: SupportFilterDto) {
     console.log(param);
     const { skip, take } = Pagination(param?.limit, param?.page);
-    return await this.supportRepository.find({
-      where: this.addWhereSupport(param.active, param.categories),
-      skip,
-      take,
-      relations: ['contentHtml', 'categories'],
-    });
+    const sqlCreate = this.supportRepository.createQueryBuilder('support')
+      .take(take)
+      .skip(skip)
+      .leftJoinAndSelect('support.categories', 'categories')
+      .leftJoinAndSelect('support.contentHtml', 'contentHtml')
+
+    await this.addWhereSupport(param, sqlCreate);
+
+    return await sqlCreate.getMany();
   }
   convertCategories(data: number[]) {
     const res = []
@@ -86,8 +83,9 @@ export class SupportService {
     return "состояние письма успешно измененно"
   }
   //  запрос для получение всех support-ids по categories-id
-  addSqlInCategories(categoriesId: number[]) {
-    return this.supportRepository.query(
+  async addSqlInCategories(categoriesId: number[]) {
+    console.log(categoriesId);    
+    return await this.supportRepository.query(
       `SELECT DISTINCT "support"."id" FROM "support"
         JOIN "support_categories" ON ("support_categories"."supportId" = "support"."id")
         WHERE "support_categories"."categoriesId" IN (:categories)

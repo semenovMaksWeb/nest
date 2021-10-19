@@ -52,6 +52,17 @@ export class CategoriesService {
     })
   }
 
+  convertStringToArrayIds(categories:string){
+    const categoiresIdArray = categories.split(',').map((e: any) => {
+      if (+e !== NaN) {
+        return +e;
+      } else {
+        this.errors400CategoriesInIds();
+      }
+    });
+    return categoiresIdArray;
+  }
+
   // получить (валидация) id категории если категория является вашей по todo
   async getCategoriesTodoUser(id: number, idCategories: number) {
     const data = await this.categoriesRepository.query(
