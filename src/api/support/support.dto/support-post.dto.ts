@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsArray, IsNotEmpty, IsNumber, ValidateNested } from 'class-validator';
-import { CategoriesGetTodoDto } from 'src/api/categories/categories.dto/categories-get-todo.dto';
+import { IsArray, IsNotEmpty } from 'class-validator';
 import { ContentHtmlPostType } from 'src/api/content-html/interface/content-html-post.interface';
 
 export class SupportPostDto {
@@ -10,7 +8,11 @@ export class SupportPostDto {
   @ApiProperty({ type: Number })
   @IsArray({ message: 'Категории поддержки является массивом' })
   categories: number[];
- 
+
+  @ApiProperty()
+  @IsNotEmpty({ message: 'названия письма поддержки является обязательным полем' })
+  title: string;
+  
   @ApiProperty()
   @IsNotEmpty({ message: 'Письмо поддержки является обязательным полем' })
   content: ContentHtmlPostType;
