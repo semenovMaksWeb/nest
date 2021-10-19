@@ -37,8 +37,9 @@ export class SupportService {
     }
     if (params.categories) {
       const categoriesArrayNumber = this.categoriesService.convertStringToArrayIds(params.categories); 
-      const ids = await this.addSqlInCategories(categoriesArrayNumber);      
-      // sqlCreate.andWhere(`categories.id IN ${ids}`)
+      const ids = await this.addSqlInCategories(categoriesArrayNumber); 
+      const arrayIds = this.categoriesService.convertCategoriesToObjIdInSql(ids);       
+      sqlCreate.andWhere(`support.id IN (${arrayIds})`)
     }
   }
   async getSupportAll(param: SupportFilterDto) {
@@ -54,15 +55,6 @@ export class SupportService {
 
     return await sqlCreate.getMany();
   }
-  convertCategories(data: number[]) {
-    const res = []
-    data.map((e) => {
-      res.push({
-        id: e
-      })
-    })
-    return res;
-  }
 
   async postSupport(body: SupportPostDto) {
     await this.categoriesService.categoriesValidateTypeSupport(body.categories);
@@ -72,7 +64,7 @@ export class SupportService {
 
     await this.supportRepository.save({
       contentHtml: htmlContent,
-      categories: this.convertCategories(body.categories)
+      categories: this.categoriesService.convertCategoriesToArrayInObjId(body.categories)
     });
   }
   async updateActiveSupport(id: number, body: SupportActiveDto) {
@@ -88,9 +80,8 @@ export class SupportService {
     return await this.supportRepository.query(
       `SELECT DISTINCT "support"."id" FROM "support"
         JOIN "support_categories" ON ("support_categories"."supportId" = "support"."id")
-        WHERE "support_categories"."categoriesId" IN (:categories)
+        WHERE "support_categories"."categoriesId" IN (${categoriesId})
         `,
-      [categoriesId],
     );
   }
 

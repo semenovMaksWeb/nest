@@ -13,7 +13,7 @@ export class CategoriesService {
   constructor(
     @InjectRepository(Categories)
     private categoriesRepository: Repository<Categories>,
-  ) {}
+  ) { }
   //  сохранить категории пользователю по todo
   async saveCategoriesTodo(
     categories: CategoriesGetTodoDto[],
@@ -30,29 +30,45 @@ export class CategoriesService {
     return await this.categoriesRepository.find();
   }
   //  сохранить категории пользователю all
-  async postCategories(categories: CategoriesCreateDto) {  
+  async postCategories(categories: CategoriesCreateDto) {
     return await this.categoriesRepository.save({
       name: categories.name
     });
   }
-    //  сохранить категории пользователю admin
-  async categoriesPostAdmin(categories:CategoriesCreateAdminDto){
-    console.log(categories);  
+  //  сохранить категории пользователю admin
+  async categoriesPostAdmin(categories: CategoriesCreateAdminDto) {
+    console.log(categories);
     return await this.categoriesRepository.save({
       name: categories.name,
       type: categories.type,
     });
   }
   //  получить категории типа support
-  async categoriesSupport(){
+  async categoriesSupport() {
     return await this.categoriesRepository.find({
-      where:{
+      where: {
         type: TypeCategories.support
       }
     })
   }
+  convertCategoriesToObjIdInSql(val: { id: number }[]) {
+    const res = [];
+    val.map((e) => {
+      res.push(e.id);
+    })
+    return res.join(',');
+  }
 
-  convertStringToArrayIds(categories:string){
+  convertCategoriesToArrayInObjId(data: number[]) {
+    const res = []
+    data.map((e) => {
+      res.push({
+        id: e
+      })
+    })
+    return res;
+  }
+  convertStringToArrayIds(categories: string) {
     const categoiresIdArray = categories.split(',').map((e: any) => {
       if (+e !== NaN) {
         return +e;
@@ -92,8 +108,8 @@ export class CategoriesService {
     await this.categoriesRepository.delete(idCategories);
     return 'Категория для задачи успешно удалена!';
   }
-  async categoriesValidateTypeSupport(ids:number[]){
-    const categoiresAll  = await this.categoriesRepository.find({
+  async categoriesValidateTypeSupport(ids: number[]) {
+    const categoiresAll = await this.categoriesRepository.find({
       where: {
         id: In(ids)
       }
@@ -101,8 +117,8 @@ export class CategoriesService {
     if (ids.length !== categoiresAll.length) {
       this.errors404CategoriesInIds();
     }
-    if (categoiresAll.filter((e)=> e.type !== TypeCategories.support)[0]) {
-      this.errors400CategoriesInIds();      
+    if (categoiresAll.filter((e) => e.type !== TypeCategories.support)[0]) {
+      this.errors400CategoriesInIds();
     }
   }
   // ошибка это не ваша категория работа с ней запрещена
@@ -112,7 +128,7 @@ export class CategoriesService {
       HttpStatus.NOT_FOUND,
     );
   }
-  errors404CategoriesInIds(){
+  errors404CategoriesInIds() {
     throw new HttpException(
       'Не все указанные категории были найдены',
       HttpStatus.NOT_FOUND,

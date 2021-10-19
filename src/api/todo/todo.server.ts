@@ -16,7 +16,7 @@ export class TodoService {
     @InjectRepository(Todo)
     private todoRepository: Repository<Todo>,
     private categoriesService: CategoriesService,
-  ) {}
+  ) { }
   // Создать todo
   async postTodoUser(todoCreateDto: TodoCreateDto, userId: number) {
     todoCreateDto.categories = await this.categoriesService.saveCategoriesTodo(
@@ -61,17 +61,17 @@ export class TodoService {
   }
   // получить todo users
   async getTodoUser(userId: number, query: TodoGetFilterDto) {
-    const { sqlCreate } = this.getTodoFunc(query);
+    const { sqlCreate } = await this.getTodoFunc(query);
     sqlCreate.where({ user: { id: userId } });
     return await this.getTodoFuncEnd(sqlCreate);
   }
   // получить todo all admin
   async getTodoAll(query: TodoGetFilterDto) {
-    const { sqlCreate } = this.getTodoFunc(query);
+    const { sqlCreate } = await this.getTodoFunc(query);
     return await this.getTodoFuncEnd(sqlCreate);
   }
   // дефолтные параметры получение todos начало запроса
-  getTodoFunc(query: TodoGetFilterDto) {
+  async getTodoFunc(query: TodoGetFilterDto) {
     const { skip, take } = Pagination(query?.limit, query?.page);
     const sqlCreate = this.todoRepository
       .createQueryBuilder('todo')
@@ -88,7 +88,7 @@ export class TodoService {
       ]);
     this.addSqlWhereTitle(sqlCreate, query.title);
     this.addSqlWhereActive(sqlCreate, query.active);
-    this.addSqlWhereCategoriesId(sqlCreate, query.categories);
+    await this.addSqlWhereCategoriesId(sqlCreate, query.categories);
     this.addSqlInnerJoinCategories(sqlCreate);
     return { sqlCreate };
   }
@@ -124,19 +124,19 @@ export class TodoService {
     if (categoriesId) {
       const categoiresIdArray = this.categoriesService.convertStringToArrayIds(categoriesId);
       const ids = await this.addSqlInCategories(categoiresIdArray);
-      sqlCreate.andWhere(`todo.id IN ${ids}`);
+      const arrayIds = this.categoriesService.convertCategoriesToObjIdInSql(ids);
+      console.log(arrayIds);
+      sqlCreate.andWhere(`todo.id IN (${arrayIds})`);
     }
   }
   //  запрос для получение всех todo-ids по categories-id + user-id
-  addSqlInCategories(categoriesId: number[]) {
-    console.log(categoriesId);    
-    return this.todoRepository.query(
+  async addSqlInCategories(categoriesId: number[]) {
+    return await this.todoRepository.query(
       `SELECT DISTINCT "todo"."id" FROM "user"
       JOIN "todo" ON ("todo"."userId" = "user"."id")
       JOIN "todo_categories" ON ("todo_categories"."todoId" = "todo"."id")
-      WHERE "todo_categories"."categoriesId" IN (:categories)
-      `,
-      [categoriesId],
+      WHERE "todo_categories"."categoriesId" IN ( ${categoriesId} )
+      `
     );
   }
 
