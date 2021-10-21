@@ -52,6 +52,13 @@ export class UserController {
     return this.userService.getUserProfile(req.user);
   }
 
+  @Get("/isAdmin")
+  async isUserAdminByToken(@Request() req){
+    const token = req.headers.authorization;
+    return await this.userService.isUserAdminByToken(token);
+  }
+
+
   @Put(User.updateUserProfile.name)
   @RouterName('updateUserProfile')
   updateUserProfile(

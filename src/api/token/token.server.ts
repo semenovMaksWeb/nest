@@ -75,6 +75,9 @@ export class TokenService {
     date.setDate(date.getDate() + parseInt(process.env.LIVE_TOKEN_DAY));
     return date;
   }
+  tokenNull(){
+    throw new HttpException('Токен не указан', HttpStatus.FORBIDDEN);
+  }
   tokenNoValidate(checkValidate: string): void {
     if (checkValidate === 'rest') {
       throw new HttpException('Токен не валиден', HttpStatus.FORBIDDEN);

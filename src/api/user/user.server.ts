@@ -18,7 +18,7 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private readonly tokenService: TokenService,
-  ) {}
+  ) { }
 
   // Показать всех пользователей
   async getUserAll(param: UserGetFilterDto): Promise<User[]> {
@@ -162,6 +162,28 @@ export class UserService {
   async findOneUserId(id: number) {
     return await this.userRepository.findOne(id);
   }
+  // проверка по token что user имеет доступ к админ панели
+  async isUserAdminByToken(token?: string): Promise<boolean> {
+    if (!token) {
+      this.tokenService.tokenNull();
+      return;
+    }
+    token = token.replace('Bearer ', '');
+    const count = await this.userRepository.query(`
+    SELECT COUNT(*) 
+    FROM "token"
+    LEFT JOIN "user_token" ON ("token"."id" = "user_token"."tokenId") 
+    LEFT JOIN "user_roles" ON ("user_roles"."userId" = "user_token"."userId") 
+    LEFT JOIN "roles_rights" ON ("roles_rights"."rolesId" = "user_roles"."rolesId") 
+    WHERE "token"."value" = '${token}' AND ("user_roles"."rolesId" = 3 OR "roles_rights"."rightsId" = 1)
+    `);
+    if (count === 0) {
+      return false;
+    }
+    return true;
+  }
+
+
 
   // Ошибка email
   private static errorsEmail(): void {
