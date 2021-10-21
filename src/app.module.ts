@@ -18,9 +18,13 @@ import { StyleModule } from './api/style/style.module';
 import { ComponentsAllModule } from './api/components/components-all.module';
 import { ContentHtmlModule } from './api/content-html/content-html.module';
 import { bdMain } from './config/bd-main';
+import { ScheduleModule } from '@nestjs/schedule';
+import { DemonModule } from './demon/Demon';
 @Module({
   imports: [
+    DemonModule,
     SupportModule,
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(bdMain),
     UserModule,
