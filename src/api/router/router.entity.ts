@@ -3,8 +3,10 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Menu } from '../menu/menu.entity';
 import { Rights } from '../rights/rights.entity';
 
 @Entity()
@@ -39,4 +41,8 @@ export class Router {
   @ManyToMany(() => Rights, (rights) => rights.id)
   @JoinTable({ name: 'router_rights' })
   rights: Rights[];
+
+
+  @OneToOne(() => Menu, (menu) => menu.id)
+  menu: Menu;
 }

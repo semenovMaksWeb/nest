@@ -1,3 +1,4 @@
+import { MenuModule } from './api/menu/menu.module';
 import { SupportModule } from './api/support/support.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -22,6 +23,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { DemonModule } from './demon/Demon';
 @Module({
   imports: [
+    MenuModule,
     DemonModule,
     SupportModule,
     ScheduleModule.forRoot(),
@@ -46,4 +48,4 @@ import { DemonModule } from './demon/Demon';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
