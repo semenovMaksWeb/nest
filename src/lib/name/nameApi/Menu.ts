@@ -14,5 +14,5 @@ export const Menu = {
     },
   };
   
-  export const nameController = 'message';
+  export const nameController = 'menu';
   

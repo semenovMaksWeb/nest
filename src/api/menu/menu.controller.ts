@@ -11,7 +11,7 @@ import { MemuPostDto } from './menu.dto/menu-post.dto';
 import { MemuUpdateDto } from './menu.dto/menu-update.dto';
 import { MenuService } from './menu.service';
 
-@Controller()
+@Controller(nameController)
 @ApiTags(nameController)
 @ApiBearerAuth()
 @UseGuards(UserGuard)
