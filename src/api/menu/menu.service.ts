@@ -3,6 +3,7 @@ https://docs.nestjs.com/providers#services
 */
 
 import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RouterServer } from '../router/router-server';
 import { MemuPostDto } from './menu.dto/menu-post.dto';
@@ -12,10 +13,11 @@ import { Menu } from './menu.entity';
 @Injectable()
 export class MenuService {
     constructor(
+        @InjectRepository(Menu)
         private menuEntity: Repository<Menu>,
         private routerServer: RouterServer,
     ) { }
-    //  найти 1 запись меню по id
+    //  найти 1 запись меню по
     async menuFindId(id:number){
        return await this.menuEntity.findOne(id);
     }

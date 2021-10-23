@@ -44,5 +44,5 @@ export class Router {
 
 
   @OneToOne(() => Menu, (menu) => menu.id)
-  menu: Menu;
+  router: Menu;
 }
